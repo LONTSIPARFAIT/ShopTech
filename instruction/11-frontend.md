@@ -1,13 +1,14 @@
-# MODULE 11 – FRONTEND GLOBAL
+# MODULE 11 – UI
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
 
-UI complète
+## 🎯 OBJECTIF
 
-## 🔧 À GÉNÉRER
+Améliorer design
 
-* composants UI
+---
+
 * responsive
 * dark mode
