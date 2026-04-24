@@ -1,28 +1,23 @@
-# MODULE 8 – WEBHOOK NOTCH PAY
+# MODULE 8 – WEBHOOK
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
 
-Validation asynchrone
+## 🎯 OBJECTIF
 
-## 🔧 À GÉNÉRER
+Validation paiement
 
-1. Route webhook
+---
 
-2. Action :
+## 🔧 BACKEND
 
-* HandleNotchPayWebhookAction
+* webhook route
+* HandleWebhookAction
+* events + listeners
 
-3. Event :
+---
 
-* PaymentSucceeded
+## 🧪 TEST
 
-4. Listener :
-
-* UpdateOrderAfterPayment
-
-## ⚠️ Contraintes
-
-* idempotent
-* signature vérifiée
+→ simuler webhook → commande paid
