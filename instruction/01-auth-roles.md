@@ -1,47 +1,57 @@
-# MODULE 1 – AUTHENTIFICATION & RÔLES
+# MODULE 1 – AUTH & RÔLES
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
+
+## 🎯 OBJECTIF
 
 Mettre en place rôles admin / client
 
-## 🔧 À GÉNÉRER
+---
 
-1. Migration :
+## 🔧 BACKEND
 
-* ajout champ `role` dans users
+* migration ajout `role`
+* enum UserRole
+* User model (casts + helpers)
+* middleware RoleMiddleware
+* policies (Product, Order)
 
-2. Enum :
+---
 
-* UserRole (admin, client)
+## 🌐 ROUTES
 
-3. Model User :
+* routes protégées admin/client
 
-* cast enum
-* helpers : isAdmin(), isClient()
+---
 
-4. Middleware :
+## 🎨 FRONTEND MINIMAL
 
-* RoleMiddleware
+Créer :
 
-5. Protection routes :
+* `Pages/Auth/TestRole.vue`
 
-* admin
-* client
+Fonction :
 
-6. Policies :
+* afficher rôle utilisateur
+* bouton test accès admin
 
-* ProductPolicy
-* OrderPolicy
+---
 
-## ⚠️ Contraintes
+## 🧪 TEST MANUEL
 
-* Ne pas casser auth existante
-* Compatible Inertia
+1. login user
+   → voir rôle affiché
 
-## ✅ Résultat attendu
+2. accéder route admin
+   → refus si client
 
-* admin → accès admin
-* client → bloqué
+3. accéder admin avec admin
+   → OK
 
+---
+
+## ⚠️ CONTRAINTES
+
+* ne pas casser auth existante
