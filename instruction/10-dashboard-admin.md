@@ -1,13 +1,16 @@
-# MODULE 10 – DASHBOARD ADMIN
+# MODULE 10 – ADMIN
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
+
+## 🎯 OBJECTIF
 
 Gestion admin
 
-## 🔧 À GÉNÉRER
+---
 
-* gestion produits
-* gestion commandes
-* gestion promotions
+## 🎨 FRONTEND
+
+* produits
+* commandes
