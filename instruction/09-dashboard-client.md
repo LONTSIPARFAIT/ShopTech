@@ -1,13 +1,21 @@
 # MODULE 9 – DASHBOARD CLIENT
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
 
-Interface client
+## 🎯 OBJECTIF
 
-## 🔧 À GÉNÉRER
+Voir commandes
+
+---
+
+## 🎨 FRONTEND
 
 * OrdersList.vue
-* Dashboard.vue
-* facture PDF
+
+---
+
+## 🧪 TEST
+
+→ voir commandes utilisateur
