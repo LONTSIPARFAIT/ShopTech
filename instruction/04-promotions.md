@@ -1,30 +1,36 @@
-# MODULE 4 – PROMOTIONS AUTOMATIQUES
+# MODULE 4 – PROMOTIONS
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
 
-Réduction automatique
+## 🎯 OBJECTIF
 
-## 🔧 À GÉNÉRER
+Réductions automatiques
 
-1. Migration :
+---
 
-* promotions
+## 🔧 BACKEND
 
-2. Service :
-
+* promotions table
 * PromotionService
-
-3. Action :
-
 * ApplyPromotionAction
 
-## 🎯 Types
+---
 
-* qty_based
-* total_based
+## 🎨 FRONTEND MINIMAL
 
-## 🧪 Tests
+* afficher réduction dans panier
 
-* réduction automatique appliquée
+---
+
+## 🧪 TEST MANUEL
+
+1. ajouter 3 produits
+   → réduction appliquée
+
+---
+
+## ⚠️ CONTRAINTES
+
+* automatique sans coupon
