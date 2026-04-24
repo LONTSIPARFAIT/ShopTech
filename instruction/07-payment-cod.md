@@ -1,13 +1,21 @@
-# MODULE 7 – PAIEMENT À LA LIVRAISON
+# MODULE 7 – COD
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
 
-Paiement manuel
+## 🎯 OBJECTIF
 
-## 🔧 Règles
+Paiement livraison
 
-* status = paid
-* payment_method = cod
-* stock réduit immédiatement
+---
+
+## 🎨 FRONTEND
+
+* bouton "payer à la livraison"
+
+---
+
+## 🧪 TEST
+
+→ commande paid direct
