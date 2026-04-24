@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import StatCard from '@/Components/Admin/StatCard.vue';
+import StatusBadge from '@/Components/UI/StatusBadge.vue';
 
 const props = defineProps<{
     stats: {
@@ -21,22 +23,10 @@ const props = defineProps<{
 
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <p class="text-sm font-bold opacity-50 uppercase tracking-widest mb-4">Revenus</p>
-                    <p class="text-3xl font-black">{{ stats.total_revenue.toLocaleString() }} <span class="text-xs">XAF</span></p>
-                </div>
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <p class="text-sm font-bold opacity-50 uppercase tracking-widest mb-4">Commandes</p>
-                    <p class="text-3xl font-black">{{ stats.total_orders }}</p>
-                </div>
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <p class="text-sm font-bold opacity-50 uppercase tracking-widest mb-4">Produits</p>
-                    <p class="text-3xl font-black">{{ stats.total_products }}</p>
-                </div>
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <p class="text-sm font-bold opacity-50 uppercase tracking-widest mb-4">Clients</p>
-                    <p class="text-3xl font-black">{{ stats.total_clients }}</p>
-                </div>
+                <StatCard label="Revenus" :value="stats.total_revenue" unit="XAF" />
+                <StatCard label="Commandes" :value="stats.total_orders" />
+                <StatCard label="Produits" :value="stats.total_products" />
+                <StatCard label="Clients" :value="stats.total_clients" />
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -54,9 +44,7 @@ const props = defineProps<{
                                     <td class="px-8 py-6 text-sm">{{ order.user.name }}</td>
                                     <td class="px-8 py-6 text-sm font-black">{{ Number(order.total_amount).toLocaleString() }} XAF</td>
                                     <td class="px-8 py-6 text-right">
-                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase" :class="order.payment_status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'">
-                                            {{ order.payment_status }}
-                                        </span>
+                                        <StatusBadge :status="order.payment_status" type="payment" />
                                     </td>
                                 </tr>
                             </tbody>

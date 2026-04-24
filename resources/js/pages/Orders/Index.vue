@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import StatusBadge from '@/Components/UI/StatusBadge.vue';
 
 const props = defineProps<{
     orders: {
@@ -7,15 +8,6 @@ const props = defineProps<{
         links: Array<any>;
     };
 }>();
-
-const getStatusClass = (status: string) => {
-    return {
-        'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400': status === 'pending',
-        'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400': status === 'processing',
-        'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400': status === 'delivered',
-        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400': status === 'cancelled',
-    };
-};
 </script>
 
 <template>
@@ -46,14 +38,10 @@ const getStatusClass = (status: string) => {
                                 <td class="px-8 py-6 font-bold">#{{ order.id }}</td>
                                 <td class="px-8 py-6 text-sm opacity-70">{{ new Date(order.created_at).toLocaleDateString() }}</td>
                                 <td class="px-8 py-6 text-sm">
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider" :class="getStatusClass(order.status)">
-                                        {{ order.status }}
-                                    </span>
+                                    <StatusBadge :status="order.status" />
                                 </td>
                                 <td class="px-8 py-6 text-sm">
-                                    <span class="font-medium" :class="order.payment_status === 'paid' ? 'text-green-500' : 'text-slate-400'">
-                                        {{ order.payment_status }}
-                                    </span>
+                                    <StatusBadge :status="order.payment_status" type="payment" />
                                 </td>
                                 <td class="px-8 py-6 font-black">{{ Number(order.total_amount).toLocaleString() }} XAF</td>
                                 <td class="px-8 py-6 text-right">

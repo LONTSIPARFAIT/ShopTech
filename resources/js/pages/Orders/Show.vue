@@ -1,18 +1,10 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import StatusBadge from '@/Components/UI/StatusBadge.vue';
 
 const props = defineProps<{
     order: any;
 }>();
-
-const getStatusClass = (status: string) => {
-    return {
-        'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400': status === 'pending',
-        'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400': status === 'processing',
-        'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400': status === 'delivered',
-        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400': status === 'cancelled',
-    };
-};
 </script>
 
 <template>
@@ -33,12 +25,8 @@ const getStatusClass = (status: string) => {
                     <p class="text-slate-500 mt-2">Passée le {{ new Date(order.created_at).toLocaleDateString() }}</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <span class="px-6 py-2 rounded-2xl text-sm font-black uppercase tracking-widest" :class="getStatusClass(order.status)">
-                        {{ order.status }}
-                    </span>
-                    <span v-if="order.payment_status === 'paid'" class="px-6 py-2 bg-green-500 text-white rounded-2xl text-sm font-black uppercase tracking-widest">
-                        Payé
-                    </span>
+                    <StatusBadge :status="order.status" />
+                    <StatusBadge :status="order.payment_status" type="payment" />
                 </div>
             </div>
 
