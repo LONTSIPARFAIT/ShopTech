@@ -1,35 +1,36 @@
-# MODULE 3 – PANIER
+# MODULE 4 – PROMOTIONS
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
 
-Panier session + utilisateur
+## 🎯 OBJECTIF
 
-## 🔧 À GÉNÉRER
+Réductions automatiques
 
-1. Migrations :
+---
 
-* carts
-* cart_items
+## 🔧 BACKEND
 
-2. Service :
+* promotions table
+* PromotionService
+* ApplyPromotionAction
 
-* CartService
+---
 
-3. Actions :
+## 🎨 FRONTEND MINIMAL
 
-* AddToCartAction
-* RemoveFromCartAction
-* UpdateCartItemAction
+* afficher réduction dans panier
 
-4. Controller
+---
 
-5. Front :
+## 🧪 TEST MANUEL
 
-* CartSidebar.vue
-* Cart/Index.vue
+1. ajouter 3 produits
+   → réduction appliquée
 
-## ⚠️ Contraintes
+---
 
-* invité + connecté
+## ⚠️ CONTRAINTES
+
+* automatique sans coupon
