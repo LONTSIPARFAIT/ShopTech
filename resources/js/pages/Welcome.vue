@@ -1,223 +1,213 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { login, register, dashboard } from '@/routes';
+import { onMounted, ref } from 'vue';
 
-defineProps<{
-    canLogin?: boolean;
-    canRegister?: boolean;
-    laravelVersion: string;
-    phpVersion: string;
-}>();
+const isLoaded = ref(false);
+
+onMounted(() => {
+    isLoaded.value = true;
+});
+
+const features = [
+    {
+        title: 'Qualité Premium',
+        description: 'Nous ne sélectionnons que le meilleur du hardware mondial pour votre setup.',
+        icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04M12 2.944a11.955 11.955 0 01-8.618 3.04M12 2.944V12m0 9.75c0-1.336-.754-2.55-1.925-3.14l-5.973-3.037a2.25 2.25 0 01-1.102-1.96V5.75M12 21.75c0-1.336.754-2.55 1.925-3.14l5.973-3.037a2.25 2.25 0 001.102-1.96V5.75'
+    },
+    {
+        title: 'Livraison Express',
+        description: 'Vos gadgets livrés à votre porte en un temps record partout au Cameroun.',
+        icon: 'M13 10V3L4 14h7v7l9-11h-7z'
+    },
+    {
+        title: 'Support Expert',
+        description: 'Une équipe de passionnés pour vous conseiller sur vos choix technologiques.',
+        icon: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z'
+    }
+];
 </script>
 
 <template>
-    <Head title="Bienvenue chez ShopTech" />
+    <Head title="Bienvenue chez ShopTech - L'excellence Technologique" />
 
-    <div class="relative min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
-        <!-- Background Orbs -->
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute top-1/2 -right-24 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"></div>
-
-        <!-- Navbar -->
-        <nav class="relative z-10 flex items-center justify-between px-6 py-8 mx-auto max-w-7xl lg:px-12">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+    <div class="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-500 font-sans selection:bg-blue-500/30">
+        
+        <!-- Navigation -->
+        <nav class="fixed top-0 w-full z-50 border-b border-slate-100 dark:border-slate-800/50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-2xl px-6 py-4 lg:px-12">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <span class="text-white font-black text-xl">S</span>
+                    </div>
+                    <span class="text-xl font-black tracking-tighter uppercase">Shop<span class="text-blue-600">Tech</span></span>
                 </div>
-                <span class="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-                    ShopTech
-                </span>
-            </div>
+                
+                <div class="hidden md:flex items-center gap-8 text-sm font-bold uppercase tracking-widest opacity-70">
+                    <Link href="/products" class="hover:text-blue-600 transition-colors">Boutique</Link>
+                    <Link href="#" class="hover:text-blue-600 transition-colors">Nouveautés</Link>
+                    <Link href="#" class="hover:text-blue-600 transition-colors">Promotions</Link>
+                </div>
 
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Catalogue</a>
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Promotions</a>
-                <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">À propos</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <template v-if="$page.props.auth.user">
-                    <Link :href="dashboard()" class="px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 shadow-md shadow-blue-500/20 transition-all hover:-translate-y-0.5">
-                        Dashboard
+                <div class="flex items-center gap-4">
+                    <Link 
+                        v-if="$page.props.auth.user" 
+                        href="/dashboard" 
+                        class="px-6 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-xl text-sm font-bold hover:opacity-90 transition-all"
+                    >
+                        Mon Compte
                     </Link>
-                </template>
-                <template v-else>
-                    <Link :href="login()" class="text-sm font-semibold hover:text-blue-600 transition-colors">
-                        Connexion
-                    </Link>
-                    <Link :href="register()" class="px-5 py-2.5 text-sm font-semibold text-white bg-slate-900 dark:bg-white dark:text-slate-950 rounded-full hover:opacity-90 transition-all shadow-xl hover:-translate-y-0.5">
-                        S'inscrire
-                    </Link>
-                </template>
+                    <template v-else>
+                        <Link href="/login" class="text-sm font-bold hover:text-blue-600 transition-colors">Connexion</Link>
+                        <Link href="/register" class="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all">S'inscrire</Link>
+                    </template>
+                </div>
             </div>
         </nav>
 
         <!-- Hero Section -->
-        <main class="relative z-10 px-6 pt-16 pb-24 mx-auto max-w-7xl lg:px-12 lg:pt-32">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="space-y-8 max-w-2xl">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-bold tracking-wider text-blue-600 uppercase bg-blue-100 rounded-full dark:bg-blue-900/30 dark:text-blue-400">
-                        <span class="relative flex w-2 h-2">
-                            <span class="absolute inline-flex w-full h-full bg-blue-400 rounded-full opacity-75 animate-ping"></span>
-                            <span class="relative inline-flex w-2 h-2 bg-blue-500 rounded-full"></span>
-                        </span>
-                        Nouvelle Collection Disponible
-                    </div>
-                    
-                    <h1 class="text-5xl font-black tracking-tight sm:text-7xl leading-[1.1]">
-                        L'innovation <br />
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-                            À portée de main.
-                        </span>
-                    </h1>
+        <section class="relative pt-48 pb-32 overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple-500/10 blur-[100px] rounded-full pointer-events-none"></div>
 
-                    <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
-                        Découvrez les dernières technologies et gadgets premium chez ShopTech. 
-                        Qualité garantie, livraison rapide au Cameroun et partout en Afrique.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                        <button class="px-8 py-4 text-lg font-bold text-white bg-blue-600 rounded-2xl hover:bg-blue-700 shadow-xl shadow-blue-500/25 transition-all hover:-translate-y-1 active:scale-95 group">
-                            Découvrir le Catalogue
-                            <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </button>
-                        <button class="px-8 py-4 text-lg font-bold bg-white text-slate-900 border border-slate-200 dark:bg-slate-900 dark:text-white dark:border-slate-800 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all hover:-translate-y-1 active:scale-95 shadow-lg">
-                            Nos Promotions
-                        </button>
-                    </div>
-
-                    <!-- Stats -->
-                    <div class="flex gap-12 pt-8 border-t border-slate-100 dark:border-slate-800/50">
-                        <div>
-                            <div class="text-3xl font-bold">10k+</div>
-                            <div class="text-sm text-slate-500">Clients Satisfaits</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold">500+</div>
-                            <div class="text-sm text-slate-500">Produits Tech</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold">24h</div>
-                            <div class="text-sm text-slate-500">Livraison Moyenne</div>
-                        </div>
-                    </div>
+            <div class="max-w-7xl mx-auto px-6 lg:px-12 text-center space-y-12 relative">
+                <div 
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-xs font-bold tracking-widest uppercase mb-4 animate-fade-in"
+                >
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    La nouvelle ère tech est ici
                 </div>
 
-                <!-- Visual Element -->
-                <div class="relative group lg:block">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                    <div class="relative overflow-hidden rounded-[2.5rem] bg-slate-100 dark:bg-slate-900 border border-white/10 shadow-2xl aspect-[4/5] sm:aspect-[4/3] lg:aspect-square">
-                        <!-- We'll use the generated image here in a real scenario -->
-                        <img 
-                            src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop" 
-                            alt="Tech Banner"
-                            class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                        <div class="absolute bottom-8 left-8 right-8 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
-                            <div class="flex justify-between items-end">
-                                <div>
-                                    <h3 class="text-white font-bold text-xl">Nouveautés 2026</h3>
-                                    <p class="text-white/70 text-sm">Préparez-vous pour le futur</p>
-                                </div>
-                                <div class="px-4 py-2 bg-blue-500 text-white rounded-lg font-bold text-xs">
-                                    -20% OFF
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+                <h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] max-w-4xl mx-auto">
+                    Upgradez Votre <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-400">Expérience Digitale</span>
+                </h1>
 
-        <!-- Features Grid -->
-        <section class="relative z-10 px-6 py-24 mx-auto max-w-7xl lg:px-12 bg-slate-50/50 dark:bg-slate-900/30 rounded-[3rem] my-12">
-            <div class="text-center mb-16 space-y-4">
-                <h2 class="text-3xl font-black sm:text-4xl">Pourquoi choisir ShopTech ?</h2>
-                <p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
-                    Nous nous engageons à fournir les meilleurs produits tech avec une expérience client exceptionnelle.
+                <p class="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                    Découvrez une sélection exclusive des meilleurs produits high-tech. Smartphones, laptops et accessoires premium pour les passionnés d'innovation.
                 </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
+                    <Link 
+                        href="/products" 
+                        class="px-12 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black text-lg shadow-2xl hover:-translate-y-1 transition-all active:scale-[0.98]"
+                    >
+                        Explorer la Boutique
+                    </Link>
+                    <Link 
+                        href="/register" 
+                        class="px-12 py-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 rounded-2xl font-black text-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                    >
+                        Devenir Membre
+                    </Link>
+                </div>
             </div>
+        </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 group">
-                    <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
+        <!-- Features -->
+        <section class="py-32 bg-slate-50 dark:bg-slate-900/50">
+            <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <div v-for="(feature, index) in features" :key="index" class="space-y-6 group">
+                        <div class="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 group-hover:-rotate-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="feature.icon" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold">{{ feature.title }}</h3>
+                        <p class="text-slate-500 dark:text-slate-400 leading-relaxed">{{ feature.description }}</p>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Produits Authentiques</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                        Tous nos articles proviennent directement des fabricants officiels avec garantie constructeur.
-                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Preview -->
+        <section class="py-32 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 lg:px-12 space-y-16">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                    <div class="space-y-4">
+                        <h2 class="text-5xl font-black tracking-tight">Nos Catégories</h2>
+                        <p class="text-slate-500 max-w-md">L'essentiel de la technologie regroupé par univers pour faciliter vos recherches.</p>
+                    </div>
+                    <Link href="/products" class="group flex items-center gap-2 font-bold text-blue-600">
+                        Voir tout le catalogue 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </Link>
                 </div>
 
-                <div class="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 group">
-                    <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 012 2 2 2 0 01-2 2 2 2 0 01-2-2 2 2 0 012-2z" />
-                        </svg>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div 
+                        v-for="cat in ['Smartphones', 'Laptops', 'Audio', 'Accessoires']" 
+                        :key="cat"
+                        class="h-80 relative rounded-[2.5rem] bg-slate-100 dark:bg-slate-800 overflow-hidden group cursor-pointer"
+                    >
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent z-10"></div>
+                        <div class="absolute bottom-8 left-8 z-20 space-y-2">
+                            <h4 class="text-2xl font-black text-white">{{ cat }}</h4>
+                            <p class="text-sm text-white/60 font-bold tracking-widest uppercase">Découvrir</p>
+                        </div>
+                        <!-- Decorative element for image placeholder -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 group-hover:scale-110 transition-transform duration-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-48 h-48" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Paiement Sécurisé</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                        Payez en toute sécurité via Notch Pay (Mobile Money) ou à la livraison (COD).
-                    </p>
                 </div>
+            </div>
+        </section>
 
-                <div class="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 group">
-                    <div class="w-14 h-14 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Service Client 24/7</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                        Notre équipe est disponible à tout moment pour répondre à vos questions et vous assister.
+        <!-- Newsletter / CTA -->
+        <section class="px-6 lg:px-12 pb-32">
+            <div class="max-w-7xl mx-auto bg-blue-600 rounded-[3rem] p-12 md:p-24 text-center text-white relative overflow-hidden shadow-2xl shadow-blue-500/40">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3"></div>
+                <div class="relative z-10 space-y-12">
+                    <h2 class="text-4xl md:text-6xl font-black tracking-tight leading-tight">
+                        Prêt pour le prochain <br/> niveau de Technologie ?
+                    </h2>
+                    <p class="text-xl text-blue-100 max-w-xl mx-auto">
+                        Inscrivez-vous dès maintenant pour bénéficier d'offres exclusives et être informé des derniers arrivages.
                     </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <Link 
+                            href="/register" 
+                            class="px-12 py-5 bg-white text-blue-600 rounded-2xl font-black text-lg hover:scale-105 transition-all shadow-xl"
+                        >
+                            Créer mon Compte Gratuit
+                        </Link>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="px-6 py-12 mx-auto max-w-7xl lg:px-12 border-t border-slate-100 dark:border-slate-800/50">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+        <footer class="py-12 border-t border-slate-100 dark:border-slate-800 px-6 lg:px-12">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 opacity-50 text-sm font-bold uppercase tracking-widest">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-slate-900 dark:bg-white rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white dark:text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold tracking-tight">ShopTech</span>
+                    <span class="text-slate-900 dark:text-white uppercase">ShopTech &copy; 2024</span>
                 </div>
-                
-                <p class="text-sm text-slate-500">
-                    &copy; 2026 ShopTech. Tous droits réservés. Propulsé par Laravel & Inertia.
-                </p>
-
-                <div class="flex gap-6">
-                    <a href="#" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
-                        <span class="sr-only">Facebook</span>
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
-                    </a>
-                    <a href="#" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
-                        <span class="sr-only">Instagram</span>
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    </a>
+                <div class="flex gap-8">
+                    <a href="#" class="hover:text-blue-600 transition-colors">Twitter</a>
+                    <a href="#" class="hover:text-blue-600 transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-blue-600 transition-colors">LinkedIn</a>
                 </div>
+                <p>Cameroun, Douala - Yaoundé</p>
             </div>
         </footer>
+
     </div>
 </template>
 
-<style scoped>
-@keyframes blob {
-    0% { transform: translate(0px, 0px) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
-    100% { transform: translate(0px, 0px) scale(1); }
+<style>
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
 }
 </style>

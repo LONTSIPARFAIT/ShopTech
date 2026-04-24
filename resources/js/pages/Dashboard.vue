@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import { dashboard, test_role } from '@/routes';
 import { Link } from '@inertiajs/vue3';
+import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 
 defineOptions({
     layout: {
@@ -31,6 +31,9 @@ defineOptions({
                 </div>
                 <span class="font-bold">Test des Rôles</span>
             </Link>
+            <div
+                class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
+            >
                 <PlaceholderPattern />
             </div>
             <div
