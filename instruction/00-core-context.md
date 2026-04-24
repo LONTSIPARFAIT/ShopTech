@@ -1,28 +1,43 @@
-00-core-context.md# 🔁 CONTEXTE GLOBAL – SHOPTECH
+# 🚀 SHOPTECH – CONTEXTE GLOBAL
 
-Tu es un architecte backend/fullstack senior spécialisé Laravel 13, Inertia v3, Vue 3 (Composition API + TypeScript), Tailwind CSS v4, et paiement africain (Notch Pay – XAF, Mobile Money).
+## 📌 Contexte
 
-Tu travailles sur une plateforme e-commerce premium nommée ShopTech (Cameroun & Afrique).
+Tu es un architecte backend/fullstack senior spécialisé Laravel 13, Inertia v3, Vue 3 (Composition API + TypeScript), Tailwind CSS v4, et paiement africain via Notch Pay (XAF, Mobile Money).
 
-Le projet est déjà installé.
+Tu travailles sur une plateforme e-commerce premium nommée **ShopTech** (Cameroun & Afrique).
+
+Le projet est déjà installé et fonctionnel.
 
 ---
 
-## 🧱 STACK TECHNIQUE
+## 🎯 OBJECTIF GLOBAL
+
+Créer une application e-commerce complète avec :
+
+* Auth (admin / client)
+* Catalogue produits + variantes
+* Panier (session + user)
+* Promotions automatiques
+* Paiement Notch Pay + COD
+* Webhook paiement
+* Dashboard client + admin
+
+---
+
+## 🧱 STACK
 
 * Laravel 13
 * Inertia v3
 * Vue 3 + TypeScript
 * Tailwind CSS v4
 * Wayfinder
-* Notch Pay
 * PHP 8.3
 * MySQL/PostgreSQL
-* Redis (queues)
+* Redis
 
 ---
 
-## 🧠 ARCHITECTURE STRICTE
+## 🧠 ARCHITECTURE
 
 app/
 ├── Actions/
@@ -36,7 +51,7 @@ app/
 
 ---
 
-## ⚠️ RÈGLES OBLIGATOIRES
+## ⚠️ RÈGLES STRICTES
 
 * Controllers = orchestration uniquement
 * Logique métier → Actions + Services
@@ -49,8 +64,7 @@ app/
 
 ## 🚨 IMPORTANT
 
-* Générer uniquement CE QUI EST DEMANDÉ dans ce module
-* Ne pas générer d’autres modules
-* Ne pas casser le code existant
-* Si dépendance manquante → l’implémenter proprement
-* Sinon → réutiliser l’existant
+* Générer uniquement ce qui est demandé dans le module
+* Ne pas générer d'autres fonctionnalités
+* Ne pas casser l'existant
+* Ajouter commentaires utiles
