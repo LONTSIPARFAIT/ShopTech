@@ -1,34 +1,55 @@
-# MODULE 2 – CATALOGUE PRODUITS
+# MODULE 2 – CATALOGUE
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
 
-Gestion produits + catégories + variantes
+## 🎯 OBJECTIF
 
-## 🔧 À GÉNÉRER
+Produits + catégories + variantes
 
-1. Migrations :
+---
 
-* categories
-* products
-* product_images
-* variants
+## 🔧 BACKEND
 
-2. Models + relations
-
-3. Admin :
-
-* ProductController
+* migrations (categories, products, variants, images)
+* models + relations
+* ProductController (admin)
 * ProductRequest
 
-4. Front :
+---
 
-* Products/Index.vue
-* Products/Show.vue
+## 🌐 ROUTES
 
-## ⚠️ Contraintes
+* /products
+* /products/{slug}
+
+---
+
+## 🎨 FRONTEND MINIMAL
+
+Créer :
+
+* `Products/Index.vue`
+* `Products/Show.vue`
+
+Fonctions :
+
+* afficher liste produits
+* afficher détails produit
+
+---
+
+## 🧪 TEST MANUEL
+
+1. créer produit admin
+   → visible dans liste
+
+2. cliquer produit
+   → voir détails
+
+---
+
+## ⚠️ CONTRAINTES
 
 * variantes obligatoires
-* architecture propre
-* pas de panier ici
