@@ -1,27 +1,30 @@
 # MODULE 6 – PAIEMENT NOTCH PAY
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
+
+## 🎯 OBJECTIF
 
 Paiement en ligne
 
-## 🔧 À GÉNÉRER
+---
 
-1. Service :
+## 🔧 BACKEND
 
 * PaymentService
-
-2. Action :
-
 * InitializeNotchPayPaymentAction
+* config notchpay
 
-3. Config :
+---
 
-* notchpay.php
+## 🎨 FRONTEND MINIMAL
 
-4. Redirection checkout
+* bouton "payer"
 
-## ⚠️ Contraintes
+---
 
-* hosted checkout
+## 🧪 TEST MANUEL
+
+1. cliquer payer
+   → redirection checkout
