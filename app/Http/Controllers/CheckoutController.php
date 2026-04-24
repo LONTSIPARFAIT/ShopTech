@@ -14,7 +14,8 @@ class CheckoutController extends Controller
     public function __construct(
         protected CartService $cartService,
         protected OrderService $orderService,
-        protected ApplyPromotionAction $applyPromotion
+        protected ApplyPromotionAction $applyPromotion,
+        protected \App\Services\CODService $codService
     ) {}
 
     public function index(): Response
@@ -49,6 +50,8 @@ class CheckoutController extends Controller
             return redirect()->route('payment.notchpay.init', ['order' => $order->id]);
         }
 
-        return redirect()->route('orders.show', ['order' => $order->id])->with('success', 'Commande validée !');
+        $this->codService->process($order);
+
+        return redirect()->route('orders.show', ['order' => $order->id])->with('success', 'Commande validée ! Elle sera payée à la livraison.');
     }
 }
