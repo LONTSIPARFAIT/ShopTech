@@ -1,26 +1,30 @@
 # MODULE 5 – COMMANDES
 
-Inclure CONTEXTE GLOBAL
+Inclure : CONTEXTE GLOBAL
 
-## 🎯 Objectif
+---
 
-Créer commandes depuis panier
+## 🎯 OBJECTIF
 
-## 🔧 À GÉNÉRER
+Créer commande
 
-1. Migrations :
+---
 
-* orders
-* order_items
+## 🔧 BACKEND
 
-2. Actions :
-
+* orders + order_items
 * CreateOrderAction
-
-3. Service :
-
 * OrderService
 
-## ⚠️ Contraintes
+---
 
-* status = pending
+## 🎨 FRONTEND MINIMAL
+
+* page résumé commande
+
+---
+
+## 🧪 TEST MANUEL
+
+1. valider panier
+   → commande créée (pending)
