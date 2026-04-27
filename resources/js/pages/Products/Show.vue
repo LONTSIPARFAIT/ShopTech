@@ -1,10 +1,11 @@
-<script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import ShopHeader from '@/components/Shop/ShopHeader.vue';
+import ShopFooter from '@/components/Shop/ShopFooter.vue';
 
 const props = defineProps<{
     product: any;
-    relatedProducts: Array<any>;
+    relatedProducts: any[];
 }>();
 
 const selectedVariant = ref(props.product.variants[0] || null);
@@ -35,7 +36,9 @@ const addToCart = () => {
     <Head :title="`${product.name} - ShopTech`" />
 
     <div class="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300 pb-24">
-        <div class="px-6 py-12 mx-auto max-w-7xl lg:px-12">
+        <ShopHeader />
+        
+        <div class="pt-32 px-6 py-12 mx-auto max-w-7xl lg:px-12">
             <!-- Breadcrumbs -->
             <nav class="flex text-sm text-slate-500 mb-8 gap-2 items-center">
                 <Link href="/products" class="hover:text-blue-600 transition-colors">Boutique</Link>
@@ -156,5 +159,6 @@ const addToCart = () => {
                 </div>
             </div>
         </div>
+        <ShopFooter />
     </div>
 </template>

@@ -21,8 +21,14 @@ class ProductController extends Controller
             });
         }
 
+        if ($request->sort === 'latest') {
+            $query->latest();
+        } else {
+            $query->orderBy('name');
+        }
+
         return Inertia::render('Products/Index', [
-            'products' => $query->latest()->paginate(12),
+            'products' => $query->paginate(12)->withQueryString(),
             'categories' => Category::all(),
             'filters' => $request->only(['category'])
         ]);

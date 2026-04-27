@@ -1,0 +1,90 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\Variant;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+
+class ProductSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $electronics = Category::where('slug', 'electronique')->first();
+        $mode = Category::where('slug', 'mode')->first();
+
+        // Product 1: Smartphone
+        $p1 = Product::create([
+            'category_id' => $electronics->id,
+            'name' => 'iPhone 15 Pro',
+            'slug' => 'iphone-15-pro',
+            'description' => 'Le dernier iPhone avec puce A17 Pro et système de caméra avancé.',
+            'base_price' => 999.99,
+            'is_active' => true,
+        ]);
+
+        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=800&auto=format&fit=crop', 'is_featured' => true]);
+
+        Variant::create(['product_id' => $p1->id, 'name' => 'Couleur', 'value' => 'Titane Naturel', 'price_override' => 0, 'stock' => 50]);
+        Variant::create(['product_id' => $p1->id, 'name' => 'Couleur', 'value' => 'Titane Bleu', 'price_override' => 0, 'stock' => 30]);
+        Variant::create(['product_id' => $p1->id, 'name' => 'Stockage', 'value' => '128GB', 'price_override' => 0, 'stock' => 20]);
+        Variant::create(['product_id' => $p1->id, 'name' => 'Stockage', 'value' => '256GB', 'price_override' => 120, 'stock' => 15]);
+
+        // Product 2: Headphones
+        $p2 = Product::create([
+            'category_id' => $electronics->id,
+            'name' => 'Sony WH-1000XM5',
+            'slug' => 'sony-wh-1000xm5',
+            'description' => 'Casque à réduction de bruit sans fil de pointe.',
+            'base_price' => 349.99,
+            'is_active' => true,
+        ]);
+
+        ProductImage::create(['product_id' => $p2->id, 'path' => 'https://images.unsplash.com/photo-1675102008933-7221665a5885?q=80&w=800&auto=format&fit=crop', 'is_featured' => true]);
+
+        Variant::create(['product_id' => $p2->id, 'name' => 'Couleur', 'value' => 'Noir', 'price_override' => 0, 'stock' => 100]);
+        Variant::create(['product_id' => $p2->id, 'name' => 'Couleur', 'value' => 'Argent', 'price_override' => 0, 'stock' => 45]);
+
+        // Product 3: T-Shirt
+        $p3 = Product::create([
+            'category_id' => $mode->id,
+            'name' => 'T-Shirt Coton Bio',
+            'slug' => 't-shirt-coton-bio',
+            'description' => 'T-shirt confortable en coton 100% biologique.',
+            'base_price' => 25.00,
+            'is_active' => true,
+        ]);
+
+        ProductImage::create(['product_id' => $p3->id, 'path' => 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop', 'is_featured' => true]);
+
+        Variant::create(['product_id' => $p3->id, 'name' => 'Taille', 'value' => 'S', 'price_override' => 0, 'stock' => 100]);
+        Variant::create(['product_id' => $p3->id, 'name' => 'Taille', 'value' => 'M', 'price_override' => 0, 'stock' => 150]);
+        Variant::create(['product_id' => $p3->id, 'name' => 'Taille', 'value' => 'L', 'price_override' => 0, 'stock' => 80]);
+        Variant::create(['product_id' => $p3->id, 'name' => 'Couleur', 'value' => 'Blanc', 'price_override' => 0, 'stock' => 200]);
+        Variant::create(['product_id' => $p3->id, 'name' => 'Couleur', 'value' => 'Noir', 'price_override' => 0, 'stock' => 180]);
+
+        // Add more products for realistic feel
+        $products = [
+            ['name' => 'MacBook Air M2', 'price' => 1199.00, 'cat' => $electronics, 'img' => 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=800&auto=format&fit=crop'],
+            ['name' => 'Veste en Jean', 'price' => 75.00, 'cat' => $mode, 'img' => 'https://images.unsplash.com/photo-1576871337622-98d48d1cf027?q=80&w=800&auto=format&fit=crop'],
+            ['name' => 'Montre Connectée', 'price' => 299.00, 'cat' => $electronics, 'img' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop'],
+            ['name' => 'Sneakers White', 'price' => 95.00, 'cat' => $mode, 'img' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop'],
+        ];
+
+        foreach ($products as $p) {
+            $product = Product::create([
+                'category_id' => $p['cat']->id,
+                'name' => $p['name'],
+                'slug' => Str::slug($p['name']),
+                'description' => 'Description détaillée pour '.$p['name'],
+                'base_price' => $p['price'],
+                'is_active' => true,
+            ]);
+            ProductImage::create(['product_id' => $product->id, 'path' => $p['img'], 'is_featured' => true]);
+            Variant::create(['product_id' => $product->id, 'name' => 'Standard', 'value' => 'Unique', 'price_override' => 0, 'stock' => rand(10, 100)]);
+        }
+    }
+}

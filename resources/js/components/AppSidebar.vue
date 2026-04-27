@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-vue-next';
+import { computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import { BookOpen, FolderGit2, LayoutGrid, ShoppingBag, Users, Layers, Settings } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -17,24 +18,60 @@ import {
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
+const page = usePage();
+const user = computed(() => page.props.auth.user);
+const isAdmin = computed(() => user.value?.role === 'admin');
+
+const mainNavItems = computed((): NavItem[] => {
+    if (isAdmin.value) {
+        return [
+            {
+                title: 'Dashboard',
+                href: route('admin.dashboard'),
+                icon: LayoutGrid,
+            },
+            {
+                title: 'Produits',
+                href: route('admin.products.index'),
+                icon: ShoppingBag,
+            },
+            {
+                title: 'Commandes',
+                href: route('admin.orders.index'),
+                icon: Layers,
+            },
+            {
+                title: 'Utilisateurs',
+                href: '#',
+                icon: Users,
+            },
+        ];
+    }
+
+    return [
+        {
+            title: 'Dashboard',
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Mes Commandes',
+            href: route('orders.index'),
+            icon: ShoppingBag,
+        },
+        {
+            title: 'Boutique',
+            href: route('products.index'),
+            icon: Layers,
+        },
+    ];
+});
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        title: 'Paramètres',
+        href: route('profile.edit'),
+        icon: Settings,
     },
 ];
 </script>
@@ -45,7 +82,7 @@ const footerNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="dashboard()">
+                        <Link :href="isAdmin ? route('admin.dashboard') : dashboard()">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>

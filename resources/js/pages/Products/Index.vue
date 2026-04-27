@@ -1,13 +1,14 @@
-<script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import ProductCard from '@/Components/Shop/ProductCard.vue';
+import ProductCard from '@/components/Shop/ProductCard.vue';
+import ShopHeader from '@/components/Shop/ShopHeader.vue';
+import ShopFooter from '@/components/Shop/ShopFooter.vue';
 
 const props = defineProps<{
     products: {
-        data: Array<any>;
-        links: Array<any>;
+        data: any[];
+        links: any[];
     };
-    categories: Array<any>;
+    categories: any[];
     filters: any;
 }>();
 </script>
@@ -16,7 +17,9 @@ const props = defineProps<{
     <Head title="Catalogue - ShopTech" />
 
     <div class="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
-        <div class="px-6 py-12 mx-auto max-w-7xl lg:px-12">
+        <ShopHeader />
+        
+        <div class="pt-32 pb-24 px-6 py-12 mx-auto max-w-7xl lg:px-12">
             <!-- Header -->
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
                 <div class="space-y-4">
@@ -85,5 +88,6 @@ const props = defineProps<{
                 />
             </div>
         </div>
+        <ShopFooter />
     </div>
 </template>

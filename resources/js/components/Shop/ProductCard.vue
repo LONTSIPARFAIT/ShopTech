@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { products_show } from '@/routes';
+import products from '@/routes/products';
 
 const props = defineProps<{
     product: any;
@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
     <div class="group relative bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/50 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-2">
-        <Link :href="products_show({ slug: product.slug })" class="block">
+        <Link :href="products.show({ slug: product.slug }).url" class="block">
             <div class="aspect-square bg-slate-100 dark:bg-slate-800 relative overflow-hidden">
                 <img 
                     v-if="product.featured_image" 
