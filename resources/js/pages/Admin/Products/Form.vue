@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import { store as admin_products_store, update as admin_products_update } from '@/routes/admin/products';
+import { computed } from 'vue';
 
 const props = defineProps<{
     categories: any[];
@@ -41,6 +42,13 @@ const submit = () => {
         form.post(admin_products_store().url);
     }
 };
+
+const discountPercent = computed(() => {
+    const base = parseFloat(form.base_price as any);
+    const original = parseFloat(form.original_price as any);
+    if (!base || !original || original <= base) return null;
+    return Math.round((1 - base / original) * 100);
+});
 
 const generateSlug = () => {
     form.slug = form.name
@@ -105,26 +113,40 @@ const generateSlug = () => {
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Prix de base</label>
-                            <input 
-                                v-model="form.base_price" 
-                                type="number" 
-                                step="0.01"
+                            <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Prix actuel (XAF)</label>
+                            <input
+                                v-model="form.base_price"
+                                type="number"
+                                step="1"
                                 class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
+                                placeholder="ex: 150000"
                             />
                             <div v-if="form.errors.base_price" class="text-red-500 text-xs">{{ form.errors.base_price }}</div>
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Ancien Prix</label>
-                            <input 
-                                v-model="form.original_price" 
-                                type="number" 
-                                step="0.01"
+                            <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Prix barré / Ancien prix (XAF)</label>
+                            <input
+                                v-model="form.original_price"
+                                type="number"
+                                step="1"
                                 class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
                                 placeholder="(Optionnel)"
                             />
                             <div v-if="form.errors.original_price" class="text-red-500 text-xs">{{ form.errors.original_price }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Live discount preview -->
+                    <div v-if="discountPercent" class="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-2xl">
+                        <div class="w-12 h-12 bg-red-500 text-white rounded-xl flex items-center justify-center font-black text-sm shadow-lg shadow-red-500/20">
+                            -{{ discountPercent }}%
+                        </div>
+                        <div>
+                            <p class="font-black text-sm text-red-600 dark:text-red-400">Réduction calculée automatiquement</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                {{ Number(form.original_price).toLocaleString() }} XAF → {{ Number(form.base_price).toLocaleString() }} XAF
+                            </p>
                         </div>
                     </div>
 

@@ -6,12 +6,19 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\Payment\NotchPayController;
 use App\Http\Controllers\Payment\WebhookController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Static Pages
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/services', [PageController::class, 'services'])->name('services');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::post('/contact/send', [PageController::class, 'sendContact'])->name('contact.send');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');

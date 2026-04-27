@@ -2,109 +2,107 @@
 import { Link, router } from '@inertiajs/vue3';
 import products from '@/routes/products';
 import { store as cartStore } from '@/routes/cart';
-import { ShoppingBag, Plus, Eye } from 'lucide-vue-next';
+import { ShoppingCart, Eye, Tag } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 const props = defineProps<{
     product: any;
 }>();
 
+const discountPercent = computed(() => {
+    const base = parseFloat(props.product.base_price);
+    const orig = parseFloat(props.product.original_price);
+    if (!base || !orig || orig <= base) return null;
+    return Math.round((1 - base / orig) * 100);
+});
+
 const addToCart = () => {
-    // If product has variants, redirect to show page to pick one
     if (props.product.variants && props.product.variants.length > 0) {
         router.visit(products.show({ slug: props.product.slug }).url);
         return;
     }
-
-    // Otherwise add directly
-    router.post(cartStore().url, {
-        product_id: props.product.id,
-        quantity: 1
-    }, {
-        preserveScroll: true,
-    });
+    router.post(cartStore().url, { product_id: props.product.id, quantity: 1 }, { preserveScroll: true });
 };
 </script>
 
 <template>
-    <div class="group relative bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-100 dark:border-slate-800/50 shadow-sm hover:shadow-2xl transition-all duration-700 overflow-hidden hover:-translate-y-3">
-        <!-- Image Section -->
-        <div class="relative aspect-[4/5] bg-slate-50 dark:bg-slate-950 overflow-hidden">
+    <div class="group relative bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/50 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-2">
+        <!-- Image -->
+        <div class="relative aspect-square bg-slate-50 dark:bg-slate-950 overflow-hidden">
             <Link :href="products.show({ slug: product.slug }).url" class="block w-full h-full">
-                <img 
-                    v-if="product.featured_image" 
-                    :src="product.featured_image.path" 
+                <img
+                    v-if="product.featured_image"
+                    :src="product.featured_image.path"
                     :alt="product.name"
-                    class="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-110"
+                    class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                 />
                 <div v-else class="flex items-center justify-center h-full text-slate-200 dark:text-slate-800">
-                    <ShoppingBag class="w-24 h-24" />
+                    <ShoppingCart class="w-16 h-16" />
                 </div>
             </Link>
-            
-            <!-- Floating Actions -->
-            <div class="absolute inset-x-6 bottom-6 flex items-center gap-3 translate-y-20 group-hover:translate-y-0 transition-transform duration-500">
-                <button 
+
+            <!-- Hover Actions -->
+            <div class="absolute inset-x-3 bottom-3 flex items-center gap-2 translate-y-14 group-hover:translate-y-0 transition-transform duration-400">
+                <button
                     @click="addToCart"
-                    class="flex-1 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center gap-3 font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-95"
+                    class="flex-1 h-11 bg-blue-600 text-white rounded-xl flex items-center justify-center gap-2 font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-95"
                 >
-                    <Plus class="w-4 h-4" /> Ajouter
+                    <ShoppingCart class="w-3.5 h-3.5" /> Ajouter
                 </button>
-                <Link 
+                <Link
                     :href="products.show({ slug: product.slug }).url"
-                    class="w-14 h-14 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white rounded-2xl flex items-center justify-center hover:bg-white transition-all shadow-xl active:scale-95"
+                    class="w-11 h-11 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-xl flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95"
                 >
-                    <Eye class="w-5 h-5" />
+                    <Eye class="w-4 h-4" />
                 </Link>
             </div>
 
             <!-- Category Badge -->
-            <div class="absolute top-6 left-6">
-                <span class="px-4 py-2 text-[8px] font-black uppercase tracking-[0.2em] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-blue-600 shadow-sm border border-slate-100 dark:border-slate-800">
-                    {{ product.category.name }}
+            <div class="absolute top-3 left-3">
+                <span class="px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.2em] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-blue-600 shadow-sm border border-slate-100 dark:border-slate-800">
+                    {{ product.category?.name }}
                 </span>
             </div>
 
             <!-- Discount Badge -->
-            <div v-if="product.original_price" class="absolute top-6 right-6">
-                <div class="w-12 h-12 bg-red-500 text-white rounded-2xl flex flex-col items-center justify-center shadow-xl shadow-red-500/30">
-                    <span class="text-[10px] font-black">-{{ Math.round((1 - (product.base_price / product.original_price)) * 100) }}%</span>
+            <div v-if="discountPercent" class="absolute top-3 right-3">
+                <div class="flex items-center gap-1 px-2 py-1 bg-red-500 text-white rounded-xl shadow-lg shadow-red-500/30">
+                    <Tag class="w-2.5 h-2.5" />
+                    <span class="text-[9px] font-black">-{{ discountPercent }}%</span>
                 </div>
             </div>
         </div>
 
-        <!-- Content Section -->
-        <div class="p-8 space-y-6">
-            <div class="space-y-2">
-                <Link :href="products.show({ slug: product.slug }).url" class="block">
-                    <h3 class="text-xl font-black tracking-tight group-hover:text-blue-600 transition-colors line-clamp-1 uppercase italic">
-                        {{ product.name }}
-                    </h3>
-                </Link>
-                <p class="text-xs text-slate-400 font-medium line-clamp-2 leading-relaxed h-8">
-                    {{ product.description }}
-                </p>
-            </div>
+        <!-- Content -->
+        <div class="p-5 space-y-3">
+            <Link :href="products.show({ slug: product.slug }).url" class="block">
+                <h3 class="text-sm font-black tracking-tight group-hover:text-blue-600 transition-colors line-clamp-2 uppercase leading-snug">
+                    {{ product.name }}
+                </h3>
+            </Link>
 
-            <div class="flex items-center justify-between pt-4 border-t border-slate-50 dark:border-slate-800/50">
+            <div class="flex items-end justify-between">
+                <!-- Prices -->
                 <div class="flex flex-col">
-                    <span v-if="product.original_price" class="text-xs text-slate-400 line-through font-bold opacity-50 mb-0.5">
+                    <span v-if="product.original_price" class="text-[10px] text-slate-400 line-through font-semibold">
                         {{ Number(product.original_price).toLocaleString() }} XAF
                     </span>
-                    <div class="text-2xl font-black text-slate-900 dark:text-white flex items-baseline gap-1">
-                        {{ Number(product.base_price).toLocaleString() }}
-                        <span class="text-[9px] font-black uppercase tracking-widest text-blue-600">XAF</span>
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-lg font-black text-slate-900 dark:text-white">
+                            {{ Number(product.base_price).toLocaleString() }}
+                        </span>
+                        <span class="text-[8px] font-black uppercase tracking-widest text-blue-600">XAF</span>
                     </div>
                 </div>
 
-                <!-- Small Add Button (Fallback/Always visible on mobile) -->
-                <button 
+                <!-- Mobile add button -->
+                <button
                     @click="addToCart"
-                    class="lg:hidden w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 active:scale-90"
+                    class="lg:hidden w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20 active:scale-90"
                 >
-                    <Plus class="w-6 h-6" />
+                    <ShoppingCart class="w-4 h-4" />
                 </button>
             </div>
         </div>
     </div>
 </template>
-

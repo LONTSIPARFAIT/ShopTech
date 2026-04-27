@@ -39,15 +39,15 @@ watch([search, sort], () => {
     <ShopLayout>
         <Head title="Catalogue - ShopTech" />
 
-        <div class="pt-32 pb-24 px-6 mx-auto max-w-7xl lg:px-12 min-h-[80vh]">
+        <div class="pt-28 pb-16 px-6 mx-auto max-w-7xl lg:px-12 min-h-[80vh]">
             <!-- Header Section -->
-            <div class="flex flex-col space-y-12 mb-16">
-                <div class="space-y-4 text-center max-w-3xl mx-auto">
-                    <h1 class="text-6xl font-black tracking-tight sm:text-7xl uppercase italic">
+            <div class="flex flex-col space-y-8 mb-10">
+                <div class="space-y-3 text-center max-w-3xl mx-auto">
+                    <h1 class="text-4xl font-black tracking-tight sm:text-5xl uppercase italic">
                         <span class="text-blue-600">The</span> Catalog
                     </h1>
-                    <p class="text-slate-500 dark:text-slate-400 text-lg font-medium">
-                        Dénichez les meilleures pépites technologiques parmi notre sélection rigoureuse.
+                    <p class="text-slate-500 dark:text-slate-400 font-medium">
+                        Dénichez les meilleures pépites technologiques parmi notre sélection.
                     </p>
                 </div>
 
@@ -105,11 +105,11 @@ watch([search, sort], () => {
             </div>
 
             <!-- Results Meta -->
-            <div class="mb-12 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <span class="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></span>
-                    <p class="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
-                        {{ products.data.length }} pépites disponibles
+            <div class="mb-8 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="w-2.5 h-2.5 bg-blue-600 rounded-full animate-pulse"></span>
+                    <p class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">
+                        {{ products.data.length }} produits
                     </p>
                 </div>
                 <div class="h-px flex-1 mx-10 bg-slate-100 dark:bg-slate-800"></div>
@@ -121,7 +121,7 @@ watch([search, sort], () => {
             </div>
 
             <!-- Product Grid -->
-            <div v-if="products.data.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+            <div v-if="products.data.length > 0" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 <ProductCard 
                     v-for="product in products.data" 
                     :key="product.id"
@@ -146,7 +146,7 @@ watch([search, sort], () => {
             </div>
 
             <!-- Pagination -->
-            <div v-if="products.links.length > 3" class="mt-32 flex justify-center items-center gap-3">
+            <div v-if="products.links.length > 3" class="mt-16 flex justify-center items-center gap-2">
                 <Link 
                     v-for="(link, index) in products.links" 
                     :key="index"
