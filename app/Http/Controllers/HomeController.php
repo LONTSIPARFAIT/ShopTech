@@ -13,12 +13,18 @@ class HomeController extends Controller
     {
         return Inertia::render('Welcome', [
             'canRegister' => Features::enabled(Features::registration()),
-            'featuredProducts' => Product::with(['category', 'featuredImage', 'variants'])
+            'newArrivals' => Product::with(['category', 'featuredImage', 'variants'])
                 ->where('is_active', true)
                 ->latest()
-                ->take(8)
+                ->take(4)
                 ->get(),
-            'categories' => Category::all(),
+            'discountedProducts' => Product::with(['category', 'featuredImage', 'variants'])
+                ->where('is_active', true)
+                ->whereNotNull('original_price')
+                ->latest()
+                ->take(4)
+                ->get(),
+            'categories' => Category::withCount('products')->get(),
         ]);
     }
 }

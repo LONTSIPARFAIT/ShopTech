@@ -15,22 +15,33 @@ class ProductController extends Controller
         $query = Product::with(['category', 'featuredImage', 'variants'])
             ->where('is_active', true);
 
-        if ($request->has('category')) {
+        // Search
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Category
+        if ($request->filled('category')) {
             $query->whereHas('category', function ($q) use ($request) {
                 $q->where('slug', $request->category);
             });
         }
 
-        if ($request->sort === 'latest') {
-            $query->latest();
-        } else {
-            $query->orderBy('name');
-        }
+        // Sorting
+        match ($request->sort) {
+            'price_asc' => $query->orderBy('base_price', 'asc'),
+            'price_desc' => $query->orderBy('base_price', 'desc'),
+            'name_asc' => $query->orderBy('name', 'asc'),
+            default => $query->latest(),
+        };
 
         return Inertia::render('Products/Index', [
             'products' => $query->paginate(12)->withQueryString(),
             'categories' => Category::all(),
-            'filters' => $request->only(['category'])
+            'filters' => $request->only(['search', 'category', 'sort'])
         ]);
     }
 

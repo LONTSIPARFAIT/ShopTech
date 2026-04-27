@@ -13,6 +13,7 @@ const form = useForm({
     slug: props.product?.slug ?? '',
     description: props.product?.description ?? '',
     base_price: props.product?.base_price ?? '',
+    original_price: props.product?.original_price ?? '',
     is_active: props.product?.is_active ?? true,
     variants: props.product?.variants ?? [
         { name: 'Standard', value: 'Unique', price_override: 0, stock: 0 }
@@ -96,15 +97,29 @@ const generateSlug = () => {
                         <div v-if="form.errors.category_id" class="text-red-500 text-xs">{{ form.errors.category_id }}</div>
                     </div>
 
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Prix de base</label>
-                        <input 
-                            v-model="form.base_price" 
-                            type="number" 
-                            step="0.01"
-                            class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
-                        />
-                        <div v-if="form.errors.base_price" class="text-red-500 text-xs">{{ form.errors.base_price }}</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Prix de base</label>
+                            <input 
+                                v-model="form.base_price" 
+                                type="number" 
+                                step="0.01"
+                                class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
+                            />
+                            <div v-if="form.errors.base_price" class="text-red-500 text-xs">{{ form.errors.base_price }}</div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Ancien Prix</label>
+                            <input 
+                                v-model="form.original_price" 
+                                type="number" 
+                                step="0.01"
+                                class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
+                                placeholder="(Optionnel)"
+                            />
+                            <div v-if="form.errors.original_price" class="text-red-500 text-xs">{{ form.errors.original_price }}</div>
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-3">

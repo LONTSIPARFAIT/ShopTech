@@ -57,6 +57,14 @@ class CartService
         }
     }
 
+    public function getTotal(Cart $cart): float
+    {
+        return $cart->items->sum(function ($item) {
+            $price = $item->variant ? ($item->variant->price_override ?? $item->product->base_price) : $item->product->base_price;
+            return $price * $item->quantity;
+        });
+    }
+
     public function clear(): void
     {
         $cart = $this->getCart();

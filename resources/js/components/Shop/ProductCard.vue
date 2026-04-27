@@ -1,54 +1,110 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import products from '@/routes/products';
+import { store as cartStore } from '@/routes/cart';
+import { ShoppingBag, Plus, Eye } from 'lucide-vue-next';
 
 const props = defineProps<{
     product: any;
 }>();
+
+const addToCart = () => {
+    // If product has variants, redirect to show page to pick one
+    if (props.product.variants && props.product.variants.length > 0) {
+        router.visit(products.show({ slug: props.product.slug }).url);
+        return;
+    }
+
+    // Otherwise add directly
+    router.post(cartStore().url, {
+        product_id: props.product.id,
+        quantity: 1
+    }, {
+        preserveScroll: true,
+    });
+};
 </script>
 
 <template>
-    <div class="group relative bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/50 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-2">
-        <Link :href="products.show({ slug: product.slug }).url" class="block">
-            <div class="aspect-square bg-slate-100 dark:bg-slate-800 relative overflow-hidden">
+    <div class="group relative bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-100 dark:border-slate-800/50 shadow-sm hover:shadow-2xl transition-all duration-700 overflow-hidden hover:-translate-y-3">
+        <!-- Image Section -->
+        <div class="relative aspect-[4/5] bg-slate-50 dark:bg-slate-950 overflow-hidden">
+            <Link :href="products.show({ slug: product.slug }).url" class="block w-full h-full">
                 <img 
                     v-if="product.featured_image" 
                     :src="product.featured_image.path" 
                     :alt="product.name"
-                    class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
+                    class="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-110"
                 />
-                <div v-else class="flex items-center justify-center h-full text-slate-300 dark:text-slate-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                <div v-else class="flex items-center justify-center h-full text-slate-200 dark:text-slate-800">
+                    <ShoppingBag class="w-24 h-24" />
                 </div>
-                
-                <!-- Badges -->
-                <div class="absolute top-4 right-4">
-                    <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-full text-blue-600 shadow-sm">
-                        {{ product.category.name }}
-                    </span>
-                </div>
+            </Link>
+            
+            <!-- Floating Actions -->
+            <div class="absolute inset-x-6 bottom-6 flex items-center gap-3 translate-y-20 group-hover:translate-y-0 transition-transform duration-500">
+                <button 
+                    @click="addToCart"
+                    class="flex-1 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center gap-3 font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-95"
+                >
+                    <Plus class="w-4 h-4" /> Ajouter
+                </button>
+                <Link 
+                    :href="products.show({ slug: product.slug }).url"
+                    class="w-14 h-14 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white rounded-2xl flex items-center justify-center hover:bg-white transition-all shadow-xl active:scale-95"
+                >
+                    <Eye class="w-5 h-5" />
+                </Link>
             </div>
 
-            <div class="p-6 space-y-3">
-                <h3 class="text-lg font-bold group-hover:text-blue-600 transition-colors line-clamp-1">
-                    {{ product.name }}
-                </h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
-                    {{ product.description }}
-                </p>
-                <div class="flex items-center justify-between pt-2">
-                    <div class="text-xl font-black text-slate-900 dark:text-white">
-                        {{ Number(product.base_price).toLocaleString() }} <span class="text-xs font-normal opacity-70">XAF</span>
-                    </div>
-                    <div class="w-10 h-10 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                    </div>
+            <!-- Category Badge -->
+            <div class="absolute top-6 left-6">
+                <span class="px-4 py-2 text-[8px] font-black uppercase tracking-[0.2em] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-blue-600 shadow-sm border border-slate-100 dark:border-slate-800">
+                    {{ product.category.name }}
+                </span>
+            </div>
+
+            <!-- Discount Badge -->
+            <div v-if="product.original_price" class="absolute top-6 right-6">
+                <div class="w-12 h-12 bg-red-500 text-white rounded-2xl flex flex-col items-center justify-center shadow-xl shadow-red-500/30">
+                    <span class="text-[10px] font-black">-{{ Math.round((1 - (product.base_price / product.original_price)) * 100) }}%</span>
                 </div>
             </div>
-        </Link>
+        </div>
+
+        <!-- Content Section -->
+        <div class="p-8 space-y-6">
+            <div class="space-y-2">
+                <Link :href="products.show({ slug: product.slug }).url" class="block">
+                    <h3 class="text-xl font-black tracking-tight group-hover:text-blue-600 transition-colors line-clamp-1 uppercase italic">
+                        {{ product.name }}
+                    </h3>
+                </Link>
+                <p class="text-xs text-slate-400 font-medium line-clamp-2 leading-relaxed h-8">
+                    {{ product.description }}
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-50 dark:border-slate-800/50">
+                <div class="flex flex-col">
+                    <span v-if="product.original_price" class="text-xs text-slate-400 line-through font-bold opacity-50 mb-0.5">
+                        {{ Number(product.original_price).toLocaleString() }} XAF
+                    </span>
+                    <div class="text-2xl font-black text-slate-900 dark:text-white flex items-baseline gap-1">
+                        {{ Number(product.base_price).toLocaleString() }}
+                        <span class="text-[9px] font-black uppercase tracking-widest text-blue-600">XAF</span>
+                    </div>
+                </div>
+
+                <!-- Small Add Button (Fallback/Always visible on mobile) -->
+                <button 
+                    @click="addToCart"
+                    class="lg:hidden w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 active:scale-90"
+                >
+                    <Plus class="w-6 h-6" />
+                </button>
+            </div>
+        </div>
     </div>
 </template>
+
