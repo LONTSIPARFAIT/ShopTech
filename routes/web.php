@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
@@ -23,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
         Route::resource('orders', App\Http\Controllers\Admin\OrderController::class);
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     });
 
     // Client Routes

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import CartItem from '@/Components/Shop/CartItem.vue';
+import ShopHeader from '@/components/Shop/ShopHeader.vue';
+import ShopFooter from '@/components/Shop/ShopFooter.vue';
+import { update as cartUpdate, destroy as cartDestroy } from '@/routes/cart';
 
 const props = defineProps<{
     cart: any;
@@ -11,12 +14,12 @@ const props = defineProps<{
 
 const updateQuantity = (itemId: number, quantity: number) => {
     if (quantity < 1) return;
-    router.patch(route('cart.update', { item: itemId }), { quantity });
+    router.patch(cartUpdate(itemId).url, { quantity });
 };
 
 const removeItem = (itemId: number) => {
     if (confirm('Voulez-vous retirer cet article ?')) {
-        router.delete(route('cart.destroy', { item: itemId }));
+        router.delete(cartDestroy(itemId).url);
     }
 };
 </script>
@@ -25,7 +28,8 @@ const removeItem = (itemId: number) => {
     <Head title="Votre Panier - ShopTech" />
 
     <div class="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
-        <div class="px-6 py-12 mx-auto max-w-7xl lg:px-12">
+        <ShopHeader />
+        <div class="pt-32 px-6 py-12 mx-auto max-w-7xl lg:px-12">
             <h1 class="text-4xl font-black mb-12">Votre Panier</h1>
 
             <div v-if="cart.items.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-12">

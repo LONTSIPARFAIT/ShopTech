@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import AppHeaderLayout from '@/layouts/app/AppHeaderLayout.vue';
+import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import StatusBadge from '@/components/ui/StatusBadge.vue';
 import { Package, ChevronRight, Calendar, CreditCard } from 'lucide-vue-next';
 
@@ -12,7 +12,7 @@ const props = defineProps<{
 }>();
 
 defineOptions({
-    layout: AppHeaderLayout,
+    layout: AppSidebarLayout,
 });
 </script>
 

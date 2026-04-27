@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 import ProductCard from '@/components/Shop/ProductCard.vue';
 import ShopHeader from '@/components/Shop/ShopHeader.vue';

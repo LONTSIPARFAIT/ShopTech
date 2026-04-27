@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, FolderGit2, LayoutGrid, ShoppingBag, Users, Layers, Settings } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -15,7 +15,14 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard as clientDashboard } from '@/routes';
+import { dashboard as adminDashboard } from '@/routes/admin';
+import { index as adminProducts } from '@/routes/admin/products';
+import { index as adminOrders } from '@/routes/admin/orders';
+import { index as adminUsers } from '@/routes/admin/users';
+import { index as ordersIndex } from '@/routes/orders';
+import { index as shopIndex } from '@/routes/products';
+import { edit as profileEdit } from '@/routes/profile';
 import type { NavItem } from '@/types';
 
 const page = usePage();
@@ -27,22 +34,22 @@ const mainNavItems = computed((): NavItem[] => {
         return [
             {
                 title: 'Dashboard',
-                href: route('admin.dashboard'),
+                href: adminDashboard().url,
                 icon: LayoutGrid,
             },
             {
                 title: 'Produits',
-                href: route('admin.products.index'),
+                href: adminProducts().url,
                 icon: ShoppingBag,
             },
             {
                 title: 'Commandes',
-                href: route('admin.orders.index'),
+                href: adminOrders().url,
                 icon: Layers,
             },
             {
                 title: 'Utilisateurs',
-                href: '#',
+                href: adminUsers().url,
                 icon: Users,
             },
         ];
@@ -51,17 +58,17 @@ const mainNavItems = computed((): NavItem[] => {
     return [
         {
             title: 'Dashboard',
-            href: dashboard(),
+            href: clientDashboard().url,
             icon: LayoutGrid,
         },
         {
             title: 'Mes Commandes',
-            href: route('orders.index'),
+            href: ordersIndex().url,
             icon: ShoppingBag,
         },
         {
             title: 'Boutique',
-            href: route('products.index'),
+            href: shopIndex().url,
             icon: Layers,
         },
     ];
@@ -70,7 +77,7 @@ const mainNavItems = computed((): NavItem[] => {
 const footerNavItems: NavItem[] = [
     {
         title: 'Paramètres',
-        href: route('profile.edit'),
+        href: profileEdit().url,
         icon: Settings,
     },
 ];
@@ -82,7 +89,7 @@ const footerNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="isAdmin ? route('admin.dashboard') : dashboard()">
+                        <Link href="/">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>

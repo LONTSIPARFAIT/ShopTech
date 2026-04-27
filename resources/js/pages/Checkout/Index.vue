@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
+import { store as checkoutStore } from '@/routes/checkout';
+import ShopHeader from '@/components/Shop/ShopHeader.vue';
+import ShopFooter from '@/components/Shop/ShopFooter.vue';
 
 const props = defineProps<{
     cart: any;
@@ -14,15 +17,16 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('checkout.store'));
+    form.post(checkoutStore().url);
 };
 </script>
 
 <template>
     <Head title="Paiement - ShopTech" />
 
-    <div class="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300 py-12">
-        <div class="px-6 mx-auto max-w-7xl lg:px-12">
+    <div class="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+        <ShopHeader />
+        <div class="pt-32 pb-12 px-6 mx-auto max-w-7xl lg:px-12">
             <h1 class="text-4xl font-black mb-12">Finaliser votre commande</h1>
 
             <form @submit.prevent="submit" class="grid grid-cols-1 lg:grid-cols-3 gap-12">

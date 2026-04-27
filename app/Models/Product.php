@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['category_id', 'name', 'slug', 'description', 'base_price', 'is_active'])]
+#[Fillable(['category_id', 'name', 'slug', 'description', 'base_price', 'original_price', 'is_active'])]
 class Product extends Model
 {
     use HasFactory;
@@ -17,6 +17,7 @@ class Product extends Model
     {
         return [
             'base_price' => 'decimal:2',
+            'original_price' => 'decimal:2',
             'is_active' => 'boolean',
         ];
     }

@@ -1,7 +1,9 @@
+<script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import ShopHeader from '@/components/Shop/ShopHeader.vue';
 import ShopFooter from '@/components/Shop/ShopFooter.vue';
+import { store as cartStore } from '@/routes/cart';
 
 const props = defineProps<{
     product: any;
@@ -23,14 +25,21 @@ const quantity = ref(1);
 const form = useForm({
     product_id: props.product.id,
     variant_id: selectedVariant.value?.id,
-    quantity: quantity.value,
+    quantity: 1,
+});
+
+watch([selectedVariant, quantity], () => {
+    form.variant_id = selectedVariant.value?.id;
+    form.quantity = quantity.value;
 });
 
 const addToCart = () => {
-    // Sera implémenté dans le module Panier
-    alert('Ajouté au panier ! (Bientôt disponible)');
+    form.post(cartStore().url, {
+        preserveScroll: true,
+    });
 };
 </script>
+
 
 <template>
     <Head :title="`${product.name} - ShopTech`" />
