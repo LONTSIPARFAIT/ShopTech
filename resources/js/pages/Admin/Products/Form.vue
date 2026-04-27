@@ -15,13 +15,19 @@ const form = useForm({
     base_price: props.product?.base_price ?? '',
     original_price: props.product?.original_price ?? '',
     is_active: props.product?.is_active ?? true,
-    variants: props.product?.variants ?? [
-        { name: 'Standard', value: 'Unique', price_override: 0, stock: 0 }
+    variants: props.product?.variants?.map((v: any) => ({
+        name: v.name,
+        value: v.value,
+        color_code: v.color_code ?? '',
+        price_override: v.price_override,
+        stock: v.stock
+    })) ?? [
+        { name: 'Standard', value: 'Unique', color_code: '', price_override: 0, stock: 0 }
     ],
 });
 
 const addVariant = () => {
-    form.variants.push({ name: '', value: '', price_override: 0, stock: 0 });
+    form.variants.push({ name: '', value: '', color_code: '', price_override: 0, stock: 0 });
 };
 
 const removeVariant = (index: number) => {
@@ -155,7 +161,7 @@ const generateSlug = () => {
                 </div>
 
                 <div class="space-y-4">
-                    <div v-for="(variant, index) in form.variants" :key="index" class="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl relative group">
+                    <div v-for="(variant, index) in form.variants" :key="index" class="grid grid-cols-1 md:grid-cols-6 gap-4 p-6 bg-slate-50 dark:bg-slate-800 rounded-2xl relative group">
                         <div class="space-y-1">
                             <label class="text-[10px] font-black uppercase opacity-50">Type</label>
                             <input v-model="variant.name" type="text" placeholder="Couleur, Taille..." class="w-full bg-white dark:bg-slate-900 border-none rounded-xl text-sm" />
@@ -163,6 +169,13 @@ const generateSlug = () => {
                         <div class="space-y-1">
                             <label class="text-[10px] font-black uppercase opacity-50">Valeur</label>
                             <input v-model="variant.value" type="text" placeholder="Rouge, XL..." class="w-full bg-white dark:bg-slate-900 border-none rounded-xl text-sm" />
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-black uppercase opacity-50">Couleur (Hex)</label>
+                            <div class="flex gap-2">
+                                <input v-model="variant.color_code" type="color" class="w-10 h-10 p-1 bg-white dark:bg-slate-900 border-none rounded-lg cursor-pointer" />
+                                <input v-model="variant.color_code" type="text" placeholder="#FFFFFF" class="flex-1 bg-white dark:bg-slate-900 border-none rounded-xl text-[10px] font-mono uppercase" />
+                            </div>
                         </div>
                         <div class="space-y-1">
                             <label class="text-[10px] font-black uppercase opacity-50">Supplément</label>

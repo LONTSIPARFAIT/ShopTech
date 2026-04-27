@@ -28,6 +28,7 @@ class ProductRequest extends FormRequest
             'variants' => 'required|array|min:1',
             'variants.*.name' => 'required|string',
             'variants.*.value' => 'required|string',
+            'variants.*.color_code' => 'nullable|string',
             'variants.*.price_override' => 'nullable|numeric|min:0',
             'variants.*.stock' => 'required|integer|min:0',
         ];

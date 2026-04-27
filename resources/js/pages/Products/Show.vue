@@ -138,19 +138,27 @@ const activeImage = ref(props.product.images[0]?.path || null);
                                     v-for="variant in product.variants" 
                                     :key="variant.id"
                                     @click="selectedVariant = variant"
-                                    class="group relative px-8 py-5 rounded-[2rem] border-2 transition-all duration-500 text-left overflow-hidden active:scale-95"
+                                    class="group relative p-2 rounded-[2rem] border-2 transition-all duration-500 text-left overflow-hidden active:scale-95 flex items-center gap-4"
                                     :class="selectedVariant?.id === variant.id 
                                         ? 'border-blue-600 bg-blue-600 text-white shadow-2xl shadow-blue-500/40' 
                                         : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:border-blue-400'"
                                 >
-                                    <div class="relative z-10">
-                                        <div class="text-xs font-black uppercase tracking-widest">{{ variant.name }}: {{ variant.value }}</div>
-                                        <div v-if="variant.price_override" class="text-[10px] font-bold opacity-70 mt-1">
-                                            {{ Number(variant.price_override).toLocaleString() }} XAF
+                                    <!-- Color Swatch -->
+                                    <div 
+                                        v-if="variant.color_code" 
+                                        class="w-12 h-12 rounded-[1.2rem] border-2 border-white/20 shadow-inner flex-shrink-0"
+                                        :style="{ backgroundColor: variant.color_code }"
+                                    ></div>
+                                    
+                                    <div class="pr-6">
+                                        <div class="text-[10px] font-black uppercase tracking-widest">{{ variant.name }}: {{ variant.value }}</div>
+                                        <div v-if="variant.price_override" class="text-[9px] font-bold opacity-70 mt-0.5">
+                                            + {{ Number(variant.price_override).toLocaleString() }} XAF
                                         </div>
                                     </div>
+                                    
                                     <div class="absolute top-0 right-0 p-3 opacity-20 group-hover:rotate-12 transition-transform">
-                                        <Sparkles class="w-4 h-4" />
+                                        <Sparkles class="w-3 h-3" />
                                     </div>
                                 </button>
                             </div>
