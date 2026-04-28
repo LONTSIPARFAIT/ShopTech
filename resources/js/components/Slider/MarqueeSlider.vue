@@ -1,9 +1,5 @@
 <template>
     <div class="relative overflow-hidden w-full group py-4">
-        <!-- Gradient Overlays for smooth edges -->
-        <div class="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-white dark:from-slate-950 to-transparent pointer-events-none"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-white dark:from-slate-950 to-transparent pointer-events-none"></div>
-
         <div class="flex whitespace-nowrap animate-marquee group-hover:pause" :style="{ animationDuration: duration }">
             <!-- First set of items -->
             <div class="flex gap-6 pr-6">

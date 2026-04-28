@@ -24,9 +24,22 @@ defineProps<{
 
         <HeroSection />
         <StatsSection />
-        <CategoriesSection :categories="categories" />
-        <DiscountedSection :products="discountedProducts" />
-        <NewArrivalsSection :products="newArrivals" />
+        
+        <CategoriesSection 
+            :categories="categories" 
+            subtitle="Explorez nos univers technologiques par catégorie"
+        />
+        
+        <DiscountedSection 
+            :products="discountedProducts" 
+            subtitle="Profitez de nos meilleures réductions sur une sélection de pépites"
+        />
+        
+        <NewArrivalsSection 
+            :products="newArrivals" 
+            subtitle="Découvrez les derniers produits fraîchement arrivés en stock"
+        />
+        
         <TechFocusSection />
         <FeaturesSection />
     </ShopLayout>

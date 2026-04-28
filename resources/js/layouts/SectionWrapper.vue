@@ -1,23 +1,15 @@
 <template>
     <section :class="['py-16', bgClass]">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 space-y-10">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div class="space-y-3">
-                    <div v-if="badge" class="inline-flex items-center gap-2 text-indigo-600 font-black uppercase tracking-widest text-[10px]">
-                        <component :is="badgeIcon" class="w-4 h-4" v-if="badgeIcon" />
-                        {{ badge }}
-                    </div>
-                    <h2 class="text-3xl font-black tracking-tight uppercase italic">{{ title }}</h2>
-                    <p v-if="subtitle" class="text-slate-500 dark:text-slate-400">{{ subtitle }}</p>
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 space-y-12">
+            <div class="space-y-4 text-center max-w-3xl mx-auto">
+                <div v-if="badge" class="inline-flex px-4 py-1.5 bg-blue-600/10 text-blue-600 rounded-full font-black uppercase tracking-widest text-[9px] border border-blue-600/10">
+                    {{ badge }}
                 </div>
-                <Link 
-                    v-if="viewAllLink"
-                    :href="viewAllLink" 
-                    class="group flex items-center gap-3 font-black text-xs uppercase tracking-widest"
-                >
-                    Tout voir 
-                    <ArrowRight class="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                </Link>
+                <h2 class="text-3xl md:text-4xl font-black tracking-tight uppercase italic leading-none">
+                    {{ title }}
+                </h2>
+                <div v-if="subtitle" class="h-1 w-20 bg-blue-600 mx-auto rounded-full"></div>
+                <p v-if="subtitle" class="text-slate-500 dark:text-slate-400 font-medium text-sm">{{ subtitle }}</p>
             </div>
             <slot />
         </div>

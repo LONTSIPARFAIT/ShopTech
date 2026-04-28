@@ -26,7 +26,7 @@ const addToCart = () => {
 </script>
 
 <template>
-    <div class="group relative bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/50 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-2">
+    <div class="group/card relative bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800/50 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-2">
         <!-- Image -->
         <div class="relative aspect-square bg-slate-50 dark:bg-slate-950 overflow-hidden">
             <Link :href="products.show({ slug: product.slug }).url" class="block w-full h-full">
@@ -34,7 +34,7 @@ const addToCart = () => {
                     v-if="product.featured_image"
                     :src="product.featured_image.path"
                     :alt="product.name"
-                    class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
+                    class="object-cover w-full h-full transition-transform duration-700 group-hover/card:scale-110"
                 />
                 <div v-else class="flex items-center justify-center h-full text-slate-200 dark:text-slate-800">
                     <ShoppingCart class="w-16 h-16" />
@@ -42,7 +42,7 @@ const addToCart = () => {
             </Link>
 
             <!-- Hover Actions -->
-            <div class="absolute inset-x-3 bottom-3 flex items-center gap-2 translate-y-14 group-hover:translate-y-0 transition-transform duration-400">
+            <div class="absolute inset-x-3 bottom-3 flex items-center gap-2 translate-y-14 group-hover/card:translate-y-0 transition-transform duration-400">
                 <button
                     @click="addToCart"
                     class="flex-1 h-11 bg-blue-600 text-white rounded-xl flex items-center justify-center gap-2 font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-95"
@@ -76,7 +76,7 @@ const addToCart = () => {
         <!-- Content -->
         <div class="p-5 space-y-3">
             <Link :href="products.show({ slug: product.slug }).url" class="block space-y-1">
-                <h3 class="text-sm font-black tracking-tight group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+                <h3 class="text-sm font-black tracking-tight group-hover/card:text-blue-600 transition-colors line-clamp-1 uppercase leading-snug">
                     {{ product.name }}
                 </h3>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 font-medium leading-relaxed">
