@@ -61,7 +61,7 @@ const removeItem = (itemId: number) => {
                         <p class="text-sm text-slate-400 font-medium max-w-[200px] mx-auto">Votre prochaine pépite technologique vous attend en boutique.</p>
                     </div>
                     <DialogClose as-child>
-                        <Link href="/products" class="px-10 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all">
+                        <Link :href="products.index()" class="px-10 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all">
                             Explorer la Boutique
                         </Link>
                     </DialogClose>

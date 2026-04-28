@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { X, MessageCircle, Phone } from 'lucide-vue-next';
+import { contact } from '@/routes';
 
 const isOpen = ref(false);
 const WHATSAPP_NUMBER = '237600000000';
@@ -36,7 +37,7 @@ const WHATSAPP_MSG = encodeURIComponent("Bonjour ShopTech, j'ai besoin d'aide av
 
                 <!-- Contact Page -->
                 <a
-                    href="/contact"
+                    :href="contact().url"
                     class="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl rounded-2xl px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all group"
                     aria-label="Formulaire de contact"
                 >

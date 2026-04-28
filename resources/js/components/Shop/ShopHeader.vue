@@ -2,7 +2,7 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import products from '@/routes/products';
-import { login, register, dashboard } from '@/routes';
+import { home, login, register, dashboard, services, about, contact } from '@/routes';
 import { useAppearance } from '@/composables/useAppearance';
 import { Sun, Moon, ShoppingBag, Menu, X, User, Sparkles, Info, Phone, Wrench } from 'lucide-vue-next';
 import CartModal from './CartModal.vue';
@@ -32,7 +32,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
     >
         <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
             <!-- Logo -->
-            <Link href="/" class="flex items-center gap-3 group">
+            <Link :href="home()" class="flex items-center gap-3 group">
                 <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/40 group-hover:rotate-12 transition-all duration-500">
                     <Sparkles class="text-white w-4 h-4" />
                 </div>
@@ -41,11 +41,11 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 
             <!-- Desktop Nav -->
             <div class="hidden lg:flex items-center gap-7">
-                <Link href="/" class="shop-nav-link" :class="$page.url === '/' ? 'text-blue-600' : 'text-slate-500'">Accueil</Link>
-                <Link :href="products.index().url" class="shop-nav-link" :class="$page.url.startsWith('/products') ? 'text-blue-600' : 'text-slate-500'">Boutique</Link>
-                <Link href="/services" class="shop-nav-link" :class="$page.url === '/services' ? 'text-blue-600' : 'text-slate-500'">Services</Link>
-                <Link href="/about" class="shop-nav-link" :class="$page.url === '/about' ? 'text-blue-600' : 'text-slate-500'">À propos</Link>
-                <Link href="/contact" class="shop-nav-link" :class="$page.url === '/contact' ? 'text-blue-600' : 'text-slate-500'">Contact</Link>
+                <Link :href="home()" class="shop-nav-link" :class="$page.url === '/' ? 'text-blue-600' : 'text-slate-500'">Accueil</Link>
+                <Link :href="products.index()" class="shop-nav-link" :class="$page.url.startsWith('/products') ? 'text-blue-600' : 'text-slate-500'">Boutique</Link>
+                <Link :href="services()" class="shop-nav-link" :class="$page.url === '/services' ? 'text-blue-600' : 'text-slate-500'">Services</Link>
+                <Link :href="about()" class="shop-nav-link" :class="$page.url === '/about' ? 'text-blue-600' : 'text-slate-500'">À propos</Link>
+                <Link :href="contact()" class="shop-nav-link" :class="$page.url === '/contact' ? 'text-blue-600' : 'text-slate-500'">Contact</Link>
             </div>
 
             <!-- Actions -->

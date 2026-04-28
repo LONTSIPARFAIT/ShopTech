@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import products from '@/routes/products';
+import { home, contact, about, services } from '@/routes';
 import { MapPin, Phone, Mail, Instagram, Facebook, Twitter, Clock, ArrowUp } from 'lucide-vue-next';
 import { ref, onMounted, onUnmounted } from 'vue';
 
@@ -22,7 +23,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-14">
                 <!-- Brand col -->
                 <div class="lg:col-span-2 space-y-5">
-                    <Link href="/" class="flex items-center gap-3">
+                    <Link :href="home()" class="flex items-center gap-3">
                         <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20">
                             <span class="text-white font-black text-base">S</span>
                         </div>
@@ -83,9 +84,9 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
                 <div class="space-y-5">
                     <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Support</h4>
                     <ul class="space-y-3 text-sm font-semibold">
-                        <li><Link href="/contact" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors">Nous contacter</Link></li>
-                        <li><Link href="/services" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors">Nos services</Link></li>
-                        <li><Link href="/about" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors">À propos</Link></li>
+                        <li><Link :href="contact()" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors">Nous contacter</Link></li>
+                        <li><Link :href="services()" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors">Nos services</Link></li>
+                        <li><Link :href="about()" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors">À propos</Link></li>
                         <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors">Livraison & Retours</a></li>
                         <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors">FAQ</a></li>
                     </ul>
