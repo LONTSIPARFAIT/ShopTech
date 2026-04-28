@@ -1,15 +1,15 @@
 <template>
     <section class="relative min-h-[95vh] flex items-center overflow-hidden pt-24 lg:pt-32">
-        <!-- Background Image avec transition -->
-        <div class="absolute inset-0 z-0">
-            <transition name="fade" mode="out-in">
-                <div :key="currentSlide" class="absolute inset-0">
+        <!-- Background Image avec transition horizontale -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <transition name="slide-x" mode="out-in">
+                <div :key="currentIndex" class="absolute inset-0">
                     <img
                         :src="currentSlide.image"
                         :alt="currentSlide.title"
                         class="w-full h-full object-cover brightness-[0.4] lg:brightness-[0.6]"
                     />
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+                    <!-- Plus de gradient latéral, juste un overlay subtil si besoin, mais on l'enlève pour satisfaire l'utilisateur -->
                 </div>
             </transition>
         </div>
@@ -27,12 +27,12 @@
                             </div>
 
                             <!-- Title -->
-                            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1]">
+                            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1]">
                                 {{ currentSlide.title }}
                             </h1>
-
+                            
                             <!-- Description -->
-                            <p class="text-lg md:text-xl text-gray-200 max-w-2xl">
+                            <p class="text-base sm:text-lg md:text-xl text-gray-200 max-w-2xl">
                                 {{ currentSlide.description }}
                             </p>
 
@@ -146,13 +146,15 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.8s ease;
+.slide-x-enter-active,
+.slide-x-leave-active {
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
+.slide-x-enter-from {
+    transform: translateX(100%);
+}
+.slide-x-leave-to {
+    transform: translateX(-100%);
 }
 
 .slide-up-enter-active,

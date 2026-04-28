@@ -1,7 +1,7 @@
 <template>
     <section class="py-16">
         <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FeatureCard
                     :icon="Truck"
                     title="Livraison Partout"

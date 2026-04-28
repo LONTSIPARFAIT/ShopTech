@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import TechCard from '@/Components/Home/TechCard.vue';
+import TechCard from '@/components/Home/TechCard.vue';
 import { Smartphone, Cpu, Headphones } from 'lucide-vue-next';
 
 const techItems = [

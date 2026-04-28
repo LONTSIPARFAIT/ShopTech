@@ -6,13 +6,11 @@
         :view-all-link="productsIndex.url()"
         bg-class="bg-white dark:bg-slate-950"
     >
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            <ProductCard 
-                v-for="product in products" 
-                :key="product.id" 
-                :product="product" 
-            />
-        </div>
+        <MarqueeSlider :items="products" duration="60s" item-width="280px">
+            <template #default="{ item }">
+                <ProductCard :product="item" />
+            </template>
+        </MarqueeSlider>
     </SectionWrapper>
 </template>
 
@@ -21,7 +19,7 @@ import { index as productsIndex } from '@/actions/App/Http/Controllers/ProductCo
 import { Zap } from 'lucide-vue-next';
 import SectionWrapper from '@/layouts/SectionWrapper.vue';
 import ProductCard from '@/components/Shop/ProductCard.vue';
-import HorizontalSlider from '@/components/Slider/HorizontalSlider.vue';
+import MarqueeSlider from '@/components/Slider/MarqueeSlider.vue';
 
 defineProps<{
     products: any[];
