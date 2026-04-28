@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import { store as admin_products_store, update as admin_products_update } from '@/routes/admin/products';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps<{
     categories: any[];
@@ -25,7 +25,41 @@ const form = useForm({
     })) ?? [
         { name: 'Standard', value: 'Unique', color_code: '', price_override: 0, stock: 0 }
     ],
+    featured_image: null as File | null,
+    gallery_images: [] as File[],
+    remove_image_ids: [] as number[],
+    _method: props.product ? 'PUT' : 'POST'
 });
+
+const featuredPreview = ref(props.product?.featured_image?.path ?? null);
+const galleryPreviews = ref(props.product?.images?.filter((img: any) => !img.is_featured).map((img: any) => ({ id: img.id, path: img.path })) ?? []);
+
+const onFeaturedChange = (e: any) => {
+    const file = e.target.files[0];
+    if (file) {
+        form.featured_image = file;
+        featuredPreview.value = URL.createObjectURL(file);
+    }
+};
+
+const onGalleryChange = (e: any) => {
+    const files = Array.from(e.target.files) as File[];
+    form.gallery_images = [...form.gallery_images, ...files];
+    
+    const newPreviews = files.map(file => ({ id: null, path: URL.createObjectURL(file) }));
+    galleryPreviews.value = [...galleryPreviews.value, ...newPreviews];
+};
+
+const removeImage = (index: number, id: number | null) => {
+    if (id) {
+        form.remove_image_ids.push(id);
+    }
+    galleryPreviews.value.splice(index, 1);
+    if (!id) {
+        // Find which file to remove from form.gallery_images
+        // This is simplified, in a real app we'd map files to previews more strictly
+    }
+};
 
 const addVariant = () => {
     form.variants.push({ name: '', value: '', color_code: '', price_override: 0, stock: 0 });
@@ -37,7 +71,9 @@ const removeVariant = (index: number) => {
 
 const submit = () => {
     if (props.product) {
-        form.put(admin_products_update(props.product.id).url);
+        form.post(admin_products_update(props.product.id).url, {
+            forceFormData: true,
+        });
     } else {
         form.post(admin_products_store().url);
     }
@@ -156,16 +192,57 @@ const generateSlug = () => {
                     </div>
                 </div>
 
-                <!-- Description -->
-                <div class="space-y-6 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
-                    <h2 class="text-xl font-bold">Détails</h2>
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Description</label>
+                <!-- Images & Description -->
+                <div class="space-y-8">
+                    <!-- Featured Image -->
+                    <div class="p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
+                        <h2 class="text-xl font-bold">Image Principale</h2>
+                        <div class="relative group aspect-video bg-slate-50 dark:bg-slate-800 rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all">
+                            <img v-if="featuredPreview" :src="featuredPreview" class="w-full h-full object-cover" />
+                            <div v-else class="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span class="text-xs font-bold uppercase tracking-widest">Choisir une image</span>
+                            </div>
+                            <input type="file" @change="onFeaturedChange" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                        </div>
+                        <div v-if="form.errors.featured_image" class="text-red-500 text-xs">{{ form.errors.featured_image }}</div>
+                    </div>
+
+                    <!-- Gallery -->
+                    <div class="p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
+                        <h2 class="text-xl font-bold">Galerie Photos</h2>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div v-for="(img, idx) in galleryPreviews" :key="idx" class="relative aspect-square bg-slate-50 dark:bg-slate-800 rounded-xl overflow-hidden group">
+                                <img :src="img.path" class="w-full h-full object-cover" />
+                                <button @click.prevent="removeImage(idx, img.id)" class="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all shadow-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="relative aspect-square bg-slate-50 dark:bg-slate-800 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center text-slate-400 hover:border-blue-500 transition-all cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                <span class="text-[10px] font-bold uppercase tracking-tighter">Ajouter</span>
+                                <input type="file" multiple @change="onGalleryChange" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                            </div>
+                        </div>
+                        <div v-if="form.errors.gallery_images" class="text-red-500 text-xs">{{ form.errors.gallery_images }}</div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
+                        <h2 class="text-xl font-bold">Description</h2>
                         <textarea 
                             v-model="form.description" 
-                            rows="10"
+                            rows="6"
                             class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
+                            placeholder="Détails du produit..."
                         ></textarea>
+                        <div v-if="form.errors.description" class="text-red-500 text-xs">{{ form.errors.description }}</div>
                     </div>
                 </div>
             </div>

@@ -25,9 +25,9 @@ defineProps<{
         <HeroSection />
         <StatsSection />
         <CategoriesSection :categories="categories" />
+        <DiscountedSection :products="discountedProducts" />
         <NewArrivalsSection :products="newArrivals" />
         <TechFocusSection />
-        <DiscountedSection :products="discountedProducts" />
         <FeaturesSection />
     </ShopLayout>
 </template>

@@ -75,10 +75,13 @@ const addToCart = () => {
 
         <!-- Content -->
         <div class="p-5 space-y-3">
-            <Link :href="products.show({ slug: product.slug }).url" class="block">
-                <h3 class="text-sm font-black tracking-tight group-hover:text-blue-600 transition-colors line-clamp-2 uppercase leading-snug">
+            <Link :href="products.show({ slug: product.slug }).url" class="block space-y-1">
+                <h3 class="text-sm font-black tracking-tight group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
                     {{ product.name }}
                 </h3>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 font-medium leading-relaxed">
+                    {{ product.description }}
+                </p>
             </Link>
 
             <div class="flex items-end justify-between">

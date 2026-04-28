@@ -3,9 +3,9 @@
         title="Par Catégories" 
         badge="Collections" 
         :badge-icon="Layers"
-        bg-class="bg-slate-50/50 dark:bg-slate-900/30"
+        bg-class="bg-white dark:bg-slate-950"
     >
-        <HorizontalSlider :items="categories" card-width="220px" show-progress>
+        <HorizontalSlider :items="categories" card-width="280px" show-progress>
             <template #default="{ item }">
                 <CategoryCard :category="item" />
             </template>

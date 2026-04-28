@@ -16,13 +16,13 @@ class HomeController extends Controller
             'newArrivals' => Product::with(['category', 'featuredImage', 'variants'])
                 ->where('is_active', true)
                 ->latest()
-                ->take(4)
+                ->take(5)
                 ->get(),
             'discountedProducts' => Product::with(['category', 'featuredImage', 'variants'])
                 ->where('is_active', true)
                 ->whereNotNull('original_price')
                 ->latest()
-                ->take(4)
+                ->take(5)
                 ->get(),
             'categories' => Category::withCount('products')->get(),
         ]);

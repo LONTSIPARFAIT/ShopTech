@@ -22,16 +22,18 @@ class ProductSeeder extends Seeder
             'name' => 'iPhone 15 Pro',
             'slug' => 'iphone-15-pro',
             'description' => 'Le dernier iPhone avec puce A17 Pro et système de caméra avancé.',
-            'base_price' => 999.99,
+            'base_price' => 750000,
+            'original_price' => 850000,
             'is_active' => true,
         ]);
 
-        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=800&auto=format&fit=crop', 'is_featured' => true]);
+        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=800', 'is_featured' => true]);
+        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=800', 'is_featured' => false]);
+        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1695048132803-0c4656910629?q=80&w=800', 'is_featured' => false]);
 
-        Variant::create(['product_id' => $p1->id, 'name' => 'Couleur', 'value' => 'Titane Naturel', 'price_override' => 0, 'stock' => 50]);
-        Variant::create(['product_id' => $p1->id, 'name' => 'Couleur', 'value' => 'Titane Bleu', 'price_override' => 0, 'stock' => 30]);
-        Variant::create(['product_id' => $p1->id, 'name' => 'Stockage', 'value' => '128GB', 'price_override' => 0, 'stock' => 20]);
-        Variant::create(['product_id' => $p1->id, 'name' => 'Stockage', 'value' => '256GB', 'price_override' => 120, 'stock' => 15]);
+        Variant::create(['product_id' => $p1->id, 'name' => 'Couleur', 'value' => 'Titane Naturel', 'color_code' => '#BEB7A4', 'price_override' => 0, 'stock' => 50]);
+        Variant::create(['product_id' => $p1->id, 'name' => 'Couleur', 'value' => 'Titane Bleu', 'color_code' => '#272D39', 'price_override' => 0, 'stock' => 30]);
+        Variant::create(['product_id' => $p1->id, 'name' => 'Stockage', 'value' => '256GB', 'price_override' => 50000, 'stock' => 15]);
 
         // Product 2: Headphones
         $p2 = Product::create([
@@ -39,14 +41,16 @@ class ProductSeeder extends Seeder
             'name' => 'Sony WH-1000XM5',
             'slug' => 'sony-wh-1000xm5',
             'description' => 'Casque à réduction de bruit sans fil de pointe.',
-            'base_price' => 349.99,
+            'base_price' => 225000,
+            'original_price' => 250000,
             'is_active' => true,
         ]);
 
-        ProductImage::create(['product_id' => $p2->id, 'path' => 'https://images.unsplash.com/photo-1675102008933-7221665a5885?q=80&w=800&auto=format&fit=crop', 'is_featured' => true]);
+        ProductImage::create(['product_id' => $p2->id, 'path' => 'https://images.unsplash.com/photo-1675102008933-7221665a5885?q=80&w=800', 'is_featured' => true]);
+        ProductImage::create(['product_id' => $p2->id, 'path' => 'https://images.unsplash.com/photo-1675102010188-46797a780136?q=80&w=800', 'is_featured' => false]);
 
-        Variant::create(['product_id' => $p2->id, 'name' => 'Couleur', 'value' => 'Noir', 'price_override' => 0, 'stock' => 100]);
-        Variant::create(['product_id' => $p2->id, 'name' => 'Couleur', 'value' => 'Argent', 'price_override' => 0, 'stock' => 45]);
+        Variant::create(['product_id' => $p2->id, 'name' => 'Couleur', 'value' => 'Noir', 'color_code' => '#000000', 'price_override' => 0, 'stock' => 100]);
+        Variant::create(['product_id' => $p2->id, 'name' => 'Couleur', 'value' => 'Argent', 'color_code' => '#C0C0C0', 'price_override' => 5000, 'stock' => 45]);
 
         // Product 3: T-Shirt
         $p3 = Product::create([
@@ -54,24 +58,22 @@ class ProductSeeder extends Seeder
             'name' => 'T-Shirt Coton Bio',
             'slug' => 't-shirt-coton-bio',
             'description' => 'T-shirt confortable en coton 100% biologique.',
-            'base_price' => 25.00,
+            'base_price' => 15000,
             'is_active' => true,
         ]);
 
-        ProductImage::create(['product_id' => $p3->id, 'path' => 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop', 'is_featured' => true]);
+        ProductImage::create(['product_id' => $p3->id, 'path' => 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800', 'is_featured' => true]);
 
-        Variant::create(['product_id' => $p3->id, 'name' => 'Taille', 'value' => 'S', 'price_override' => 0, 'stock' => 100]);
         Variant::create(['product_id' => $p3->id, 'name' => 'Taille', 'value' => 'M', 'price_override' => 0, 'stock' => 150]);
         Variant::create(['product_id' => $p3->id, 'name' => 'Taille', 'value' => 'L', 'price_override' => 0, 'stock' => 80]);
-        Variant::create(['product_id' => $p3->id, 'name' => 'Couleur', 'value' => 'Blanc', 'price_override' => 0, 'stock' => 200]);
-        Variant::create(['product_id' => $p3->id, 'name' => 'Couleur', 'value' => 'Noir', 'price_override' => 0, 'stock' => 180]);
+        Variant::create(['product_id' => $p3->id, 'name' => 'Couleur', 'value' => 'Blanc', 'color_code' => '#FFFFFF', 'price_override' => 0, 'stock' => 200]);
 
-        // Add more products for realistic feel
+        // Add more products
         $products = [
-            ['name' => 'MacBook Air M2', 'price' => 1199.00, 'cat' => $electronics, 'img' => 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=800&auto=format&fit=crop'],
-            ['name' => 'Veste en Jean', 'price' => 75.00, 'cat' => $mode, 'img' => 'https://images.unsplash.com/photo-1576871337622-98d48d1cf027?q=80&w=800&auto=format&fit=crop'],
-            ['name' => 'Montre Connectée', 'price' => 299.00, 'cat' => $electronics, 'img' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop'],
-            ['name' => 'Sneakers White', 'price' => 95.00, 'cat' => $mode, 'img' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop'],
+            ['name' => 'MacBook Air M2', 'price' => 850000, 'cat' => $electronics, 'img' => 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=800'],
+            ['name' => 'Veste en Jean', 'price' => 45000, 'cat' => $mode, 'img' => 'https://images.unsplash.com/photo-1576871337622-98d48d1cf027?q=80&w=800'],
+            ['name' => 'Montre Connectée', 'price' => 150000, 'cat' => $electronics, 'img' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800'],
+            ['name' => 'Sneakers White', 'price' => 65000, 'cat' => $mode, 'img' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800'],
         ];
 
         foreach ($products as $p) {

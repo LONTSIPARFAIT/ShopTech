@@ -29,9 +29,7 @@ class OrderService
             ]);
 
             foreach ($cart->items as $item) {
-                $price = $item->variant && $item->variant->price_override 
-                    ? $item->variant->price_override 
-                    : $item->product->base_price;
+                $price = (float) $item->product->base_price + (float) ($item->variant->price_override ?? 0);
 
                 $order->items()->create([
                     'product_id' => $item->product_id,

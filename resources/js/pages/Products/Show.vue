@@ -16,7 +16,7 @@ const selectedVariant = ref(props.product.variants[0] || null);
 const totalPrice = computed(() => {
     let price = Number(props.product.base_price);
     if (selectedVariant.value && selectedVariant.value.price_override) {
-        price = Number(selectedVariant.value.price_override);
+        price += Number(selectedVariant.value.price_override);
     }
     return price;
 });
@@ -37,6 +37,14 @@ watch([selectedVariant, quantity], () => {
 const addToCart = () => {
     form.post(cartStore().url, {
         preserveScroll: true,
+    });
+};
+
+const buyNow = () => {
+    form.post(cartStore().url, {
+        onSuccess: () => {
+            window.location.href = '/cart';
+        }
     });
 };
 
@@ -146,18 +154,18 @@ const activeImage = ref(props.product.images[0]?.path || null);
                                     <!-- Color Swatch -->
                                     <div 
                                         v-if="variant.color_code" 
-                                        class="w-12 h-12 rounded-[1.2rem] border-2 border-white/20 shadow-inner flex-shrink-0"
+                                        class="w-10 h-10 rounded-[1.2rem] border-2 border-white/20 shadow-inner flex-shrink-0"
                                         :style="{ backgroundColor: variant.color_code }"
                                     ></div>
                                     
-                                    <div class="pr-6">
+                                    <div class="pr-6 py-1">
                                         <div class="text-[10px] font-black uppercase tracking-widest">{{ variant.name }}: {{ variant.value }}</div>
-                                        <div v-if="variant.price_override" class="text-[9px] font-bold opacity-70 mt-0.5">
+                                        <div v-if="variant.price_override > 0" class="text-[9px] font-bold opacity-70 mt-0.5">
                                             + {{ Number(variant.price_override).toLocaleString() }} XAF
                                         </div>
                                     </div>
                                     
-                                    <div class="absolute top-0 right-0 p-3 opacity-20 group-hover:rotate-12 transition-transform">
+                                    <div v-if="selectedVariant?.id === variant.id" class="absolute top-0 right-0 p-3 opacity-40">
                                         <Sparkles class="w-3 h-3" />
                                     </div>
                                 </button>
@@ -167,24 +175,36 @@ const activeImage = ref(props.product.images[0]?.path || null);
 
                     <!-- Actions -->
                     <div class="mt-12 pt-10 border-t border-slate-50 dark:border-slate-900 space-y-8">
-                        <div class="flex items-center gap-8">
-                            <div class="flex items-center bg-slate-50 dark:bg-slate-900 rounded-3xl p-1.5 border border-slate-100 dark:border-slate-800 shadow-sm">
-                                <button @click="quantity > 1 && quantity--" class="w-14 h-14 flex items-center justify-center hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all shadow-sm active:scale-90">
+                        <div class="flex flex-col sm:flex-row items-stretch gap-6">
+                            <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-900 rounded-3xl p-2 border border-slate-100 dark:border-slate-800 shadow-sm sm:w-48">
+                                <button @click="quantity > 1 && quantity--" class="w-12 h-12 flex items-center justify-center hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all shadow-sm active:scale-90">
                                     <Minus class="w-5 h-5" />
                                 </button>
-                                <span class="w-16 text-center text-xl font-black">{{ quantity }}</span>
-                                <button @click="quantity++" class="w-14 h-14 flex items-center justify-center hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all shadow-sm active:scale-90">
+                                <span class="text-xl font-black">{{ quantity }}</span>
+                                <button @click="quantity++" class="w-12 h-12 flex items-center justify-center hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all shadow-sm active:scale-90">
                                     <Plus class="w-5 h-5" />
                                 </button>
                             </div>
-                            <button 
-                                @click="addToCart"
-                                :disabled="form.processing"
-                                class="flex-1 h-[76px] bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-[0.98] flex items-center justify-center gap-4 group disabled:opacity-50"
-                            >
-                                <ShoppingBag class="w-6 h-6 group-hover:scale-110 transition-transform" />
-                                {{ form.processing ? 'Chargement...' : 'Ajouter au Panier' }}
-                            </button>
+                            
+                            <div class="flex-1 flex flex-col sm:flex-row gap-4">
+                                <button 
+                                    @click="addToCart"
+                                    :disabled="form.processing"
+                                    class="flex-1 h-[72px] bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-2 border-slate-900 dark:border-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition-all active:scale-[0.98] flex items-center justify-center gap-3 group disabled:opacity-50"
+                                >
+                                    <ShoppingBag class="w-5 h-5" />
+                                    {{ form.processing ? '...' : 'Ajouter au Panier' }}
+                                </button>
+
+                                <button 
+                                    @click="buyNow"
+                                    :disabled="form.processing"
+                                    class="flex-1 h-[72px] bg-blue-600 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-[0.98] flex items-center justify-center gap-3 group disabled:opacity-50"
+                                >
+                                    <Sparkles class="w-5 h-5 animate-pulse" />
+                                    Acheter Maintenant
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Value Props -->

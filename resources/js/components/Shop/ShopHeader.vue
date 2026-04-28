@@ -95,28 +95,28 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
             leave-to-class="opacity-0 -translate-y-6"
         >
             <div v-if="isMobileOpen" class="lg:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 px-6 pb-8 pt-3 space-y-0.5">
-                <Link href="/" class="flex items-center justify-between py-3 text-xs font-black uppercase tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
+                <Link href="/" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
                     <span>Accueil</span>
                 </Link>
-                <Link :href="products.index().url" class="flex items-center justify-between py-3 text-xs font-black uppercase tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
+                <Link :href="products.index().url" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
                     <span>Boutique</span><ShoppingBag class="w-3.5 h-3.5 opacity-30" />
                 </Link>
-                <Link href="/services" class="flex items-center justify-between py-3 text-xs font-black uppercase tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
+                <Link href="/services" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
                     <span>Services</span><Wrench class="w-3.5 h-3.5 opacity-30" />
                 </Link>
-                <Link href="/about" class="flex items-center justify-between py-3 text-xs font-black uppercase tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
+                <Link href="/about" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
                     <span>À propos</span><Info class="w-3.5 h-3.5 opacity-30" />
                 </Link>
-                <Link href="/contact" class="flex items-center justify-between py-3 text-xs font-black uppercase tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
+                <Link href="/contact" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
                     <span>Contact</span><Phone class="w-3.5 h-3.5 opacity-30" />
                 </Link>
                 <div class="pt-4 space-y-2">
                     <div v-if="auth.user">
-                        <Link :href="dashboard().url" class="block w-full text-center py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black text-xs uppercase tracking-widest" @click="isMobileOpen = false">Mon Espace</Link>
+                        <Link :href="dashboard().url" class="block w-full text-center py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black text-xs tracking-widest" @click="isMobileOpen = false">Mon Espace</Link>
                     </div>
                     <div v-else class="space-y-2">
-                        <Link :href="login().url" class="block w-full text-center py-3.5 bg-slate-100 dark:bg-slate-800 rounded-2xl font-black text-xs uppercase tracking-widest" @click="isMobileOpen = false">Connexion</Link>
-                        <Link :href="register().url" class="block w-full text-center py-3.5 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-blue-500/30" @click="isMobileOpen = false">S'inscrire</Link>
+                        <Link :href="login().url" class="block w-full text-center py-3.5 bg-slate-100 dark:bg-slate-800 rounded-2xl font-black text-xs tracking-widest" @click="isMobileOpen = false">Connexion</Link>
+                        <Link :href="register().url" class="block w-full text-center py-3.5 bg-blue-600 text-white rounded-2xl font-black text-xs tracking-widest shadow-lg shadow-blue-500/30" @click="isMobileOpen = false">S'inscrire</Link>
                     </div>
                 </div>
             </div>

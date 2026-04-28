@@ -60,7 +60,7 @@ class CartService
     public function getTotal(Cart $cart): float
     {
         return $cart->items->sum(function ($item) {
-            $price = $item->variant ? ($item->variant->price_override ?? $item->product->base_price) : $item->product->base_price;
+            $price = (float) $item->product->base_price + (float) ($item->variant->price_override ?? 0);
             return $price * $item->quantity;
         });
     }

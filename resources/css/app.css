@@ -134,10 +134,10 @@
     }
 
     .shop-nav-link {
-        font-size: 10px;
+        font-size: 14px;
         font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
+        /* text-transform: uppercase; */
+        /* letter-spacing: 0.2em; */
         transition-property: all;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms;

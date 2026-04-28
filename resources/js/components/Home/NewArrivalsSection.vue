@@ -4,12 +4,15 @@
         badge="Just arrived" 
         :badge-icon="Zap"
         :view-all-link="productsIndex.url()"
+        bg-class="bg-white dark:bg-slate-950"
     >
-        <HorizontalSlider :items="products" card-width="280px" show-progress>
-            <template #default="{ item }">
-                <ProductCard :product="item" />
-            </template>
-        </HorizontalSlider>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <ProductCard 
+                v-for="product in products" 
+                :key="product.id" 
+                :product="product" 
+            />
+        </div>
     </SectionWrapper>
 </template>
 

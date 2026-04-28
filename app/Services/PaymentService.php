@@ -24,7 +24,12 @@ class PaymentService
                 ],
                 'reference' => 'order_' . $order->id . '_' . time(),
                 'callback' => route('payment.notchpay.callback'),
-                'description' => 'Paiement pour la commande #' . $order->id,
+                'description' => 'Achat ShopTech - Commande #' . $order->id,
+                'items' => $order->items->map(fn($item) => [
+                    'name' => $item->product->name . ($item->variant ? ' (' . $item->variant->value . ')' : ''),
+                    'amount' => (int) $item->price,
+                    'quantity' => $item->quantity,
+                ])->toArray(),
             ]);
 
             if ($response->successful()) {

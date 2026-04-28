@@ -31,6 +31,10 @@ class ProductRequest extends FormRequest
             'variants.*.color_code' => 'nullable|string',
             'variants.*.price_override' => 'nullable|numeric|min:0',
             'variants.*.stock' => 'required|integer|min:0',
+            'featured_image' => 'nullable|image|max:5120',
+            'gallery_images' => 'nullable|array',
+            'gallery_images.*' => 'image|max:5120',
+            'remove_image_ids' => 'nullable|string',
         ];
     }
 }

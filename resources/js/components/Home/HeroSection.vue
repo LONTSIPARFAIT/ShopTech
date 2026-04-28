@@ -1,5 +1,5 @@
 <template>
-    <section class="relative min-h-[90vh] flex items-center overflow-hidden">
+    <section class="relative min-h-[95vh] flex items-center overflow-hidden pt-24 lg:pt-32">
         <!-- Background Image avec transition -->
         <div class="absolute inset-0 z-0">
             <transition name="fade" mode="out-in">
@@ -7,9 +7,9 @@
                     <img
                         :src="currentSlide.image"
                         :alt="currentSlide.title"
-                        class="w-full h-full object-cover"
+                        class="w-full h-full object-cover brightness-[0.4] lg:brightness-[0.6]"
                     />
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
                 </div>
             </transition>
         </div>
