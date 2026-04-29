@@ -78,7 +78,7 @@ const removeItem = (itemId: number) => {
                         <div class="cart-item-image">
                             <img 
                                 v-if="item.product.featured_image" 
-                                :src="item.product.featured_image.path" 
+                                :src="item.product.featured_image.url" 
                                 :alt="item.product.name"
                             />
                             <div v-else class="cart-item-image-placeholder">

@@ -15,7 +15,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === UserRole::ADMIN->value) {
+        if ($user->isAdmin()) {
             return redirect()->route('admin.dashboard');
         }
 

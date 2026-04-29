@@ -48,7 +48,7 @@ const updateOrder = () => {
                     <div class="admin-items-list">
                         <div v-for="item in order.items" :key="item.id" class="admin-order-item">
                             <div class="admin-item-image">
-                                <img v-if="item.product.featured_image" :src="item.product.featured_image.path" />
+                                <img v-if="item.product.featured_image" :src="item.product.featured_image.url" />
                                 <div v-else class="admin-item-placeholder">
                                     <Package class="w-6 h-6" />
                                 </div>

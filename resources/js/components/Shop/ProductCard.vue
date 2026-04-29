@@ -32,7 +32,7 @@ const addToCart = () => {
             <Link :href="products.show({ slug: product.slug }).url" class="product-card-link">
                 <img
                     v-if="product.featured_image"
-                    :src="product.featured_image.path"
+                    :src="product.featured_image.url"
                     :alt="product.name"
                     class="product-card-img"
                 />

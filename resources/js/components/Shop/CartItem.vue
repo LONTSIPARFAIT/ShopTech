@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ShoppingBag, Minus, Plus, Trash2 } from 'lucide-vue-next';
+
 const props = defineProps<{
     item: any;
 }>();
@@ -11,7 +13,7 @@ const emit = defineEmits(['update', 'remove']);
         <div class="shop-cart-item-card-image">
             <img 
                 v-if="item.product.featured_image" 
-                :src="item.product.featured_image.path" 
+                :src="item.product.featured_image.url" 
                 :alt="item.product.name"
             />
             <div v-else class="shop-cart-item-card-image-placeholder">

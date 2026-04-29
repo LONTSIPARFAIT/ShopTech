@@ -91,11 +91,11 @@ const buyNow = () => {
                         <button 
                             v-for="(image, index) in product.images" 
                             :key="index"
-                            @click="activeImage = image.path"
+                            @click="activeImage = image.url"
                             class="shop-gallery-thumb"
-                            :class="activeImage === image.path && 'shop-gallery-thumb-active'"
+                            :class="activeImage === image.url && 'shop-gallery-thumb-active'"
                         >
-                            <img :src="image.path" />
+                            <img :src="image.url" />
                         </button>
                     </div>
                 </div>

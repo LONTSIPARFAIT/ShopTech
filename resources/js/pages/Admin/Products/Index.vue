@@ -53,7 +53,7 @@ const deleteProduct = (id: number) => {
                             <td class="admin-table-cell">
                                 <div class="admin-product-info">
                                     <div class="admin-product-image">
-                                        <img v-if="product.featured_image" :src="product.featured_image.path" />
+                                        <img v-if="product.featured_image" :src="product.featured_image.url" />
                                     </div>
                                     <div>
                                         <div class="admin-product-name">{{ product.name }}</div>
