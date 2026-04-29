@@ -15,7 +15,7 @@ const form = useForm({
     description: props.product?.description ?? '',
     base_price: props.product?.base_price ?? '',
     original_price: props.product?.original_price ?? '',
-    is_active: props.product?.is_active ?? true,
+    is_active: props.product ? !!props.product.is_active : true,
     variants: props.product?.variants?.map((v: any) => ({
         name: v.name,
         value: v.value,
@@ -31,8 +31,8 @@ const form = useForm({
     _method: props.product ? 'PUT' : 'POST'
 });
 
-const featuredPreview = ref(props.product?.featured_image?.path ?? null);
-const galleryPreviews = ref(props.product?.images?.filter((img: any) => !img.is_featured).map((img: any) => ({ id: img.id, path: img.path })) ?? []);
+const featuredPreview = ref(props.product?.featured_image?.url ?? null);
+const galleryPreviews = ref(props.product?.images?.filter((img: any) => !img.is_featured).map((img: any) => ({ id: img.id, path: img.url })) ?? []);
 
 const onFeaturedChange = (e: any) => {
     const file = e.target.files[0];

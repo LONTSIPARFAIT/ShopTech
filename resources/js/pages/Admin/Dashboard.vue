@@ -23,26 +23,26 @@ defineOptions({
 <template>
     <Head title="Tableau de Bord Admin" />
 
-    <div class="p-8 space-y-12 bg-slate-50 dark:bg-slate-950/50 min-h-full">
+    <div class="dashboard-container">
         <!-- Welcome Header -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div class="space-y-1">
-                <h1 class="text-4xl font-black tracking-tight text-slate-900 dark:text-white">Aperçu Global</h1>
-                <p class="text-slate-500 font-medium">Bienvenue dans votre centre de contrôle.</p>
+        <div class="dashboard-header">
+            <div class="dashboard-header-content">
+                <h1 class="dashboard-title">Aperçu Global</h1>
+                <p class="dashboard-subtitle">Bienvenue dans votre centre de contrôle.</p>
             </div>
-            <div class="flex items-center gap-3 bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center text-white">
-                    <Activity class="w-6 h-6" />
+            <div class="system-status">
+                <div class="system-status-icon">
+                    <Activity class="w-5 h-5 md:w-6 md:h-6" />
                 </div>
-                <div class="pr-4">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Statut Système</p>
-                    <p class="text-sm font-bold">En ligne</p>
+                <div class="system-status-info">
+                    <p class="system-status-label">Statut Système</p>
+                    <p class="system-status-value">En ligne</p>
                 </div>
             </div>
         </div>
 
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="stats-grid">
             <StatCard 
                 label="Revenus Totaux" 
                 :value="stats.total_revenue" 
@@ -74,69 +74,71 @@ defineOptions({
             />
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Recent Activity & Quick Controls -->
+        <div class="dashboard-grid">
             <!-- Recent Activity -->
-            <div class="lg:col-span-2 space-y-8">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-2xl font-black tracking-tight">Ventes Récentes</h2>
-                    <Link href="/admin/orders" class="text-sm font-black uppercase tracking-widest text-blue-600 hover:text-blue-700 transition-colors">Explorer tout</Link>
+            <div class="dashboard-recent">
+                <div class="section-header">
+                    <h2 class="section-title">Ventes Récentes</h2>
+                    <Link href="/admin/orders" class="section-link">Explorer tout</Link>
                 </div>
                 
-                <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-black/5 overflow-hidden">
+                <div class="dashboard-table-container">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table class="dashboard-table">
                             <thead>
-                                <tr class="bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
-                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-slate-400">Commande</th>
-                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-slate-400">Client</th>
-                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-slate-400">Montant</th>
-                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-slate-400">Paiement</th>
-                                </tr>
+                                <tr class="dashboard-table-header">
+                                    <th class="dashboard-table-cell">Commande</th>
+                                    <th class="dashboard-table-cell">Client</th>
+                                    <th class="dashboard-table-cell">Montant</th>
+                                    <th class="dashboard-table-cell">Paiement</th>
+                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-50 dark:divide-slate-800">
-                                <tr v-for="order in recent_orders" :key="order.id" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors group">
-                                    <td class="px-8 py-6 font-black text-slate-900 dark:text-white">#{{ order.id }}</td>
-                                    <td class="px-8 py-6">
-                                        <div class="font-bold">{{ order.user.name }}</div>
-                                        <div class="text-xs text-slate-400">{{ order.user.email }}</div>
+                            <tbody>
+                                <tr v-for="order in recent_orders" :key="order.id" class="dashboard-table-row">
+                                    <td class="dashboard-table-cell dashboard-order-id">#{{ order.id }}</td>
+                                    <td class="dashboard-table-cell">
+                                        <div class="dashboard-client-name">{{ order.user.name }}</div>
+                                        <div class="dashboard-client-email">{{ order.user.email }}</div>
                                     </td>
-                                    <td class="px-8 py-6 font-black text-blue-600">
-                                        {{ Number(order.total_amount).toLocaleString() }} <span class="text-[10px]">XAF</span>
+                                    <td class="dashboard-table-cell dashboard-amount">
+                                        {{ Number(order.total_amount).toLocaleString() }} <span class="dashboard-amount-unit">XAF</span>
                                     </td>
-                                    <td class="px-8 py-6">
+                                    <td class="dashboard-table-cell">
                                         <StatusBadge :status="order.payment_status" type="payment" />
                                     </td>
-                                </tr>
+                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div v-if="recent_orders.length === 0" class="p-20 text-center space-y-4">
-                        <p class="font-bold text-slate-400">Aucune commande récente.</p>
+                    
+                    <div v-if="recent_orders.length === 0" class="dashboard-empty">
+                        <p class="dashboard-empty-text">Aucune commande récente.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Controls -->
-            <div class="space-y-8">
-                <h2 class="text-2xl font-black tracking-tight">Raccourcis</h2>
-                <div class="grid grid-cols-1 gap-6">
-                    <Link href="/admin/products/create" class="group p-8 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-[2.5rem] flex flex-col gap-6 hover:scale-[1.02] transition-all shadow-2xl">
-                        <div class="w-14 h-14 bg-white/10 dark:bg-black/5 rounded-2xl flex items-center justify-center">
-                            <ShoppingBag class="w-7 h-7" />
+            <div class="dashboard-quick">
+                <h2 class="section-title">Raccourcis</h2>
+                <div class="quick-grid">
+                    <Link href="/admin/products/create" class="quick-card quick-card-primary">
+                        <div class="quick-icon-primary">
+                            <ShoppingBag class="w-6 h-6 md:w-7 md:h-7" />
                         </div>
-                        <div class="space-y-1">
-                            <p class="font-black text-xl">Nouveau Produit</p>
-                            <p class="text-sm opacity-60">Ajouter un article au catalogue.</p>
+                        <div class="quick-content">
+                            <p class="quick-title">Nouveau Produit</p>
+                            <p class="quick-description">Ajouter un article au catalogue.</p>
                         </div>
                     </Link>
                     
-                    <Link href="/admin/orders" class="group p-8 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] flex flex-col gap-6 hover:border-blue-600 transition-all shadow-sm">
-                        <div class="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
-                            <Layers class="w-7 h-7" />
+                    <Link href="/admin/orders" class="quick-card quick-card-secondary">
+                        <div class="quick-icon-secondary">
+                            <Layers class="w-6 h-6 md:w-7 md:h-7" />
                         </div>
-                        <div class="space-y-1">
-                            <p class="font-black text-xl">Commandes</p>
-                            <p class="text-sm opacity-60">Traiter les livraisons en attente.</p>
+                        <div class="quick-content">
+                            <p class="quick-title">Commandes</p>
+                            <p class="quick-description">Traiter les livraisons en attente.</p>
                         </div>
                     </Link>
                 </div>

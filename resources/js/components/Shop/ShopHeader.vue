@@ -4,7 +4,7 @@ import { computed, ref, onMounted, onUnmounted } from 'vue';
 import products from '@/routes/products';
 import { home, login, register, dashboard, services, about, contact } from '@/routes';
 import { useAppearance } from '@/composables/useAppearance';
-import { Sun, Moon, ShoppingBag, Menu, X, User, Sparkles, Info, Phone, Wrench } from 'lucide-vue-next';
+import { Sun, Moon, ShoppingBag, Menu, X, User } from 'lucide-vue-next';
 import CartModal from './CartModal.vue';
 import { DialogTrigger } from '@/components/ui/dialog';
 
@@ -18,67 +18,64 @@ const { appearance, updateAppearance } = useAppearance();
 const toggleTheme = () => {
     updateAppearance(appearance.value === 'dark' ? 'light' : 'dark');
 };
-const handleScroll = () => { isScrolled.value = window.scrollY > 20; };
+
+const handleScroll = () => {
+    isScrolled.value = window.scrollY > 20;
+};
+
 onMounted(() => window.addEventListener('scroll', handleScroll));
 onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 </script>
 
 <template>
-    <nav
-        class="fixed top-0 w-full z-50 transition-all duration-500"
-        :class="isScrolled
-            ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-2xl py-3 border-b border-slate-100 dark:border-slate-800 shadow-lg shadow-black/[0.03]'
-            : 'bg-transparent py-5 border-b border-transparent'"
-    >
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
+    <nav class="shop-header" :class="isScrolled ? 'shop-header-scrolled' : 'shop-header-transparent'">
+        <div class="shop-header-container">
             <!-- Logo -->
-            <Link :href="home()" class="flex items-center gap-3 group">
-                <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/40 group-hover:rotate-12 transition-all duration-500">
-                    <Sparkles class="text-white w-4 h-4" />
+            <Link :href="home()" class="shop-logo">
+                <div class="shop-logo-icon">
+                    <span class="text-white font-bold text-sm">S</span>
                 </div>
-                <span class="text-lg font-black tracking-tighter uppercase italic">Shop<span class="text-blue-600">Tech</span></span>
+                <span class="shop-logo-text">Shop<span class="shop-logo-highlight">Tech</span></span>
             </Link>
 
-            <!-- Desktop Nav -->
-            <div class="hidden lg:flex items-center gap-7">
-                <Link :href="home()" class="shop-nav-link" :class="$page.url === '/' ? 'text-blue-600' : 'text-slate-500'">Accueil</Link>
-                <Link :href="products.index()" class="shop-nav-link" :class="$page.url.startsWith('/products') ? 'text-blue-600' : 'text-slate-500'">Boutique</Link>
-                <Link :href="services()" class="shop-nav-link" :class="$page.url === '/services' ? 'text-blue-600' : 'text-slate-500'">Services</Link>
-                <Link :href="about()" class="shop-nav-link" :class="$page.url === '/about' ? 'text-blue-600' : 'text-slate-500'">À propos</Link>
-                <Link :href="contact()" class="shop-nav-link" :class="$page.url === '/contact' ? 'text-blue-600' : 'text-slate-500'">Contact</Link>
+            <!-- Desktop Navigation -->
+            <div class="shop-nav-desktop">
+                <Link :href="home()" class="shop-nav-link" :class="$page.url === '/' && 'shop-nav-link-active'">Accueil</Link>
+                <Link :href="products.index().url" class="shop-nav-link" :class="$page.url.startsWith('/products') && 'shop-nav-link-active'">Boutique</Link>
+                <Link :href="services()" class="shop-nav-link" :class="$page.url === '/services' && 'shop-nav-link-active'">Services</Link>
+                <Link :href="about()" class="shop-nav-link" :class="$page.url === '/about' && 'shop-nav-link-active'">À propos</Link>
+                <Link :href="contact()" class="shop-nav-link" :class="$page.url === '/contact' && 'shop-nav-link-active'">Contact</Link>
             </div>
 
             <!-- Actions -->
-            <div class="flex items-center gap-2">
-                <button @click="toggleTheme" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all group">
-                    <Sun v-if="appearance === 'dark'" class="w-4 h-4 text-amber-400 group-hover:rotate-12 transition-transform duration-500" />
-                    <Moon v-else class="w-4 h-4 text-blue-600 group-hover:rotate-12 transition-transform duration-500" />
+            <div class="shop-header-actions">
+                <button @click="toggleTheme" class="shop-icon-btn">
+                    <Sun v-if="appearance === 'dark'" class="w-4 h-4 text-amber-400" />
+                    <Moon v-else class="w-4 h-4" />
                 </button>
 
                 <CartModal>
                     <template #trigger>
                         <DialogTrigger as-child>
-                            <button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all relative group">
-                                <ShoppingBag class="w-4 h-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
-                                <span v-if="cartCount > 0" class="absolute top-1 right-1 w-4 h-4 bg-blue-600 text-white text-[8px] font-black rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-950">{{ cartCount }}</span>
+                            <button class="shop-icon-btn shop-cart-btn">
+                                <ShoppingBag class="w-4 h-4" />
+                                <span v-if="cartCount > 0" class="shop-cart-badge">{{ cartCount }}</span>
                             </button>
                         </DialogTrigger>
                     </template>
                 </CartModal>
 
-                <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block mx-1"></div>
+                <div class="shop-auth-divider"></div>
 
-                <div v-if="auth.user" class="hidden sm:flex">
-                    <Link :href="dashboard().url" class="shop-btn-secondary flex items-center gap-2 py-2 px-4 text-[9px]">
-                        <User class="w-3 h-3" /> Espace
-                    </Link>
+                <div v-if="auth.user" class="shop-auth-desktop">
+                    <Link :href="dashboard().url" class="shop-register-btn">Espace</Link>
                 </div>
-                <div v-else class="hidden sm:flex items-center gap-3">
-                    <Link :href="login().url" class="shop-nav-link text-slate-500">Connexion</Link>
-                    <Link :href="register().url" class="shop-btn-primary py-2 px-5 text-[9px]">S'inscrire</Link>
+                <div v-else class="shop-auth-desktop">
+                    <Link :href="login().url" class="shop-login-btn">Connexion</Link>
+                    <Link :href="register().url" class="shop-register-btn">S'inscrire</Link>
                 </div>
 
-                <button @click="isMobileOpen = !isMobileOpen" class="lg:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all">
+                <button @click="isMobileOpen = !isMobileOpen" class="shop-mobile-menu-btn">
                     <X v-if="isMobileOpen" class="w-5 h-5" />
                     <Menu v-else class="w-5 h-5" />
                 </button>
@@ -87,36 +84,38 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 
         <!-- Mobile Menu -->
         <transition
-            enter-active-class="transition-all duration-400 ease-out"
-            enter-from-class="opacity-0 -translate-y-6"
+            enter-active-class="transition-all duration-300 ease-out"
+            enter-from-class="opacity-0 -translate-y-4"
             enter-to-class="opacity-100 translate-y-0"
-            leave-active-class="transition-all duration-250 ease-in"
+            leave-active-class="transition-all duration-200 ease-in"
             leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 -translate-y-6"
+            leave-to-class="opacity-0 -translate-y-4"
         >
-            <div v-if="isMobileOpen" class="lg:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 px-6 pb-8 pt-3 space-y-0.5">
-                <Link href="/" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
+            <div v-if="isMobileOpen" class="shop-mobile-menu">
+                <Link :href="home()" class="shop-mobile-link" @click="isMobileOpen = false">
                     <span>Accueil</span>
                 </Link>
-                <Link :href="products.index().url" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
-                    <span>Boutique</span><ShoppingBag class="w-3.5 h-3.5 opacity-30" />
+                <Link :href="products.index().url" class="shop-mobile-link" @click="isMobileOpen = false">
+                    <span>Boutique</span>
+                    <ShoppingBag class="w-3.5 h-3.5 opacity-30" />
                 </Link>
-                <Link href="/services" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
-                    <span>Services</span><Wrench class="w-3.5 h-3.5 opacity-30" />
+                <Link :href="services()" class="shop-mobile-link" @click="isMobileOpen = false">
+                    <span>Services</span>
                 </Link>
-                <Link href="/about" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
-                    <span>À propos</span><Info class="w-3.5 h-3.5 opacity-30" />
+                <Link :href="about()" class="shop-mobile-link" @click="isMobileOpen = false">
+                    <span>À propos</span>
                 </Link>
-                <Link href="/contact" class="flex items-center justify-between py-3 text-xs font-black tracking-[0.2em] border-b border-slate-50 dark:border-slate-900" @click="isMobileOpen = false">
-                    <span>Contact</span><Phone class="w-3.5 h-3.5 opacity-30" />
+                <Link :href="contact()" class="shop-mobile-link" @click="isMobileOpen = false">
+                    <span>Contact</span>
                 </Link>
-                <div class="pt-4 space-y-2">
+                
+                <div class="shop-mobile-auth">
                     <div v-if="auth.user">
-                        <Link :href="dashboard().url" class="block w-full text-center py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black text-xs tracking-widest" @click="isMobileOpen = false">Mon Espace</Link>
+                        <Link :href="dashboard().url" class="shop-mobile-register" @click="isMobileOpen = false">Mon espace</Link>
                     </div>
-                    <div v-else class="space-y-2">
-                        <Link :href="login().url" class="block w-full text-center py-3.5 bg-slate-100 dark:bg-slate-800 rounded-2xl font-black text-xs tracking-widest" @click="isMobileOpen = false">Connexion</Link>
-                        <Link :href="register().url" class="block w-full text-center py-3.5 bg-blue-600 text-white rounded-2xl font-black text-xs tracking-widest shadow-lg shadow-blue-500/30" @click="isMobileOpen = false">S'inscrire</Link>
+                    <div v-else>
+                        <Link :href="login().url" class="shop-mobile-login" @click="isMobileOpen = false">Connexion</Link>
+                        <Link :href="register().url" class="shop-mobile-register" @click="isMobileOpen = false">S'inscrire</Link>
                     </div>
                 </div>
             </div>

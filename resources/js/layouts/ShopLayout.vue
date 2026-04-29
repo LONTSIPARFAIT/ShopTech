@@ -6,13 +6,11 @@ import { Toaster } from '@/components/ui/sonner';
 </script>
 
 <template>
-    <div class="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-500 font-sans selection:bg-blue-500/30">
+    <div class="shop-layout">
         <ShopHeader />
-
         <main>
             <slot />
         </main>
-
         <ShopFooter />
         <AssistanceFab />
         <Toaster />
