@@ -1,8 +1,12 @@
 <template>
-    <div class="space-y-4 p-8 bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/10 hover:bg-white/10 transition-colors">
-        <component :is="icon" :class="`w-10 h-10 text-${iconColor}-500`" />
-        <h3 class="text-xl font-black uppercase italic">{{ title }}</h3>
-        <p class="text-slate-400 text-sm font-medium">{{ description }}</p>
+    <div class="tech-card">
+        <component :is="icon" :class="['tech-card-icon', {
+            'tech-card-icon-blue': iconColor === 'blue',
+            'tech-card-icon-purple': iconColor === 'purple',
+            'tech-card-icon-emerald': iconColor === 'emerald'
+        }]" />
+        <h3 class="tech-card-title">{{ title }}</h3>
+        <p class="tech-card-description">{{ description }}</p>
     </div>
 </template>
 

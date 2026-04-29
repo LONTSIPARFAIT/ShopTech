@@ -1,13 +1,13 @@
 <template>
-    <section class="py-12 bg-white dark:bg-slate-950 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-                <div v-for="(stat, index) in stats" :key="index" class="relative group">
+    <section class="home-stats">
+        <div class="home-stats-container">
+            <div class="home-stats-grid">
+                <div v-for="(stat, index) in stats" :key="index" class="home-stat-item">
                     <div class="flex flex-col items-center space-y-2">
-                        <span class="text-4xl font-black italic text-blue-600 tabular-nums">{{ stat.value }}</span>
-                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ stat.label }}</span>
+                        <span class="home-stat-value">{{ stat.value }}</span>
+                        <span class="home-stat-label">{{ stat.label }}</span>
                     </div>
-                    <div v-if="index < stats.length - 1" class="hidden lg:block absolute -right-4 top-1/2 -translate-y-1/2 w-px h-10 bg-slate-100 dark:bg-slate-800"></div>
+                    <div v-if="index < stats.length - 1" class="home-stat-divider"></div>
                 </div>
             </div>
         </div>

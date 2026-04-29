@@ -1,16 +1,13 @@
 <template>
-    <div :class="['p-10 rounded-[2.5rem] space-y-5 relative overflow-hidden group', cardClass]">
-        <div v-if="variant === 'primary'" class="absolute -right-8 -bottom-8 w-48 h-48 bg-white/10 blur-3xl rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-        
-        <component :is="icon" :class="['w-10 h-10 mb-2', iconClass]" />
-        
-        <h3 :class="['text-2xl font-black tracking-tight uppercase italic', variant === 'primary' ? 'text-white' : '']">
-            {{ title }}
-        </h3>
-        
-        <p :class="['font-medium leading-relaxed text-sm', descriptionClass]">
-            {{ description }}
-        </p>
+    <div :class="['feature-card', {
+        'feature-card-primary': variant === 'primary',
+        'feature-card-light': variant === 'light',
+        'feature-card-dark': variant === 'dark'
+    }]">
+        <div v-if="variant === 'primary'" class="feature-card-glow"></div>
+        <component :is="icon" :class="['feature-card-icon']" />
+        <h3 class="feature-card-title">{{ title }}</h3>
+        <p class="feature-card-description">{{ description }}</p>
     </div>
 </template>
 

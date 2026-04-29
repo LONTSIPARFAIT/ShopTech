@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import StatCard from '@/components/Admin/StatCard.vue';
 import StatusBadge from '@/components/ui/StatusBadge.vue';
-import { ShoppingBag, Users, Layers, Activity } from 'lucide-vue-next';
+import { ShoppingBag, Users, Layers, Activity, Package, CreditCard, TrendingUp } from 'lucide-vue-next';
 
 const props = defineProps<{
     stats: {
@@ -15,130 +15,128 @@ const props = defineProps<{
     recent_orders: any[];
 }>();
 
-defineOptions({
-    layout: AppSidebarLayout,
-});
+defineOptions({ layout: AppSidebarLayout });
 </script>
 
 <template>
     <Head title="Tableau de Bord Admin" />
 
-    <div class="dashboard-container">
-        <!-- Welcome Header -->
-        <div class="dashboard-header">
-            <div class="dashboard-header-content">
-                <h1 class="dashboard-title">Aperçu Global</h1>
-                <p class="dashboard-subtitle">Bienvenue dans votre centre de contrôle.</p>
+    <div class="admin-dashboard">
+        <!-- Header -->
+        <div class="admin-dashboard-header">
+            <div>
+                <h1 class="admin-dashboard-title">Tableau de bord</h1>
+                <p class="admin-dashboard-subtitle">Bienvenue dans votre centre de contrôle</p>
             </div>
-            <div class="system-status">
-                <div class="system-status-icon">
-                    <Activity class="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <div class="system-status-info">
-                    <p class="system-status-label">Statut Système</p>
-                    <p class="system-status-value">En ligne</p>
-                </div>
+            <div class="admin-dashboard-status">
+                <span class="admin-dashboard-status-dot"></span>
+                <span class="admin-dashboard-status-text">Système en ligne</span>
             </div>
         </div>
 
         <!-- Stats Grid -->
-        <div class="stats-grid">
+        <div class="admin-stats-grid">
             <StatCard 
-                label="Revenus Totaux" 
+                label="Revenus totaux" 
                 :value="stats.total_revenue" 
                 unit="XAF" 
-                trend="+12%" 
-                color="bg-blue-600"
-                :icon="ShoppingBag"
+                trend="+12%"
+                color="bg-blue-50 text-blue-600"
+                :icon="TrendingUp"
             />
             <StatCard 
                 label="Commandes" 
                 :value="stats.total_orders" 
-                trend="+5% ce mois" 
-                color="bg-purple-600"
-                :icon="Layers"
+                trend="+5%"
+                color="bg-purple-50 text-purple-600"
+                :icon="ShoppingBag"
             />
             <StatCard 
-                label="Catalogue Produits" 
+                label="Produits" 
                 :value="stats.total_products" 
-                trend="Actifs" 
-                color="bg-orange-500"
-                :icon="ShoppingBag"
+                color="bg-orange-50 text-orange-600"
+                :icon="Package"
             />
             <StatCard 
                 label="Clients" 
                 :value="stats.total_clients" 
-                trend="Inscrits" 
-                color="bg-green-500"
+                color="bg-green-50 text-green-600"
                 :icon="Users"
             />
         </div>
 
-        <!-- Recent Activity & Quick Controls -->
-        <div class="dashboard-grid">
-            <!-- Recent Activity -->
-            <div class="dashboard-recent">
-                <div class="section-header">
-                    <h2 class="section-title">Ventes Récentes</h2>
-                    <Link href="/admin/orders" class="section-link">Explorer tout</Link>
+        <!-- Main Content -->
+        <div class="admin-dashboard-content">
+            <!-- Recent Orders -->
+            <div class="admin-recent-orders">
+                <div class="admin-section-header">
+                    <h2 class="admin-section-title">Commandes récentes</h2>
+                    <Link href="/admin/orders" class="admin-section-link">Voir tout</Link>
                 </div>
-                
-                <div class="dashboard-table-container">
-                    <div class="overflow-x-auto">
-                        <table class="dashboard-table">
-                            <thead>
-                                <tr class="dashboard-table-header">
-                                    <th class="dashboard-table-cell">Commande</th>
-                                    <th class="dashboard-table-cell">Client</th>
-                                    <th class="dashboard-table-cell">Montant</th>
-                                    <th class="dashboard-table-cell">Paiement</th>
-                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="order in recent_orders" :key="order.id" class="dashboard-table-row">
-                                    <td class="dashboard-table-cell dashboard-order-id">#{{ order.id }}</td>
-                                    <td class="dashboard-table-cell">
-                                        <div class="dashboard-client-name">{{ order.user.name }}</div>
-                                        <div class="dashboard-client-email">{{ order.user.email }}</div>
-                                    </td>
-                                    <td class="dashboard-table-cell dashboard-amount">
-                                        {{ Number(order.total_amount).toLocaleString() }} <span class="dashboard-amount-unit">XAF</span>
-                                    </td>
-                                    <td class="dashboard-table-cell">
-                                        <StatusBadge :status="order.payment_status" type="payment" />
-                                    </td>
-                                 </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div v-if="recent_orders.length === 0" class="dashboard-empty">
-                        <p class="dashboard-empty-text">Aucune commande récente.</p>
-                    </div>
+
+                <div class="admin-orders-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Commande</th>
+                                <th>Client</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="order in recent_orders" :key="order.id">
+                                <td class="admin-order-id">#{{ order.id }}</td>
+                                <td>
+                                    <div class="admin-order-client">{{ order.user.name }}</div>
+                                    <div class="admin-order-email">{{ order.user.email }}</div>
+                                </td>
+                                <td class="admin-order-amount">
+                                    {{ Number(order.total_amount).toLocaleString() }} XAF
+                                </td>
+                                <td>
+                                    <StatusBadge :status="order.payment_status" type="payment" />
+                                </td>
+                                <td>
+                                    <Link :href="`/admin/orders/${order.id}`" class="admin-order-link">
+                                        Détails
+                                    </Link>
+                                </td>
+                            </tr>
+                            <tr v-if="recent_orders.length === 0">
+                                <td colspan="5" class="admin-empty-cell">
+                                    Aucune commande récente
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- Quick Controls -->
-            <div class="dashboard-quick">
-                <h2 class="section-title">Raccourcis</h2>
-                <div class="quick-grid">
-                    <Link href="/admin/products/create" class="quick-card quick-card-primary">
-                        <div class="quick-icon-primary">
-                            <ShoppingBag class="w-6 h-6 md:w-7 md:h-7" />
-                        </div>
-                        <div class="quick-content">
-                            <p class="quick-title">Nouveau Produit</p>
-                            <p class="quick-description">Ajouter un article au catalogue.</p>
+            <!-- Quick Actions -->
+            <div class="admin-quick-actions">
+                <h2 class="admin-section-title">Actions rapides</h2>
+                <div class="admin-actions-list">
+                    <Link href="/admin/products/create" class="admin-action-card admin-action-primary">
+                        <Package class="w-6 h-6" />
+                        <div>
+                            <h3>Nouveau produit</h3>
+                            <p>Ajouter un article au catalogue</p>
                         </div>
                     </Link>
-                    
-                    <Link href="/admin/orders" class="quick-card quick-card-secondary">
-                        <div class="quick-icon-secondary">
-                            <Layers class="w-6 h-6 md:w-7 md:h-7" />
+                    <Link href="/admin/orders" class="admin-action-card">
+                        <ShoppingBag class="w-6 h-6" />
+                        <div>
+                            <h3>Commandes</h3>
+                            <p>Gérer les commandes en attente</p>
                         </div>
-                        <div class="quick-content">
-                            <p class="quick-title">Commandes</p>
-                            <p class="quick-description">Traiter les livraisons en attente.</p>
+                    </Link>
+                    <Link href="/admin/products" class="admin-action-card">
+                        <Package class="w-6 h-6" />
+                        <div>
+                            <h3>Catalogue</h3>
+                            <p>Gérer les produits</p>
                         </div>
                     </Link>
                 </div>
