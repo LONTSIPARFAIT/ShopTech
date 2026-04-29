@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { Users, Shield, ShoppingBag, Calendar, Search, Mail } from 'lucide-vue-next';
+import { updateRole as admin_users_updateRole, destroy as admin_users_destroy } from '@/routes/admin/users';
 
 const props = defineProps<{
     users: Array<{
@@ -24,8 +25,18 @@ const filteredUsers = computed(() => {
     );
 });
 
-const roleLabel = (role: string) => {
-    return role === 'admin' ? 'Administrateur' : 'Client';
+const updateRole = (id: number, role: string) => {
+    router.put(admin_users_updateRole(id).url, { role }, {
+        preserveScroll: true
+    });
+};
+
+const deleteUser = (id: number) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce compte utilisateur ?')) {
+        router.delete(admin_users_destroy(id).url, {
+            preserveScroll: true
+        });
+    }
 };
 </script>
 
@@ -65,6 +76,7 @@ const roleLabel = (role: string) => {
                             <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Rôle</th>
                             <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Commandes</th>
                             <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Inscription</th>
+                            <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -87,15 +99,15 @@ const roleLabel = (role: string) => {
                                 </div>
                             </td>
                             <td class="px-8 py-5">
-                                <span 
-                                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest"
-                                    :class="user.role === 'admin' 
-                                        ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' 
-                                        : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'"
+                                <select 
+                                    :value="user.role"
+                                    @change="updateRole(user.id, ($event.target as HTMLSelectElement).value)"
+                                    class="bg-slate-50 dark:bg-slate-800 border-none rounded-xl text-xs font-bold px-3 py-2 focus:ring-2 focus:ring-blue-500 transition-all cursor-pointer"
+                                    :class="user.role === 'admin' ? 'text-purple-600 dark:text-purple-400' : 'text-blue-600 dark:text-blue-400'"
                                 >
-                                    <Shield class="w-3 h-3" />
-                                    {{ roleLabel(user.role) }}
-                                </span>
+                                    <option value="client">Client</option>
+                                    <option value="admin">Administrateur</option>
+                                </select>
                             </td>
                             <td class="px-8 py-5">
                                 <div class="flex items-center gap-2 text-sm font-bold">
@@ -108,6 +120,17 @@ const roleLabel = (role: string) => {
                                     <Calendar class="w-3.5 h-3.5" />
                                     {{ new Date(user.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) }}
                                 </div>
+                            </td>
+                            <td class="px-8 py-5">
+                                <button 
+                                    @click="deleteUser(user.id)"
+                                    class="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl hover:bg-red-600 hover:text-white transition-all text-slate-400 hover:text-white"
+                                    title="Supprimer l'utilisateur"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
                             </td>
                         </tr>
                     </tbody>

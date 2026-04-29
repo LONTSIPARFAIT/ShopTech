@@ -55,10 +55,6 @@ const removeImage = (index: number, id: number | null) => {
         form.remove_image_ids.push(id);
     }
     galleryPreviews.value.splice(index, 1);
-    if (!id) {
-        // Find which file to remove from form.gallery_images
-        // This is simplified, in a real app we'd map files to previews more strictly
-    }
 };
 
 const addVariant = () => {
@@ -70,13 +66,18 @@ const removeVariant = (index: number) => {
 };
 
 const submit = () => {
-    if (props.product) {
-        form.post(admin_products_update(props.product.id).url, {
-            forceFormData: true,
-        });
-    } else {
-        form.post(admin_products_store().url);
-    }
+    form.transform((data) => ({
+        ...data,
+        is_active: data.is_active ? 1 : 0,
+        original_price: data.original_price === '' ? null : data.original_price,
+        base_price: data.base_price === '' ? null : data.base_price,
+        variants: data.variants.map((v: any) => ({
+            ...v,
+            price_override: v.price_override === '' ? null : v.price_override
+        }))
+    })).post(props.product ? admin_products_update(props.product.id).url : admin_products_store().url, {
+        forceFormData: true,
+    });
 };
 
 const discountPercent = computed(() => {
@@ -97,216 +98,226 @@ const generateSlug = () => {
 <template>
     <Head :title="product ? 'Modifier le Produit' : 'Ajouter un Produit'" />
 
-    <div class="p-6 lg:p-12 max-w-5xl mx-auto space-y-8">
-        <div class="flex items-center gap-4">
-            <Link href="/admin/products" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl hover:bg-slate-200 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="form-container">
+        <!-- Header -->
+        <div class="form-header">
+            <Link href="/admin/products" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </Link>
-            <h1 class="text-3xl font-black tracking-tight">{{ product ? 'Modifier' : 'Ajouter' }} un Produit</h1>
+            <h1 class="page-title">{{ product ? 'Modifier' : 'Ajouter' }} un Produit</h1>
         </div>
 
-        <form @submit.prevent="submit" class="space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Main Info -->
-                <div class="space-y-6 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
-                    <h2 class="text-xl font-bold">Informations Générales</h2>
+        <form @submit.prevent="submit">
+            <div class="grid-2cols">
+                <!-- Left Column: Main Information -->
+                <div class="form-card">
+                    <h2 class="form-card-title">Informations Générales</h2>
                     
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Nom du Produit</label>
+                    <div class="form-group">
+                        <label class="form-label">Nom du produit</label>
                         <input 
                             v-model="form.name" 
                             @input="generateSlug"
                             type="text" 
-                            class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
+                            class="form-input"
                             placeholder="ex: iPhone 15 Pro"
                         />
-                        <div v-if="form.errors.name" class="text-red-500 text-xs">{{ form.errors.name }}</div>
+                        <p v-if="form.errors.name" class="form-error">{{ form.errors.name }}</p>
                     </div>
 
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Slug</label>
+                    <div class="form-group">
+                        <label class="form-label">Slug</label>
                         <input 
                             v-model="form.slug" 
                             type="text" 
-                            class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
+                            class="form-input"
+                            placeholder="iphone-15-pro"
                         />
-                        <div v-if="form.errors.slug" class="text-red-500 text-xs">{{ form.errors.slug }}</div>
+                        <p v-if="form.errors.slug" class="form-error">{{ form.errors.slug }}</p>
                     </div>
 
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Catégorie</label>
+                    <div class="form-group">
+                        <label class="form-label">Catégorie</label>
                         <select 
                             v-model="form.category_id"
-                            class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
+                            class="form-select"
                         >
                             <option value="">Sélectionner une catégorie</option>
                             <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
                         </select>
-                        <div v-if="form.errors.category_id" class="text-red-500 text-xs">{{ form.errors.category_id }}</div>
+                        <p v-if="form.errors.category_id" class="form-error">{{ form.errors.category_id }}</p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Prix actuel (XAF)</label>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Prix actuel (XAF)</label>
                             <input
                                 v-model="form.base_price"
                                 type="number"
                                 step="1"
-                                class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
-                                placeholder="ex: 150000"
+                                class="form-input"
+                                placeholder="150000"
                             />
-                            <div v-if="form.errors.base_price" class="text-red-500 text-xs">{{ form.errors.base_price }}</div>
+                            <p v-if="form.errors.base_price" class="form-error">{{ form.errors.base_price }}</p>
                         </div>
 
-                        <div class="space-y-2">
-                            <label class="text-sm font-bold opacity-50 uppercase tracking-widest">Prix barré / Ancien prix (XAF)</label>
+                        <div class="form-group">
+                            <label class="form-label">Ancien prix (XAF)</label>
                             <input
                                 v-model="form.original_price"
                                 type="number"
                                 step="1"
-                                class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
-                                placeholder="(Optionnel)"
+                                class="form-input"
+                                placeholder="Optionnel"
                             />
-                            <div v-if="form.errors.original_price" class="text-red-500 text-xs">{{ form.errors.original_price }}</div>
+                            <p v-if="form.errors.original_price" class="form-error">{{ form.errors.original_price }}</p>
                         </div>
                     </div>
 
-                    <!-- Live discount preview -->
-                    <div v-if="discountPercent" class="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-2xl">
-                        <div class="w-12 h-12 bg-red-500 text-white rounded-xl flex items-center justify-center font-black text-sm shadow-lg shadow-red-500/20">
-                            -{{ discountPercent }}%
-                        </div>
-                        <div>
-                            <p class="font-black text-sm text-red-600 dark:text-red-400">Réduction calculée automatiquement</p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    <!-- Discount preview -->
+                    <div v-if="discountPercent" class="discount-badge">
+                        <div class="discount-percent">-{{ discountPercent }}%</div>
+                        <div class="discount-info">
+                            <p class="discount-title">Réduction automatique</p>
+                            <p class="discount-details">
                                 {{ Number(form.original_price).toLocaleString() }} XAF → {{ Number(form.base_price).toLocaleString() }} XAF
                             </p>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" v-model="form.is_active" class="w-6 h-6 rounded-lg text-blue-600 focus:ring-blue-500" />
-                        <label class="font-bold">Produit Actif</label>
+                    <div class="form-checkbox">
+                        <input type="checkbox" v-model="form.is_active" id="is_active" />
+                        <label for="is_active">Produit actif</label>
                     </div>
                 </div>
 
-                <!-- Images & Description -->
-                <div class="space-y-8">
+                <!-- Right Column: Images & Description -->
+                <div class="space-y-forms">
                     <!-- Featured Image -->
-                    <div class="p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
-                        <h2 class="text-xl font-bold">Image Principale</h2>
-                        <div class="relative group aspect-video bg-slate-50 dark:bg-slate-800 rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all">
-                            <img v-if="featuredPreview" :src="featuredPreview" class="w-full h-full object-cover" />
-                            <div v-else class="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span class="text-xs font-bold uppercase tracking-widest">Choisir une image</span>
+                    <div class="form-card">
+                        <h2 class="form-card-title">Image principale</h2>
+                        
+                        <div class="image-upload-area">
+                            <div class="image-preview">
+                                <img v-if="featuredPreview" :src="featuredPreview" class="w-full h-full object-cover" />
+                                <div v-else class="image-placeholder">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                        <polyline points="21 15 16 10 5 21"/>
+                                    </svg>
+                                    <span>Choisir une image</span>
+                                </div>
                             </div>
-                            <input type="file" @change="onFeaturedChange" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                            <input type="file" @change="onFeaturedChange" class="image-input" accept="image/*" />
                         </div>
-                        <div v-if="form.errors.featured_image" class="text-red-500 text-xs">{{ form.errors.featured_image }}</div>
+                        <p v-if="form.errors.featured_image" class="form-error">{{ form.errors.featured_image }}</p>
                     </div>
 
                     <!-- Gallery -->
-                    <div class="p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
-                        <h2 class="text-xl font-bold">Galerie Photos</h2>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div v-for="(img, idx) in galleryPreviews" :key="idx" class="relative aspect-square bg-slate-50 dark:bg-slate-800 rounded-xl overflow-hidden group">
-                                <img :src="img.path" class="w-full h-full object-cover" />
-                                <button @click.prevent="removeImage(idx, img.id)" class="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all shadow-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="form-card">
+                        <h2 class="form-card-title">Galerie photos</h2>
+                        
+                        <div class="gallery-grid">
+                            <div v-for="(img, idx) in galleryPreviews" :key="idx" class="gallery-item">
+                                <img :src="img.path" />
+                                <button @click.prevent="removeImage(idx, img.id)" class="gallery-remove">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </div>
-                            <div class="relative aspect-square bg-slate-50 dark:bg-slate-800 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center text-slate-400 hover:border-blue-500 transition-all cursor-pointer">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            
+                            <div class="gallery-add">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                 </svg>
-                                <span class="text-[10px] font-bold uppercase tracking-tighter">Ajouter</span>
-                                <input type="file" multiple @change="onGalleryChange" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                                <span>Ajouter</span>
+                                <input type="file" multiple @change="onGalleryChange" accept="image/*" />
                             </div>
                         </div>
-                        <div v-if="form.errors.gallery_images" class="text-red-500 text-xs">{{ form.errors.gallery_images }}</div>
+                        <p v-if="form.errors.gallery_images" class="form-error">{{ form.errors.gallery_images }}</p>
                     </div>
 
                     <!-- Description -->
-                    <div class="p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
-                        <h2 class="text-xl font-bold">Description</h2>
+                    <div class="form-card">
+                        <h2 class="form-card-title">Description</h2>
                         <textarea 
                             v-model="form.description" 
                             rows="6"
-                            class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all"
+                            class="form-textarea"
                             placeholder="Détails du produit..."
                         ></textarea>
-                        <div v-if="form.errors.description" class="text-red-500 text-xs">{{ form.errors.description }}</div>
+                        <p v-if="form.errors.description" class="form-error">{{ form.errors.description }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Variants -->
-            <div class="space-y-6 p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xl font-bold">Variantes & Stock</h2>
-                    <button 
-                        @click.prevent="addVariant"
-                        class="px-4 py-2 bg-blue-600/10 text-blue-600 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition-all text-sm"
-                    >
-                        + Ajouter une Variante
+            <div class="form-card mt-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="form-card-title mb-0">Variantes & Stock</h2>
+                    <button @click.prevent="addVariant" class="btn-add">
+                        + Ajouter une variante
                     </button>
                 </div>
 
-                <div class="space-y-4">
-                    <div v-for="(variant, index) in form.variants" :key="index" class="grid grid-cols-1 md:grid-cols-6 gap-4 p-6 bg-slate-50 dark:bg-slate-800 rounded-2xl relative group">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase opacity-50">Type</label>
-                            <input v-model="variant.name" type="text" placeholder="Couleur, Taille..." class="w-full bg-white dark:bg-slate-900 border-none rounded-xl text-sm" />
+                <div class="variants-list">
+                    <div v-for="(variant, index) in form.variants" :key="index" class="variant-item">
+                        <div class="variant-field">
+                            <label class="variant-label">Type</label>
+                            <input v-model="variant.name" type="text" placeholder="Couleur, Taille..." class="variant-input" />
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase opacity-50">Valeur</label>
-                            <input v-model="variant.value" type="text" placeholder="Rouge, XL..." class="w-full bg-white dark:bg-slate-900 border-none rounded-xl text-sm" />
+                        
+                        <div class="variant-field">
+                            <label class="variant-label">Valeur</label>
+                            <input v-model="variant.value" type="text" placeholder="Rouge, XL..." class="variant-input" />
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase opacity-50">Couleur (Hex)</label>
-                            <div class="flex gap-2">
-                                <input v-model="variant.color_code" type="color" class="w-10 h-10 p-1 bg-white dark:bg-slate-900 border-none rounded-lg cursor-pointer" />
-                                <input v-model="variant.color_code" type="text" placeholder="#FFFFFF" class="flex-1 bg-white dark:bg-slate-900 border-none rounded-xl text-[10px] font-mono uppercase" />
+                        
+                        <div class="variant-field">
+                            <label class="variant-label">Couleur (Hex)</label>
+                            <div class="color-input-group">
+                                <input v-model="variant.color_code" type="color" class="color-picker" />
+                                <input v-model="variant.color_code" type="text" placeholder="#FFFFFF" class="color-hex" />
                             </div>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase opacity-50">Supplément</label>
-                            <input v-model="variant.price_override" type="number" step="0.01" class="w-full bg-white dark:bg-slate-900 border-none rounded-xl text-sm" />
+                        
+                        <div class="variant-field">
+                            <label class="variant-label">Supplément</label>
+                            <input v-model="variant.price_override" type="number" step="0.01" class="variant-input" />
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase opacity-50">Stock</label>
-                            <input v-model="variant.stock" type="number" class="w-full bg-white dark:bg-slate-900 border-none rounded-xl text-sm" />
+                        
+                        <div class="variant-field">
+                            <label class="variant-label">Stock</label>
+                            <input v-model="variant.stock" type="number" class="variant-input" />
                         </div>
+                        
                         <div class="flex items-end">
                             <button 
                                 @click.prevent="removeVariant(index)"
                                 v-if="form.variants.length > 1"
-                                class="w-full p-3 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all"
+                                class="btn-remove-variant"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div v-if="form.errors.variants" class="text-red-500 text-sm">{{ form.errors.variants }}</div>
+                <p v-if="form.errors.variants" class="form-error">{{ form.errors.variants }}</p>
             </div>
 
-            <div class="flex justify-end">
+            <!-- Form Actions -->
+            <div class="form-actions">
                 <button 
                     type="submit"
                     :disabled="form.processing"
-                    class="px-12 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-3xl font-black text-xl hover:opacity-90 transition-all shadow-2xl disabled:opacity-50"
+                    class="btn-submit"
                 >
-                    {{ form.processing ? 'Chargement...' : (product ? 'Mettre à jour' : 'Enregistrer le Produit') }}
+                    {{ form.processing ? 'Chargement...' : (product ? 'Mettre à jour' : 'Enregistrer le produit') }}
                 </button>
             </div>
         </form>

@@ -35,7 +35,8 @@ class ProductController extends Controller
         DB::transaction(function () use ($request) {
             $product = Product::create($request->validated());
 
-            foreach ($request->variants as $variantData) {
+            $validatedVariants = $request->validated()['variants'] ?? [];
+            foreach ($validatedVariants as $variantData) {
                 $product->variants()->create($variantData);
             }
 
@@ -59,7 +60,8 @@ class ProductController extends Controller
             $product->update($request->validated());
 
             $product->variants()->delete();
-            foreach ($request->variants as $variantData) {
+            $validatedVariants = $request->validated()['variants'] ?? [];
+            foreach ($validatedVariants as $variantData) {
                 $product->variants()->create($variantData);
             }
 

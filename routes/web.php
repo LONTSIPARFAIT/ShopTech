@@ -32,6 +32,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
         Route::resource('orders', App\Http\Controllers\Admin\OrderController::class);
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::put('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.updateRole');
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
     });
 
     // Client Routes

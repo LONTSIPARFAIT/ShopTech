@@ -25,4 +25,27 @@ class UserController extends Controller
                 ]),
         ]);
     }
+
+    public function updateRole(\Illuminate\Http\Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'role' => ['required', \Illuminate\Validation\Rule::enum(UserRole::class)],
+        ]);
+
+        $user->update(['role' => $validated['role']]);
+
+        return back()->with('success', 'Le rôle de l\'utilisateur a été mis à jour.');
+    }
+
+    public function destroy(User $user)
+    {
+        // Protect against self deletion
+        if (auth()->id() === $user->id) {
+            return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+        }
+
+        $user->delete();
+
+        return back()->with('success', 'L\'utilisateur a été supprimé avec succès.');
+    }
 }
