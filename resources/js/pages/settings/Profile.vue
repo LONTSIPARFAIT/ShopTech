@@ -52,386 +52,107 @@ const submit = () => {
 </script>
 
 <template>
+
     <Head title="Paramètres du profil" />
 
-    <div class="settings-container">
-        <!-- Header -->
-        <div class="settings-header">
-            <Link href="/dashboard" class="settings-back-link">
-                <ArrowLeft class="h-4 w-4" />
-                Retour au tableau de bord
-            </Link>
-            <div>
-                <h1 class="settings-title">Mon profil</h1>
-                <p class="settings-subtitle">Personnalisez votre présence et gérez vos informations</p>
+    <!-- Grid Layout -->
+    <div class="grid gap-6 lg:grid-cols-3">
+        <!-- Left: Avatar Card -->
+        <div class="lg:col-span-1">
+            <div
+                class="rounded-xl border border-gray-200 bg-white p-6 text-center shadow-sm dark:border-gray-800 dark:bg-gray-900/50">
+                <!-- Avatar -->
+                <div class="relative mb-4 inline-block">
+                    <div
+                        class="relative h-32 w-32 overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-blue-600">
+                        <img v-if="avatarPreview" :src="avatarPreview" class="h-full w-full object-cover" />
+                        <div v-else
+                            class="flex h-full w-full items-center justify-center text-4xl font-bold text-white">
+                            {{ user.name.charAt(0).toUpperCase() }}
+                        </div>
+                        <div v-if="isUploading || form.processing"
+                            class="absolute inset-0 flex items-center justify-center bg-black/50">
+                            <Loader2 class="h-6 w-6 animate-spin text-white" />
+                        </div>
+                    </div>
+                    <label
+                        class="absolute -bottom-2 -right-2 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg bg-blue-600 text-white transition-transform hover:scale-110">
+                        <Camera class="h-4 w-4" />
+                        <input type="file" class="hidden" @change="handleAvatarChange" accept="image/*" />
+                    </label>
+                </div>
+
+                <!-- User Info -->
+                <div class="mb-3">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ user.name }}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ user.email }}</p>
+                </div>
+
+                <!-- Badge -->
+                <div
+                    class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                    <ShieldCheck class="h-3 w-3" />
+                    Compte vérifié
+                </div>
             </div>
         </div>
 
-        <div class="settings-grid">
-            <!-- Left: Avatar -->
-            <div class="settings-sidebar">
-                <div class="settings-card">
-                    <div class="settings-avatar-container">
-                        <div class="settings-avatar-wrapper">
-                            <img v-if="avatarPreview" :src="avatarPreview" class="settings-avatar" />
-                            <div v-else class="settings-avatar-placeholder">
-                                {{ user.name.charAt(0).toUpperCase() }}
-                            </div>
-                            <div v-if="isUploading || form.processing" class="settings-avatar-overlay">
-                                <Loader2 class="h-6 w-6 animate-spin" />
-                            </div>
-                        </div>
-                        <label class="settings-avatar-btn">
-                            <Camera class="h-4 w-4" />
-                            <input type="file" class="hidden" @change="handleAvatarChange" accept="image/*" />
-                        </label>
+        <!-- Right: Form Card -->
+        <div class="lg:col-span-2">
+            <form @submit.prevent="submit"
+                class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900/50">
+                <!-- Name Field -->
+                <div class="mb-6">
+                    <Label for="name" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Nom
+                        complet</Label>
+                    <div class="relative">
+                        <User class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                        <Input id="name" v-model="form.name"
+                            class="h-11 w-full rounded-lg border-gray-200 bg-gray-50 pl-9 transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                            required autocomplete="name" placeholder="Votre nom complet" />
                     </div>
-                    
-                    <div class="settings-user-info">
-                        <h3 class="settings-user-name">{{ user.name }}</h3>
-                        <p class="settings-user-email">{{ user.email }}</p>
-                    </div>
+                    <InputError :message="form.errors.name" class="mt-1 text-sm text-red-500" />
+                </div>
 
-                    <div class="settings-badge">
-                        <ShieldCheck class="h-3 w-3" />
-                        <span>Compte vérifié</span>
+                <!-- Email Field -->
+                <div class="mb-6">
+                    <Label for="email" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Adresse
+                        email</Label>
+                    <div class="relative">
+                        <Mail class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                        <Input id="email" type="email" v-model="form.email"
+                            class="h-11 w-full rounded-lg border-gray-200 bg-gray-50 pl-9 transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                            required autocomplete="username" placeholder="votre@email.com" />
+                    </div>
+                    <InputError :message="form.errors.email" class="mt-1 text-sm text-red-500" />
+                </div>
+
+                <!-- Email Verification Warning -->
+                <div v-if="mustVerifyEmail && !user.email_verified_at"
+                    class="mb-6 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800/30 dark:bg-amber-950/20">
+                    <ShieldCheck class="h-5 w-5 text-amber-500" />
+                    <div>
+                        <p class="text-sm font-medium text-amber-700 dark:text-amber-400">
+                            Votre adresse email n'est pas vérifiée.
+                        </p>
+                        <Link :href="send()" as="button"
+                            class="text-xs font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300">
+                            Renvoyer le lien de vérification
+                        </Link>
                     </div>
                 </div>
-            </div>
+                <div v-if="status === 'verification-link-sent'"
+                    class="mb-6 rounded-lg bg-green-50 p-3 text-center text-sm text-green-700 dark:bg-green-950/20 dark:text-green-400">
+                    ✓ Un nouveau lien de vérification a été envoyé.
+                </div>
 
-            <!-- Right: Form -->
-            <div class="settings-main">
-                <form @submit.prevent="submit" class="settings-form-card">
-                    <div class="settings-form-group">
-                        <Label for="name" class="settings-label">Nom complet</Label>
-                        <div class="settings-input-wrapper">
-                            <User class="settings-input-icon" />
-                            <Input
-                                id="name"
-                                v-model="form.name"
-                                class="settings-input"
-                                required
-                                autocomplete="name"
-                                placeholder="Votre nom complet"
-                            />
-                        </div>
-                        <InputError :message="form.errors.name" class="settings-error" />
-                    </div>
-
-                    <div class="settings-form-group">
-                        <Label for="email" class="settings-label">Adresse email</Label>
-                        <div class="settings-input-wrapper">
-                            <Mail class="settings-input-icon" />
-                            <Input
-                                id="email"
-                                type="email"
-                                v-model="form.email"
-                                class="settings-input"
-                                required
-                                autocomplete="username"
-                                placeholder="votre@email.com"
-                            />
-                        </div>
-                        <InputError :message="form.errors.email" class="settings-error" />
-                    </div>
-
-                    <div v-if="mustVerifyEmail && !user.email_verified_at" class="settings-verify-warning">
-                        <ShieldCheck class="h-4 w-4 text-amber-500" />
-                        <div>
-                            <p class="text-sm font-medium text-amber-700 dark:text-amber-400">
-                                Votre adresse email n'est pas vérifiée.
-                            </p>
-                            <Link
-                                :href="send()"
-                                as="button"
-                                class="text-xs font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
-                            >
-                                Renvoyer le lien de vérification
-                            </Link>
-                        </div>
-                        <div v-if="status === 'verification-link-sent'" class="mt-2 text-xs text-green-600">
-                            ✓ Un nouveau lien a été envoyé.
-                        </div>
-                    </div>
-
-                    <Button 
-                        :disabled="form.processing" 
-                        class="settings-submit-btn"
-                    >
-                        <Loader2 v-if="form.processing" class="h-4 w-4 animate-spin" />
-                        Enregistrer les modifications
-                    </Button>
-                </form>
-            </div>
+                <!-- Submit Button -->
+                <Button :disabled="form.processing"
+                    class="h-11 w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 font-semibold text-white shadow-lg shadow-blue-500/20 transition-all hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-50">
+                    <Loader2 v-if="form.processing" class="mr-2 h-4 w-4 animate-spin" />
+                    Enregistrer les modifications
+                </Button>
+            </form>
         </div>
     </div>
 </template>
-
-<style scoped>
-.settings-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.settings-header {
-    margin-bottom: 2rem;
-}
-
-.settings-back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    font-size: 0.875rem;
-    color: #6b7280;
-    transition: color 0.2s;
-}
-
-.settings-back-link:hover {
-    color: #3b82f6;
-}
-
-.settings-title {
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    margin-bottom: 0.5rem;
-}
-
-@media (min-width: 768px) {
-    .settings-title {
-        font-size: 2.5rem;
-    }
-}
-
-.settings-subtitle {
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
-.settings-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-}
-
-@media (min-width: 1024px) {
-    .settings-grid {
-        grid-template-columns: 1fr 2fr;
-    }
-}
-
-.settings-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.settings-card {
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    text-align: center;
-}
-
-.dark .settings-card {
-    background-color: #1f2937;
-    border-color: #374151;
-}
-
-.settings-avatar-container {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 1rem;
-}
-
-.settings-avatar-wrapper {
-    width: 8rem;
-    height: 8rem;
-    border-radius: 1rem;
-    overflow: hidden;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    position: relative;
-}
-
-.settings-avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.settings-avatar-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: white;
-}
-
-.settings-avatar-overlay {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.settings-avatar-btn {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 2rem;
-    height: 2rem;
-    background-color: #3b82f6;
-    border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s;
-    color: white;
-}
-
-.settings-avatar-btn:hover {
-    transform: scale(1.1);
-}
-
-.settings-user-info {
-    margin-bottom: 1rem;
-}
-
-.settings-user-name {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-}
-
-.settings-user-email {
-    font-size: 0.75rem;
-    color: #6b7280;
-}
-
-.dark .settings-user-email {
-    color: #9ca3af;
-}
-
-.settings-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.25rem 0.75rem;
-    background-color: #10b981;
-    border-radius: 9999px;
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: white;
-}
-
-.settings-main {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.settings-form-card {
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 1rem;
-    padding: 1.5rem;
-}
-
-.dark .settings-form-card {
-    background-color: #1f2937;
-    border-color: #374151;
-}
-
-.settings-form-group {
-    margin-bottom: 1.5rem;
-}
-
-.settings-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-.settings-input-wrapper {
-    position: relative;
-}
-
-.settings-input-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1rem;
-    height: 1rem;
-    color: #9ca3af;
-}
-
-.settings-input {
-    width: 100%;
-    padding: 0.625rem 0.75rem 0.625rem 2rem;
-    border-radius: 0.5rem;
-    border: 1px solid #e5e7eb;
-    background-color: #f9fafb;
-    font-size: 0.875rem;
-    transition: all 0.2s;
-}
-
-.dark .settings-input {
-    background-color: #374151;
-    border-color: #4b5563;
-    color: #f9fafb;
-}
-
-.settings-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.settings-error {
-    font-size: 0.75rem;
-    color: #ef4444;
-    margin-top: 0.25rem;
-}
-
-.settings-verify-warning {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem;
-    background-color: #fffbeb;
-    border: 1px solid #fde68a;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.dark .settings-verify-warning {
-    background-color: #422006;
-    border-color: #713f12;
-}
-
-.settings-submit-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    color: white;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    transition: all 0.2s;
-}
-
-.settings-submit-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
-}
-</style>
