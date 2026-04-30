@@ -62,11 +62,11 @@ const addToCart = () => {
             <div class="product-card-footer">
                 <div class="product-card-price">
                     <span v-if="product.original_price" class="product-card-price-old">
-                        {{ Number(product.original_price).toLocaleString() }} XAF
+                        {{ (Number(product.original_price) || 0).toLocaleString() }} XAF
                     </span>
                     <div class="product-card-price-current">
                         <span class="product-card-price-value">
-                            {{ Number(product.base_price).toLocaleString() }}
+                            {{ (Number(product.base_price) || 0).toLocaleString() }}
                         </span>
                         <span class="product-card-price-currency">XAF</span>
                     </div>

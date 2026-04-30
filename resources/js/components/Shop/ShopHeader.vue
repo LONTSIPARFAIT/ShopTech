@@ -67,8 +67,20 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 
                 <div class="shop-auth-divider"></div>
 
-                <div v-if="auth.user" class="shop-auth-desktop">
-                    <Link :href="dashboard().url" class="shop-register-btn">Espace</Link>
+                <div v-if="auth.user" class="shop-auth-desktop flex items-center gap-4">
+                    <Link :href="dashboard().url" class="flex items-center gap-3 group">
+                        <div class="flex flex-col items-end hidden lg:flex">
+                            <span class="text-xs font-bold text-foreground group-hover:text-primary transition-colors">{{ auth.user.name }}</span>
+                            <span class="text-[9px] text-muted-foreground uppercase font-black tracking-tighter">Mon Espace</span>
+                        </div>
+                        <div class="w-10 h-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary/50 transition-all">
+                            <img 
+                                :src="auth.user.avatar_url" 
+                                :alt="auth.user.name"
+                                class="w-full h-full object-cover rounded-full"
+                            />
+                        </div>
+                    </Link>
                 </div>
                 <div v-else class="shop-auth-desktop">
                     <Link :href="login().url" class="shop-login-btn">Connexion</Link>
@@ -111,7 +123,15 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
                 
                 <div class="shop-mobile-auth">
                     <div v-if="auth.user">
-                        <Link :href="dashboard().url" class="shop-mobile-register" @click="isMobileOpen = false">Mon espace</Link>
+                        <Link :href="dashboard().url" class="flex items-center gap-3 p-3 bg-secondary rounded-xl" @click="isMobileOpen = false">
+                            <div class="w-10 h-10 rounded-full overflow-hidden border border-border">
+                                <img :src="auth.user.avatar_url" :alt="auth.user.name" class="w-full h-full object-cover" />
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold">{{ auth.user.name }}</span>
+                                <span class="text-[10px] text-muted-foreground">Accéder au dashboard</span>
+                            </div>
+                        </Link>
                     </div>
                     <div v-else>
                         <Link :href="login().url" class="shop-mobile-login" @click="isMobileOpen = false">Connexion</Link>

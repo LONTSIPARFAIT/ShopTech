@@ -59,8 +59,14 @@ const submit = () => {
                             <label class="checkout-payment-option" :class="{ active: form.payment_method === 'notchpay' }">
                                 <input type="radio" v-model="form.payment_method" value="notchpay" />
                                 <div class="checkout-payment-option-content">
-                                    <span>Notch Pay</span>
-                                    <small>Mobile Money, Orange, MTN, Carte</small>
+                                    <div class="flex items-center gap-2">
+                                        <span>MTN / Orange Money</span>
+                                        <div class="flex gap-1">
+                                            <div class="px-1.5 py-0.5 bg-yellow-400 text-[8px] font-black rounded text-black">MTN</div>
+                                            <div class="px-1.5 py-0.5 bg-orange-500 text-[8px] font-black rounded text-white">ORANGE</div>
+                                        </div>
+                                    </div>
+                                    <small>Paiement sécurisé via Mobile Money</small>
                                 </div>
                             </label>
                             <label class="checkout-payment-option" :class="{ active: form.payment_method === 'cod' }">
@@ -81,13 +87,13 @@ const submit = () => {
                         <div class="checkout-summary-items">
                             <div v-for="item in cart.items" :key="item.id" class="checkout-summary-item">
                                 <span>{{ item.product.name }} x{{ item.quantity }}</span>
-                                <span>{{ (Number(item.variant?.price_override || item.product.base_price) * item.quantity).toLocaleString() }} FCFA</span>
+                                <span>{{ (Number(item.variant?.price_override || item.product.base_price) * item.quantity).toLocaleString() }} XAF</span>
                             </div>
                         </div>
                         <div class="checkout-summary-divider"></div>
                         <div class="checkout-summary-total">
                             <span>Total</span>
-                            <span>{{ total.toLocaleString() }} FCFA</span>
+                            <span>{{ (Number(total) || 0).toLocaleString() }} XAF</span>
                         </div>
                         <button type="submit" :disabled="form.processing" class="checkout-submit-btn">
                             {{ form.processing ? 'Traitement...' : 'Payer maintenant' }}

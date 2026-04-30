@@ -474,25 +474,42 @@
 /* ============================================
    6. CART MODAL
    ============================================ */
-.cart-modal {
+.cart-modal,
+[data-slot="dialog-content"].cart-modal {
     position: fixed !important;
-    top: 50% !important;
-    right: 1rem !important;
+    top: 0 !important;
+    right: 0 !important;
     left: auto !important;
-    transform: translateY(-50%) !important;
-    width: calc(100% - 2rem) !important;
-    max-width: 400px !important;
-    max-height: 85vh !important;
+    bottom: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
     background-color: var(--card) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: var(--radius) !important;
+    border-left: 1px solid var(--border) !important;
+    border-radius: 0 !important;
     padding: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1) !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    animation: slideInRight 0.3s ease-out !important;
 }
-@media (min-width: 640px) { .cart-modal { right: 1.5rem !important; width: 420px !important; } }
-@media (min-width: 768px) { .cart-modal { right: 2rem !important; width: 440px !important; } }
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@media (max-width: 640px) {
+    .cart-modal,
+    [data-slot="dialog-content"].cart-modal {
+        max-width: 100% !important;
+    }
+}
 
 .cart-modal-header {
     padding: 1rem 1.25rem;
@@ -529,9 +546,8 @@
 .cart-modal-content {
     flex: 1;
     overflow-y: auto;
-    padding: 1rem 1.25rem;
-    min-height: 200px;
-    max-height: calc(85vh - 140px);
+    padding: 1.5rem 1.25rem;
+    min-height: 0;
 }
 .cart-modal-content::-webkit-scrollbar { width: 4px; }
 .cart-modal-content::-webkit-scrollbar-track { background: transparent; }

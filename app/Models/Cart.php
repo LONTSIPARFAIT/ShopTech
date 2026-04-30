@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 class Cart extends Model
 {
     use HasFactory;
+    
+    protected $appends = ['total'];
 
     public function user(): BelongsTo
     {
@@ -26,9 +28,7 @@ class Cart extends Model
     public function getTotalAttribute(): float
     {
         return $this->items->sum(function ($item) {
-            $price = $item->variant && $item->variant->price_override 
-                ? $item->variant->price_override 
-                : $item->product->base_price;
+            $price = (float) $item->product->base_price + (float) ($item->variant->price_override ?? 0);
             return $price * $item->quantity;
         });
     }

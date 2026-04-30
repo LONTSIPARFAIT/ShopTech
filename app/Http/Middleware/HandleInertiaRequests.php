@@ -39,6 +39,10 @@ class HandleInertiaRequests extends Middleware
         $cartService = app(CartService::class);
         $cart = $cartService->getCart();
 
+        if ($cart) {
+            $cart->load(['items.product.featuredImage', 'items.variant']);
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -46,11 +50,8 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'cart' => $cart ? [
-                'items' => $cart->items()->with(['product.featuredImage', 'variant'])->get(),
-                'total' => $cartService->getTotal($cart),
-            ] : null,
-            'cartCount' => $cart ? $cart->items()->sum('quantity') : 0,
+            'cart' => $cart,
+            'cartCount' => $cart ? $cart->items->sum('quantity') : 0,
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),

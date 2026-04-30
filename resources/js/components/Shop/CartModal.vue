@@ -10,7 +10,7 @@ import {
     DialogClose 
 } from '@/components/ui/dialog';
 import { ShoppingBag, X, Plus, Minus, Trash2, ShoppingCart, ArrowRight, ShieldCheck } from 'lucide-vue-next';
-import { update as cartUpdate, destroy as cartDestroy } from '@/routes/cart';
+import { index as cartIndex, update as cartUpdate, destroy as cartDestroy } from '@/routes/cart';
 import { index as checkoutIndex } from '@/routes/checkout';
 import { index as productsIndex } from '@/routes/products';
 
@@ -135,13 +135,13 @@ const removeItem = (itemId: number) => {
                 <div class="cart-total">
                     <div class="cart-subtotal">
                         <span class="cart-subtotal-label">Sous-total</span>
-                        <span class="cart-subtotal-value">{{ Number(cart.total).toLocaleString() }} XAF</span>
+                        <span class="cart-subtotal-value">{{ (Number(cart.total) || 0).toLocaleString() }} XAF</span>
                     </div>
                     <div class="cart-divider"></div>
                     <div class="cart-grandtotal">
                         <span class="cart-grandtotal-label">Total à payer</span>
                         <span class="cart-grandtotal-value">
-                            {{ Number(cart.total).toLocaleString() }} 
+                            {{ (Number(cart.total) || 0).toLocaleString() }} 
                             <span class="cart-grandtotal-currency">XAF</span>
                         </span>
                     </div>
@@ -152,15 +152,27 @@ const removeItem = (itemId: number) => {
                     <span>Paiement 100% sécurisé</span>
                 </div>
 
-                <DialogClose as-child>
-                    <Link 
-                        :href="checkoutIndex().url" 
-                        class="cart-checkout-btn"
-                    >
-                        Passer à la caisse
-                        <ArrowRight class="w-4 h-4" />
-                    </Link>
-                </DialogClose>
+                <div class="flex flex-col gap-2 w-full">
+                    <DialogClose as-child>
+                        <Link 
+                            :href="cartIndex().url" 
+                            class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-border font-semibold hover:bg-secondary transition-colors"
+                        >
+                            <ShoppingCart class="w-4 h-4" />
+                            Voir mon panier
+                        </Link>
+                    </DialogClose>
+
+                    <DialogClose as-child>
+                        <Link 
+                            :href="checkoutIndex().url" 
+                            class="cart-checkout-btn"
+                        >
+                            Passer à la caisse
+                            <ArrowRight class="w-4 h-4" />
+                        </Link>
+                    </DialogClose>
+                </div>
             </DialogFooter>
         </DialogContent>
     </Dialog>

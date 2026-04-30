@@ -3,6 +3,8 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import CartItem from '@/components/Shop/CartItem.vue';
 import ShopLayout from '@/layouts/ShopLayout.vue';
 import { update as cartUpdate, destroy as cartDestroy } from '@/routes/cart';
+import { index as checkoutIndex } from '@/routes/checkout';
+import { index as productsIndex } from '@/routes/products';
 import { ShoppingBag, ArrowRight } from 'lucide-vue-next';
 
 const props = defineProps<{
@@ -49,11 +51,11 @@ const removeItem = (itemId: number) => {
                         <h2>Résumé</h2>
                         <div class="cart-summary-row">
                             <span>Sous-total</span>
-                            <span>{{ subtotal.toLocaleString() }} FCFA</span>
+                            <span>{{ (Number(subtotal) || 0).toLocaleString() }} XAF</span>
                         </div>
                         <div v-if="discount > 0" class="cart-summary-row discount">
                             <span>Réduction</span>
-                            <span>- {{ discount.toLocaleString() }} FCFA</span>
+                            <span>- {{ (Number(discount) || 0).toLocaleString() }} XAF</span>
                         </div>
                         <div class="cart-summary-row">
                             <span>Livraison</span>
@@ -62,12 +64,12 @@ const removeItem = (itemId: number) => {
                         <div class="cart-summary-divider"></div>
                         <div class="cart-summary-total">
                             <span>Total</span>
-                            <span>{{ total.toLocaleString() }} FCFA</span>
+                            <span>{{ (Number(total) || 0).toLocaleString() }} XAF</span>
                         </div>
-                        <Link href="/checkout" class="cart-checkout-btn">
+                        <Link :href="checkoutIndex().url" class="cart-checkout-btn">
                             Passer à la caisse <ArrowRight class="w-4 h-4" />
                         </Link>
-                        <Link href="/products" class="cart-continue-link">
+                        <Link :href="productsIndex().url" class="cart-continue-link">
                             Continuer mes achats
                         </Link>
                     </div>
@@ -79,7 +81,7 @@ const removeItem = (itemId: number) => {
                 <ShoppingBag class="w-16 h-16" />
                 <h2>Votre panier est vide</h2>
                 <p>Découvrez nos produits et trouvez votre bonheur</p>
-                <Link href="/products" class="cart-empty-btn">Découvrir la boutique</Link>
+                <Link :href="productsIndex().url" class="cart-empty-btn">Découvrir la boutique</Link>
             </div>
         </div>
     </ShopLayout>
