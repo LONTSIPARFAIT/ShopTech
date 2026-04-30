@@ -149,11 +149,22 @@ const removeItem = (itemId: number) => {
                         <span class="cart-subtotal-label">Sous-total</span>
                         <span class="cart-subtotal-value">{{ (Number(cart.total) || 0).toLocaleString() }} XAF</span>
                     </div>
+                    
+                    <div v-if="$page.props.cartDiscount > 0" class="cart-subtotal" style="color: #16a34a;">
+                        <span class="cart-subtotal-label" style="color: inherit;">Remise de Gros</span>
+                        <span class="cart-subtotal-value">-{{ (Number($page.props.cartDiscount) || 0).toLocaleString() }} XAF</span>
+                    </div>
+                    
+                    <div class="cart-subtotal">
+                        <span class="cart-subtotal-label">Livraison</span>
+                        <span class="cart-subtotal-value">{{ $page.props.cartShippingCost > 0 ? Number($page.props.cartShippingCost).toLocaleString() + ' XAF' : 'Gratuite' }}</span>
+                    </div>
+                    
                     <div class="cart-divider"></div>
                     <div class="cart-grandtotal">
                         <span class="cart-grandtotal-label">Total à payer</span>
                         <span class="cart-grandtotal-value">
-                            {{ (Number(cart.total) || 0).toLocaleString() }} 
+                            {{ (Number(cart.total) - Number($page.props.cartDiscount) + Number($page.props.cartShippingCost) || 0).toLocaleString() }} 
                             <span class="cart-grandtotal-currency">XAF</span>
                         </span>
                     </div>

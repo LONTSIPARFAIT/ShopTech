@@ -16,12 +16,16 @@ class CartController extends Controller
     {
         $cart = $this->cartService->getCart()->load(['items.product.featuredImage', 'items.variant']);
         $discount = $applyPromotion->execute($cart);
+        $shippingCost = $cart->items->sum(function ($item) {
+            return (float) ($item->product->shipping_cost ?? 0) * $item->quantity;
+        });
         
         return Inertia::render('Cart/Index', [
             'cart' => $cart,
-            'total' => max(0, $cart->total - $discount),
+            'total' => max(0, $cart->total - $discount) + $shippingCost,
             'subtotal' => $cart->total,
             'discount' => $discount,
+            'shippingCost' => $shippingCost,
         ]);
     }
 

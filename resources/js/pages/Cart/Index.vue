@@ -12,6 +12,7 @@ const props = defineProps<{
     total: number;
     subtotal: number;
     discount: number;
+    shippingCost: number;
 }>();
 
 const updateQuantity = (itemId: number, quantity: number) => {
@@ -59,7 +60,9 @@ const removeItem = (itemId: number) => {
                         </div>
                         <div class="cart-summary-row">
                             <span>Livraison</span>
-                            <span class="text-green-600">Gratuite</span>
+                            <span :class="shippingCost > 0 ? '' : 'text-green-600'">
+                                {{ shippingCost > 0 ? (Number(shippingCost).toLocaleString() + ' XAF') : 'Gratuite' }}
+                            </span>
                         </div>
                         <div class="cart-summary-divider"></div>
                         <div class="cart-summary-total">
