@@ -45,7 +45,7 @@ const addToCart = () => {
 
 const buyNow = () => {
     form.post(cartStore().url, {
-        onSuccess: () => { window.location.href = '/cart'; }
+        onSuccess: () => { window.location.href = '/checkout'; }
     });
 };
 </script>

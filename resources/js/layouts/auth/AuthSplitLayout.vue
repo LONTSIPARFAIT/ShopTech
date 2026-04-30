@@ -17,7 +17,7 @@ defineProps<{
         class="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0"
     >
         <div
-            class="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r"
+            class="relative hidden h-full flex-col p-10 text-white lg:flex auth-brand-side"
         >
             <div class="absolute inset-0 bg-zinc-900" />
             <Link
@@ -45,3 +45,13 @@ defineProps<{
         </div>
     </div>
 </template>
+
+<style scoped>
+.auth-brand-side {
+    background-color: hsl(0 0% 96.1%);
+}
+
+.dark .auth-brand-side {
+    border-right: 1px solid hsl(0 0% 14.9%);
+}
+</style>

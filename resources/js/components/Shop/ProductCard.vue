@@ -17,11 +17,11 @@ const discountPercent = computed(() => {
 });
 
 const addToCart = () => {
+    let payload: any = { product_id: props.product.id, quantity: 1 };
     if (props.product.variants && props.product.variants.length > 0) {
-        router.visit(products.show({ slug: props.product.slug }).url);
-        return;
+        payload.variant_id = props.product.variants[0].id;
     }
-    router.post(cartStore().url, { product_id: props.product.id, quantity: 1 }, { preserveScroll: true });
+    router.post(cartStore().url, payload, { preserveScroll: true });
 };
 </script>
 

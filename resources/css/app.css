@@ -279,26 +279,6 @@
 @media (min-width: 768px) { .shop-hero-description { font-size: 1.125rem; } }
 
 .shop-hero-buttons { display: flex; flex-wrap: wrap; gap: 1rem; }
-.shop-hero-btn-primary {
-    padding: 0.75rem 2rem;
-    background-color: #2563eb;
-    color: white;
-    border-radius: var(--radius);
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.shop-hero-btn-primary:hover { background-color: #1d4ed8; transform: translateY(-2px); }
-.shop-hero-btn-secondary {
-    padding: 0.75rem 2rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    color: white;
-    border-radius: var(--radius);
-    font-weight: 600;
-}
-.shop-hero-btn-secondary:hover { background-color: rgba(255, 255, 255, 0.2); }
 
 .shop-hero-dots {
     position: absolute;
@@ -336,7 +316,7 @@
 .shop-hero-nav-right { right: 1rem; }
 @media (min-width: 768px) { .shop-hero-nav-left { left: 1.5rem; } .shop-hero-nav-right { right: 1.5rem; } }
 
-/* Animations Hero */
+/* Animations */
 .shop-hero-slide-x-enter-active,
 .shop-hero-slide-x-leave-active { transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
 .shop-hero-slide-x-enter-from { transform: translateX(100%); }
@@ -1512,7 +1492,6 @@
 /* ============================================
    10. HOME PAGE COMPONENTS
    ============================================ */
-
 /* Stats Section */
 .home-stats {
     padding: 2rem 0;
@@ -2677,8 +2656,6 @@
 /* ============================================
    16. ABOUT / CONTACT / SERVICES PAGES
    ============================================ */
-
-/* Classes communes pour les 3 pages */
 .about-page, .contact-page, .services-page {
     padding-top: 5rem;
 }
