@@ -87,7 +87,7 @@ const submit = () => {
                         <div class="checkout-summary-items">
                             <div v-for="item in cart.items" :key="item.id" class="checkout-summary-item">
                                 <span>{{ item.product.name }} x{{ item.quantity }}</span>
-                                <span>{{ (Number(item.variant?.price_override || item.product.base_price) * item.quantity).toLocaleString() }} XAF</span>
+                                <span>{{ (Number(item.product.base_price) * item.quantity).toLocaleString() }} XAF</span>
                             </div>
                         </div>
                         <div class="checkout-summary-divider"></div>

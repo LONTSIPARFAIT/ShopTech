@@ -27,7 +27,7 @@ const emit = defineEmits(['update', 'remove']);
                 {{ item.variant.name }}: {{ item.variant.value }}
             </p>
             <p class="shop-cart-item-card-price">
-                {{ (Number(item.variant?.price_override || item.product.base_price) || 0).toLocaleString() }} XAF
+                {{ Number(item.product.base_price).toLocaleString() }} XAF
             </p>
 
             <div class="shop-cart-item-card-actions">
@@ -57,7 +57,7 @@ const emit = defineEmits(['update', 'remove']);
 
         <div class="shop-cart-item-card-total">
             <span class="shop-cart-item-card-total-price">
-                {{ (Number(item.variant?.price_override || item.product.base_price) * item.quantity || 0).toLocaleString() }}
+                {{ (Number(item.product.base_price) * item.quantity || 0).toLocaleString() }}
             </span>
             <span class="shop-cart-item-card-total-currency">XAF</span>
         </div>

@@ -92,7 +92,7 @@ const removeItem = (itemId: number) => {
                                 {{ item.variant.name }}: {{ item.variant.value }}
                             </p>
                             <p class="cart-item-price">
-                                {{ (Number(item.variant?.price_override || item.product.base_price)).toLocaleString() }} XAF
+                                {{ Number(item.product.base_price).toLocaleString() }} XAF
                             </p>
                             
                             <div class="cart-item-actions">
@@ -122,7 +122,7 @@ const removeItem = (itemId: number) => {
                         
                         <div class="cart-item-total">
                             <span class="cart-item-total-price">
-                                {{ (Number(item.variant?.price_override || item.product.base_price) * item.quantity).toLocaleString() }}
+                                {{ (Number(item.product.base_price) * item.quantity).toLocaleString() }}
                             </span>
                             <span class="cart-item-total-currency">XAF</span>
                         </div>

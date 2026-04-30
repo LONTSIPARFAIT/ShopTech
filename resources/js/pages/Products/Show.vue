@@ -15,12 +15,7 @@ const selectedVariant = ref(props.product.variants[0] || null);
 const quantity = ref(1);
 const activeImage = ref(props.product.images[0]?.path || null);
 
-const totalPrice = computed(() => {
-    if (selectedVariant.value && selectedVariant.value.price_override > 0) {
-        return Number(selectedVariant.value.price_override);
-    }
-    return Number(props.product.base_price);
-});
+const totalPrice = computed(() => Number(props.product.base_price));
 
 const discountPercent = computed(() => {
     if (!props.product.original_price) return null;
@@ -144,12 +139,6 @@ const buyNow = () => {
                                 ></div>
                                 <div class="shop-variant-info">
                                     <div class="shop-variant-name">{{ variant.name }}: {{ variant.value }}</div>
-                                    <div v-if="variant.price_override > 0" class="shop-variant-price">
-                                        {{ Number(variant.price_override).toLocaleString() }} XAF
-                                    </div>
-                                    <div v-else class="shop-variant-price">
-                                        {{ Number(product.base_price).toLocaleString() }} XAF
-                                    </div>
                                 </div>
                             </button>
                         </div>
