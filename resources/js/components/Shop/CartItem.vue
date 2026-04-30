@@ -31,27 +31,31 @@ const emit = defineEmits(['update', 'remove']);
             </p>
 
             <div class="shop-cart-item-card-actions">
-                <div class="shop-cart-item-card-quantity">
-                    <button 
-                        @click="emit('update', item.id, item.quantity - 1)"
-                        class="shop-cart-item-card-quantity-btn"
-                    >
-                        <Minus class="w-3 h-3" />
-                    </button>
-                    <input 
-                        type="number" 
-                        :value="item.quantity" 
-                        @change="(e) => updateQuantity(item.id, parseInt((e.target as HTMLInputElement).value))"
-                        min="1" 
-                        class="shop-cart-quantity-input"
-                    />
-                    <button 
-                        @click="emit('update', item.id, item.quantity + 1)"
-                        class="shop-cart-item-card-quantity-btn"
-                    >
-                        <Plus class="w-3 h-3" />
-                    </button>
-                </div>
+                <div class="shop-cart-quantity-stepper">
+                <button 
+                    @click="emit('update', item.id, item.quantity - 1)"
+                    :disabled="item.quantity <= 1"
+                    class="stepper-btn"
+                >
+                    <Minus class="w-3 h-3" />
+                </button>
+                <input 
+                    type="number" 
+                    :value="item.quantity" 
+                    @input="(e) => {
+                        const val = parseInt((e.target as HTMLInputElement).value);
+                        if (val > 0) emit('update', item.id, val);
+                    }"
+                    min="1" 
+                    class="stepper-input"
+                />
+                <button 
+                    @click="emit('update', item.id, item.quantity + 1)"
+                    class="stepper-btn"
+                >
+                    <Plus class="w-3 h-3" />
+                </button>
+            </div>
                 <button 
                     @click="emit('remove', item.id)" 
                     class="shop-cart-item-card-remove"

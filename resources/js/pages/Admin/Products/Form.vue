@@ -15,7 +15,10 @@ const form = useForm({
     slug: props.product?.slug ?? '',
     description: props.product?.description ?? '',
     base_price: props.product?.base_price ?? '',
+    shipping_cost: props.product?.shipping_cost ?? '',
     original_price: props.product?.original_price ?? '',
+    promo_min_quantity: props.product?.promo_min_quantity ?? '',
+    promo_discount_percent: props.product?.promo_discount_percent ?? '',
     is_active: props.product ? !!props.product.is_active : true,
     variants: props.product?.variants?.map((v: any) => ({
         name: v.name,
@@ -71,7 +74,10 @@ const submit = () => {
         ...data,
         is_active: data.is_active ? 1 : 0,
         original_price: data.original_price === '' ? null : data.original_price,
+        shipping_cost: data.shipping_cost === '' ? 0 : data.shipping_cost,
         base_price: data.base_price === '' ? null : data.base_price,
+        promo_min_quantity: data.promo_min_quantity === '' ? null : data.promo_min_quantity,
+        promo_discount_percent: data.promo_discount_percent === '' ? null : data.promo_discount_percent,
         variants: data.variants.map((v: any) => ({
             ...v,
             price_override: v.price_override === '' ? null : v.price_override
@@ -174,6 +180,35 @@ const generateSlug = () => {
                                 placeholder="Optionnel" />
                             <p v-if="form.errors.original_price" class="text-sm text-red-500 mt-1">{{
                                 form.errors.original_price }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Shipping -->
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Frais de livraison (XAF)</label>
+                        <input v-model="form.shipping_cost" type="number" step="1"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            placeholder="ex: 1500 (Laisser vide ou 0 pour gratuit)" />
+                        <p v-if="form.errors.shipping_cost" class="text-sm text-red-500 mt-1">{{ form.errors.shipping_cost }}</p>
+                    </div>
+
+                    <!-- Wholesale Promotion -->
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 border-t pt-4 dark:text-gray-400">Promotion en Gros</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Quantité minimum</label>
+                            <input v-model="form.promo_min_quantity" type="number" step="1" min="1"
+                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                placeholder="ex: 5" />
+                            <p v-if="form.errors.promo_min_quantity" class="text-sm text-red-500 mt-1">{{ form.errors.promo_min_quantity }}</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Réduction (%)</label>
+                            <input v-model="form.promo_discount_percent" type="number" step="1" min="1" max="25"
+                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                placeholder="Max 25%" />
+                            <p v-if="form.errors.promo_discount_percent" class="text-sm text-red-500 mt-1">{{ form.errors.promo_discount_percent }}</p>
                         </div>
                     </div>
 

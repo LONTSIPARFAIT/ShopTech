@@ -13,14 +13,14 @@ const props = defineProps<{
 
 const selectedVariant = ref(props.product.variants[0] || null);
 const quantity = ref(1);
-const activeImage = ref(props.product.images[0]?.path || null);
+const activeImage = ref(props.product.images[0]?.url || null);
 
 const totalPrice = computed(() => {
-    let price = Number(props.product.base_price);
+    let unitPrice = Number(props.product.base_price);
     if (selectedVariant.value && selectedVariant.value.price_override > 0) {
-        price += Number(selectedVariant.value.price_override);
+        unitPrice += Number(selectedVariant.value.price_override);
     }
-    return price;
+    return unitPrice * quantity.value;
 });
 
 const discountPercent = computed(() => {
@@ -153,28 +153,33 @@ const buyNow = () => {
                         </div>
                     </div>
 
-                    <!-- Actions -->
-                    <div class="shop-product-actions">
-                        <div class="shop-quantity">
-                            <button @click="quantity > 1 && quantity--" class="shop-quantity-btn">
-                                <Minus class="w-4 h-4" />
-                            </button>
-                            <input 
-                                v-model.number="quantity" 
-                                type="number" 
-                                min="1" 
-                                class="shop-quantity-input"
-                            />
-                            <button @click="quantity++" class="shop-quantity-btn">
-                                <Plus class="w-4 h-4" />
-                            </button>
+                    <!-- Actions modernisées -->
+                    <div class="shop-actions-modern">
+                        <!-- Quantité -->
+                        <div class="shop-quantity-group">
+                            <label class="shop-product-section-title">Quantité</label>
+                            <div class="shop-quantity-stepper">
+                                <button @click="quantity > 1 && quantity--" class="stepper-btn" type="button">
+                                    <Minus class="w-4 h-4" />
+                                </button>
+                                <input 
+                                    v-model.number="quantity" 
+                                    type="number" 
+                                    min="1" 
+                                    class="stepper-input"
+                                />
+                                <button @click="quantity++" class="stepper-btn" type="button">
+                                    <Plus class="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
                         
-                        <div class="shop-action-buttons">
+                        <!-- Boutons d'action -->
+                        <div class="shop-action-buttons-modern">
                             <button 
                                 @click="addToCart"
                                 :disabled="form.processing"
-                                class="shop-cart-btn"
+                                class="shop-cart-btn-modern"
                             >
                                 <ShoppingBag class="w-5 h-5" />
                                 Ajouter au panier
@@ -183,26 +188,37 @@ const buyNow = () => {
                             <button 
                                 @click="buyNow"
                                 :disabled="form.processing"
-                                class="shop-buy-btn"
+                                class="shop-buy-btn-modern"
                             >
                                 Acheter maintenant
                             </button>
                         </div>
-                    </div>
 
-                    <!-- Features -->
-                    <div class="shop-features">
-                        <div class="shop-feature">
-                            <Truck class="shop-feature-icon" />
-                            <span class="shop-feature-text">Livraison express</span>
-                        </div>
-                        <div class="shop-feature">
-                            <ShieldCheck class="shop-feature-icon" />
-                            <span class="shop-feature-text">Garantie 2 ans</span>
-                        </div>
-                        <div class="shop-feature">
-                            <RefreshCcw class="shop-feature-icon" />
-                            <span class="shop-feature-text">Retour 30 jours</span>
+                        <!-- Features modernisées -->
+                        <div class="shop-features-modern">
+                            <div class="shop-feature-modern">
+                                <div class="shop-feature-icon-modern">
+                                    <Truck class="w-5 h-5" />
+                                </div>
+                                <span class="shop-feature-text-modern" v-if="product.shipping_cost > 0">
+                                    Livraison<br>{{ Number(product.shipping_cost).toLocaleString() }} XAF
+                                </span>
+                                <span class="shop-feature-text-modern" v-else>
+                                    Livraison<br>gratuite
+                                </span>
+                            </div>
+                            <div class="shop-feature-modern">
+                                <div class="shop-feature-icon-modern">
+                                    <ShieldCheck class="w-5 h-5" />
+                                </div>
+                                <span class="shop-feature-text-modern">Garantie<br>2 ans</span>
+                            </div>
+                            <div class="shop-feature-modern">
+                                <div class="shop-feature-icon-modern">
+                                    <RefreshCcw class="w-5 h-5" />
+                                </div>
+                                <span class="shop-feature-text-modern">Retour<br>30 jours</span>
+                            </div>
                         </div>
                     </div>
                 </div>

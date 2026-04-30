@@ -97,25 +97,31 @@ const removeItem = (itemId: number) => {
                             
                             <div class="cart-item-actions">
                                 <div class="cart-quantity">
+                                <div class="cart-quantity-stepper">
                                     <button 
                                         @click="updateQuantity(item.id, item.quantity - 1)"
-                                        class="cart-quantity-btn"
+                                        :disabled="item.quantity <= 1"
+                                        class="cart-stepper-btn"
                                     >
                                         <Minus class="w-3 h-3" />
                                     </button>
                                     <input 
-                                    type="number" 
-                                    :value="item.quantity" 
-                                    @change="(e) => updateQuantity(item.id, parseInt((e.target as HTMLInputElement).value))"
-                                    min="1" 
-                                    class="cart-quantity-input"
-                                />
+                                        type="number" 
+                                        :value="item.quantity" 
+                                        @input="(e) => {
+                                            const val = parseInt((e.target as HTMLInputElement).value);
+                                            if (val > 0) updateQuantity(item.id, val);
+                                        }"
+                                        min="1" 
+                                        class="cart-stepper-input"
+                                    />
                                     <button 
                                         @click="updateQuantity(item.id, item.quantity + 1)"
-                                        class="cart-quantity-btn"
+                                        class="cart-stepper-btn"
                                     >
                                         <Plus class="w-3 h-3" />
                                     </button>
+                                </div>
                                 </div>
                                 <button 
                                     @click="removeItem(item.id)" 

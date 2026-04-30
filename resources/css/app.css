@@ -4214,3 +4214,233 @@
     color: var(--muted-foreground);
     margin-left: 0.125rem;
 }
+/* Integrated Stepper UX */
+.shop-quantity-stepper,
+.cart-quantity-stepper,
+.shop-cart-quantity-stepper {
+    display: inline-flex !important;
+    align-items: center !important;
+    background-color: var(--secondary) !important;
+    border-radius: 8px !important;
+    padding: 2px !important;
+    border: 1px solid var(--border) !important;
+    overflow: hidden !important;
+}
+
+.stepper-btn,
+.cart-stepper-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 6px !important;
+    transition: all 0.2s !important;
+    color: var(--foreground) !important;
+    cursor: pointer !important;
+}
+
+.stepper-btn:hover,
+.cart-stepper-btn:hover {
+    background-color: var(--card) !important;
+    color: var(--primary) !important;
+}
+
+.stepper-btn:disabled,
+.cart-stepper-btn:disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+}
+
+.stepper-input,
+.cart-stepper-input {
+    width: 50px !important;
+    height: 32px !important;
+    border: none !important;
+    background: transparent !important;
+    text-align: center !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    color: var(--foreground) !important;
+    outline: none !important;
+    -moz-appearance: textfield !important;
+}
+
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button,
+.cart-stepper-input::-webkit-outer-spin-button,
+.cart-stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+.shop-quantity-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+}
+
+/* ============================================
+   24. SHOP ACTIONS MODERNISÉES
+   ============================================ */
+
+/* Conteneur principal des actions */
+.shop-actions-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Groupe quantité */
+.shop-quantity-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.shop-quantity-group .shop-product-section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-foreground);
+    margin-bottom: 0;
+}
+
+/* Stepper amélioré - déjà défini dans ton CSS */
+/* Les classes .shop-quantity-stepper, .stepper-btn, .stepper-input existent déjà */
+
+/* Boutons d'action modernes */
+.shop-action-buttons-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .shop-action-buttons-modern {
+        flex-direction: row;
+    }
+}
+
+.shop-cart-btn-modern {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    background-color: #ffffff;
+    font-weight: 600;
+    color: #1f2937;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.dark .shop-cart-btn-modern {
+    border-color: #374151;
+    background-color: #1f2937;
+    color: #e5e7eb;
+}
+
+.shop-cart-btn-modern:hover {
+    background-color: #f9fafb;
+    border-color: #93c5fd;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    transform: translateY(-1px);
+}
+
+.dark .shop-cart-btn-modern:hover {
+    background-color: #374151;
+    border-color: #60a5fa;
+}
+
+.shop-buy-btn-modern {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.shop-buy-btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.3);
+}
+
+.shop-buy-btn-modern:active {
+    transform: translateY(0);
+}
+
+.shop-cart-btn-modern:disabled,
+.shop-buy-btn-modern:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Features modernisées */
+.shop-features-modern {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.shop-feature-modern {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+}
+
+.shop-feature-icon-modern {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+.dark .shop-feature-icon-modern {
+    background-color: #1e3a8a;
+    color: #60a5fa;
+}
+
+.shop-feature-text-modern {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-foreground);
+    line-height: 1.3;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .shop-feature-text-modern {
+        font-size: 0.55rem;
+    }
+    
+    .shop-cart-btn-modern,
+    .shop-buy-btn-modern {
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+    }
+}
