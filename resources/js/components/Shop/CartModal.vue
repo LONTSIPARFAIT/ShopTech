@@ -92,7 +92,7 @@ const removeItem = (itemId: number) => {
                                 {{ item.variant.name }}: {{ item.variant.value }}
                             </p>
                             <p class="cart-item-price">
-                                {{ Number(item.product.base_price).toLocaleString() }} XAF
+                                {{ (Number(item.product.base_price) + Number(item.variant?.price_override || 0)).toLocaleString() }} XAF
                             </p>
                             
                             <div class="cart-item-actions">
@@ -103,7 +103,13 @@ const removeItem = (itemId: number) => {
                                     >
                                         <Minus class="w-3 h-3" />
                                     </button>
-                                    <span class="cart-quantity-value">{{ item.quantity }}</span>
+                                    <input 
+                                    type="number" 
+                                    :value="item.quantity" 
+                                    @change="(e) => updateQuantity(item.id, parseInt((e.target as HTMLInputElement).value))"
+                                    min="1" 
+                                    class="cart-quantity-input"
+                                />
                                     <button 
                                         @click="updateQuantity(item.id, item.quantity + 1)"
                                         class="cart-quantity-btn"
@@ -122,7 +128,7 @@ const removeItem = (itemId: number) => {
                         
                         <div class="cart-item-total">
                             <span class="cart-item-total-price">
-                                {{ (Number(item.product.base_price) * item.quantity).toLocaleString() }}
+                                {{ ((Number(item.product.base_price) + Number(item.variant?.price_override || 0)) * item.quantity).toLocaleString() }}
                             </span>
                             <span class="cart-item-total-currency">XAF</span>
                         </div>

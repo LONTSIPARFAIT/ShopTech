@@ -27,7 +27,7 @@ const emit = defineEmits(['update', 'remove']);
                 {{ item.variant.name }}: {{ item.variant.value }}
             </p>
             <p class="shop-cart-item-card-price">
-                {{ Number(item.product.base_price).toLocaleString() }} XAF
+                {{ (Number(item.product.base_price) + Number(item.variant?.price_override || 0)).toLocaleString() }} XAF
             </p>
 
             <div class="shop-cart-item-card-actions">
@@ -38,7 +38,13 @@ const emit = defineEmits(['update', 'remove']);
                     >
                         <Minus class="w-3 h-3" />
                     </button>
-                    <span class="shop-cart-item-card-quantity-value">{{ item.quantity }}</span>
+                    <input 
+                        type="number" 
+                        :value="item.quantity" 
+                        @change="(e) => updateQuantity(item.id, parseInt((e.target as HTMLInputElement).value))"
+                        min="1" 
+                        class="shop-cart-quantity-input"
+                    />
                     <button 
                         @click="emit('update', item.id, item.quantity + 1)"
                         class="shop-cart-item-card-quantity-btn"
@@ -57,7 +63,7 @@ const emit = defineEmits(['update', 'remove']);
 
         <div class="shop-cart-item-card-total">
             <span class="shop-cart-item-card-total-price">
-                {{ (Number(item.product.base_price) * item.quantity || 0).toLocaleString() }}
+                {{ ((Number(item.product.base_price) + Number(item.variant?.price_override || 0)) * item.quantity || 0).toLocaleString() }}
             </span>
             <span class="shop-cart-item-card-total-currency">XAF</span>
         </div>

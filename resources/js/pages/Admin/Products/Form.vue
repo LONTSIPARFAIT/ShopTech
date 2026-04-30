@@ -313,6 +313,12 @@ const generateSlug = () => {
                         </div>
 
                         <div class="flex flex-col gap-1">
+                            <label class="text-xs font-bold uppercase text-gray-500">Supplément</label>
+                            <input v-model="variant.price_override" type="number" step="0.01"
+                                class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm dark:bg-gray-900 dark:border-gray-700" />
+                        </div>
+
+                        <div class="flex flex-col gap-1">
                             <label class="text-xs font-bold uppercase text-gray-500">Stock</label>
                             <input v-model="variant.stock" type="number"
                                 class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm dark:bg-gray-900 dark:border-gray-700" />
