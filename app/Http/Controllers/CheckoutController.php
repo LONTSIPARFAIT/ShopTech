@@ -27,11 +27,16 @@ class CheckoutController extends Controller
         }
 
         $discount = $this->applyPromotion->execute($cart);
+        
+        $shippingCost = $cart->items->sum(function ($item) {
+            return (float) ($item->product->shipping_cost ?? 0) * $item->quantity;
+        });
 
         return Inertia::render('Checkout/Index', [
             'cart' => $cart,
-            'total' => max(0, $cart->total - $discount),
+            'total' => max(0, $cart->total - $discount) + $shippingCost,
             'discount' => $discount,
+            'shippingCost' => $shippingCost,
         ]);
     }
 

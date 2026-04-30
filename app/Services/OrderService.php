@@ -16,7 +16,12 @@ class OrderService
     {
         return DB::transaction(function () use ($user, $cart, $data) {
             $discount = $this->applyPromotion->execute($cart);
-            $total = max(0, $cart->total - $discount);
+            
+            $shippingCost = $cart->items->sum(function ($item) {
+                return (float) ($item->product->shipping_cost ?? 0) * $item->quantity;
+            });
+            
+            $total = max(0, $cart->total - $discount) + $shippingCost;
 
             $order = Order::create([
                 'user_id' => $user->id,

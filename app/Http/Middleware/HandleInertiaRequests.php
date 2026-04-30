@@ -52,6 +52,10 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'cart' => $cart,
             'cartCount' => $cart ? $cart->items->sum('quantity') : 0,
+            'cartDiscount' => $cart ? app(\App\Actions\ApplyPromotionAction::class)->execute($cart) : 0,
+            'cartShippingCost' => $cart ? $cart->items->sum(function ($item) {
+                return (float) ($item->product->shipping_cost ?? 0) * $item->quantity;
+            }) : 0,
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),

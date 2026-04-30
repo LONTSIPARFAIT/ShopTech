@@ -155,9 +155,12 @@ const buyNow = () => {
 
                     <!-- Actions modernisées -->
                     <div class="shop-actions-modern">
-                        <!-- Quantité -->
+                        <!-- Quantité avec labels -->
                         <div class="shop-quantity-group">
-                            <label class="shop-product-section-title">Quantité</label>
+                            <div class="flex items-center justify-between">
+                                <label class="shop-product-section-title">Quantité</label>
+                                <span class="text-xs text-gray-400 dark:text-gray-500">Saisir le nombre</span>
+                            </div>
                             <div class="shop-quantity-stepper">
                                 <button @click="quantity > 1 && quantity--" class="stepper-btn" type="button">
                                     <Minus class="w-4 h-4" />
@@ -167,11 +170,15 @@ const buyNow = () => {
                                     type="number" 
                                     min="1" 
                                     class="stepper-input"
+                                    placeholder="1"
                                 />
                                 <button @click="quantity++" class="stepper-btn" type="button">
                                     <Plus class="w-4 h-4" />
                                 </button>
                             </div>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                Cliquez sur les boutons ou saisissez directement le nombre
+                            </p>
                         </div>
                         
                         <!-- Boutons d'action -->
@@ -200,12 +207,7 @@ const buyNow = () => {
                                 <div class="shop-feature-icon-modern">
                                     <Truck class="w-5 h-5" />
                                 </div>
-                                <span class="shop-feature-text-modern" v-if="product.shipping_cost > 0">
-                                    Livraison<br>{{ Number(product.shipping_cost).toLocaleString() }} XAF
-                                </span>
-                                <span class="shop-feature-text-modern" v-else>
-                                    Livraison<br>gratuite
-                                </span>
+                                <span class="shop-feature-text-modern">Livraison<br>gratuite</span>
                             </div>
                             <div class="shop-feature-modern">
                                 <div class="shop-feature-icon-modern">

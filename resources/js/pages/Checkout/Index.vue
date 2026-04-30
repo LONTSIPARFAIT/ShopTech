@@ -8,6 +8,7 @@ const props = defineProps<{
     cart: any;
     total: number;
     discount: number;
+    shippingCost: number;
 }>();
 
 const form = useForm({
@@ -91,8 +92,16 @@ const submit = () => {
                             </div>
                         </div>
                         <div class="checkout-summary-divider"></div>
+                        <div v-if="discount > 0" class="checkout-summary-total" style="font-size: 0.9em; color: #16a34a;">
+                            <span>Remise de Gros</span>
+                            <span>-{{ (Number(discount) || 0).toLocaleString() }} XAF</span>
+                        </div>
+                        <div class="checkout-summary-total" style="font-size: 0.9em; color: #4b5563;">
+                            <span>Frais de livraison</span>
+                            <span>{{ shippingCost > 0 ? (Number(shippingCost).toLocaleString() + ' XAF') : 'Gratuite' }}</span>
+                        </div>
                         <div class="checkout-summary-total">
-                            <span>Total</span>
+                            <span>Total à payer</span>
                             <span>{{ (Number(total) || 0).toLocaleString() }} XAF</span>
                         </div>
                         <button type="submit" :disabled="form.processing" class="checkout-submit-btn">

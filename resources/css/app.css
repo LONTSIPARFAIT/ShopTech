@@ -4307,8 +4307,90 @@
     margin-bottom: 0;
 }
 
-/* Stepper amélioré - déjà défini dans ton CSS */
-/* Les classes .shop-quantity-stepper, .stepper-btn, .stepper-input existent déjà */
+/* Indicateur de saisie */
+.quantity-hint-label {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    transition: color 0.2s ease;
+}
+
+.dark .quantity-hint-label {
+    color: #6b7280;
+}
+
+.quantity-hint-text {
+    font-size: 0.65rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+}
+
+.dark .quantity-hint-text {
+    color: #6b7280;
+}
+
+/* Stepper amélioré */
+.shop-quantity-stepper {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--secondary);
+    border-radius: 0.75rem;
+    padding: 0.25rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+}
+
+.shop-quantity-stepper:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.stepper-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    color: var(--foreground);
+    cursor: pointer;
+    background: transparent;
+}
+
+.stepper-btn:hover {
+    background-color: var(--card);
+    color: #2563eb;
+    transform: scale(1.05);
+}
+
+.stepper-btn:active {
+    transform: scale(0.95);
+}
+
+.stepper-input {
+    width: 3.5rem;
+    height: 2.25rem;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--foreground);
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.stepper-input:focus {
+    outline: none;
+    background-color: var(--card);
+    border-radius: 0.375rem;
+}
+
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
 /* Boutons d'action modernes */
 .shop-action-buttons-modern {
@@ -4442,5 +4524,9 @@
     .shop-buy-btn-modern {
         padding: 0.75rem 1rem;
         font-size: 0.8rem;
+    }
+    
+    .stepper-input {
+        width: 3rem;
     }
 }
