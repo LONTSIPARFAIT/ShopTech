@@ -1970,7 +1970,7 @@
 .admin-dashboard {
     padding: 1.5rem;
     max-width: 1280px;
-    margin: 0 auto;
+    margin: 0  0 auto;
 }
 @media (min-width: 768px) { .admin-dashboard { padding: 2rem; } }
 
@@ -3209,7 +3209,7 @@
 .user-dashboard {
     padding: 1.5rem;
     max-width: 1280px;
-    margin: 0 auto;
+    margin: 0 0 auto;
 }
 @media (min-width: 768px) {
     .user-dashboard {
