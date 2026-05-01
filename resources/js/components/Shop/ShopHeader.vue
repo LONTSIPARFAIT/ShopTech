@@ -71,7 +71,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
                     <Link :href="dashboard().url" class="flex items-center gap-3 group">
                         <div class="flex flex-col items-end hidden lg:flex">
                             <span class="text-xs font-bold text-foreground group-hover:text-primary transition-colors">{{ auth.user.name }}</span>
-                            <span class="text-[9px] text-muted-foreground uppercase font-black tracking-tighter">Mon Espace</span>
+                            <span class="text-[9px] text-muted-foreground font-black ">Dashboard</span>
                         </div>
                         <div class="w-10 h-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary/50 transition-all">
                             <img 
