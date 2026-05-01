@@ -74,13 +74,13 @@ const mainNavItems = computed((): NavItem[] => {
     ];
 });
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Paramètres',
-        href: profileEdit().url,
-        icon: Settings,
-    },
-];
+// const footerNavItems: NavItem[] = [
+//     {
+//         title: 'Paramètres',
+//         href: profileEdit().url,
+//         icon: Settings,
+//     },
+// ];
 </script>
 
 <template>
@@ -102,7 +102,7 @@ const footerNavItems: NavItem[] = [
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
+            <!-- <NavFooter :items="footerNavItems" /> -->
             <NavUser />
         </SidebarFooter>
     </Sidebar>

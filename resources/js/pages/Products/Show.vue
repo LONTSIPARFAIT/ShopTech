@@ -235,4 +235,4 @@ const buyNow = () => {
             </div>
         </div>
     </ShopLayout>
-</template>
+</template> 
