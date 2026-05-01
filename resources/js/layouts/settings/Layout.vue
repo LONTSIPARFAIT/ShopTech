@@ -31,8 +31,14 @@ const sidebarNavItems: NavItem[] = [
 const { isCurrentOrParentUrl } = useCurrentUrl();
 </script>
 
+<style>
+.marge {
+    margin: 0 0 auto;
+}
+</style>
+
 <template>
-    <div class="mx-auto max-w-6xl p-4 md:p-6">
+    <div class="marge max-w-6xl p-4 md:p-6">
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white md:text-3xl">Paramètres</h1>

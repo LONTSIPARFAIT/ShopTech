@@ -2162,7 +2162,7 @@
 .admin-orders {
     padding: 1.5rem;
     max-width: 1280px;
-    margin: 0 auto;
+    margin: 0  0 auto;
 }
 @media (min-width: 768px) { .admin-orders { padding: 2rem; } }
 
@@ -2311,7 +2311,7 @@
 .admin-order-detail {
     padding: 1.5rem;
     max-width: 1280px;
-    margin: 0 auto;
+    margin: 0 0 auto;
 }
 @media (min-width: 768px) { .admin-order-detail { padding: 2rem; } }
 
@@ -2320,6 +2320,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
+    cursor: pointer;
     margin-bottom: 1.5rem;
     font-size: 0.75rem;
     font-weight: 500;
@@ -2468,7 +2469,7 @@
 .admin-users {
     padding: 1.5rem;
     max-width: 1280px;
-    margin: 0 auto;
+    margin: 0 0 auto;
 }
 @media (min-width: 768px) { .admin-users { padding: 2rem; } }
 
@@ -2573,7 +2574,7 @@
 /* ============================================
    15. ADMIN & FORMULAIRE PRODUIT
    ============================================ */
-.admin-container { padding: 1.5rem; max-width: 1280px; margin: 0 auto; }
+.admin-container { padding: 1.5rem; max-width: 1280px; margin: 0 0 auto; }
 
 .admin-table-container {
     background-color: var(--card);
@@ -3523,7 +3524,7 @@
 .user-orders-page {
     padding: 1.5rem;
     max-width: 1024px;
-    margin: 0 auto;
+    margin: 0 0 auto;
 }
 @media (min-width: 768px) {
     .user-orders-page {

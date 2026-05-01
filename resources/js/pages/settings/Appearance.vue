@@ -8,7 +8,7 @@ import { ArrowLeft, Palette } from 'lucide-vue-next';
 <template>
 
     <Head title="Apparence" />
-    <div class="space-y-6 max-w-2xl">
+    <div class="space-y-6 max-w-2xl ">
         <!-- Appearance Card -->
         <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900/50">
             <div class="mb-6 flex items-center gap-3 border-b border-gray-100 pb-4 dark:border-gray-800">
