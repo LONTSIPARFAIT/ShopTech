@@ -477,8 +477,8 @@
 .cart-modal,
 [data-slot="dialog-content"].cart-modal {
     position: fixed !important;
-    top: 0 !important;
-    right: 0 !important;
+    top: 275px !important;
+    right: -200px !important;
     left: auto !important;
     bottom: 0 !important;
     transform: none !important;
@@ -1549,8 +1549,8 @@
 .home-stat-label {
     font-size: 0.6rem;
     font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    /* text-transform: uppercase; */
+    /* letter-spacing: 0.1em;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
     color: var(--muted-foreground);
 }
 @media (min-width: 640px) { .home-stat-label { font-size: 0.7rem; } }
@@ -1562,7 +1562,7 @@
     top: 50%;
     transform: translateY(-50%);
     width: 1px;
-    height: 2rem;
+    height: 1rem;
     background-color: var(--border);
 }
 @media (min-width: 1024px) { .home-stat-divider { display: block; } }

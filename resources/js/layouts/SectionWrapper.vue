@@ -5,7 +5,7 @@
                 <div v-if="badge" class="inline-flex px-4 py-1.5 bg-blue-600/10 text-blue-600 rounded-full font-black uppercase tracking-widest text-[9px] border border-blue-600/10">
                     {{ badge }}
                 </div>
-                <h2 class="text-3xl md:text-4xl font-black tracking-tight uppercase italic leading-none">
+                <h2 class="text-3xl md:text-4xl font-black">
                     {{ title }}
                 </h2>
                 <div v-if="subtitle" class="h-1 w-20 bg-blue-600 mx-auto rounded-full"></div>
