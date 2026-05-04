@@ -1,0 +1,1 @@
+import{A as e,C as t,Ct as n,E as r,G as i,J as a,k as o}from"./dist-CxgSD26y.js";import{n as s,r as c,t as l}from"./AssistanceFab-Bg-LjCeY.js";import{t as u}from"./sonner-MnPsmzZS.js";var d={class:`shop-layout`},f=e({__name:`ShopLayout`,setup(e){return(e,f)=>(i(),r(`div`,d,[o(c),t(`main`,null,[a(e.$slots,`default`)]),o(s),o(l),o(n(u))]))}});export{f as t};
