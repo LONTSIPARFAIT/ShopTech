@@ -12,29 +12,29 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Électronique',
-                'description' => 'Derniers gadgets et appareils électroniques.',
-                'image' => 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=800&auto=format&fit=crop',
+                'name' => 'Plomberie',
+                'description' => 'Tout pour vos installations d\'eau : tuyaux, raccords, robinetterie et chauffe-eau.',
+                'image' => 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?q=80&w=800&auto=format&fit=crop',
             ],
             [
-                'name' => 'Mode',
-                'description' => 'Vêtements et accessoires tendance.',
-                'image' => 'https://images.unsplash.com/photo-1445205170230-053b830c6050?q=80&w=800&auto=format&fit=crop',
+                'name' => 'Électricité',
+                'description' => 'Matériel électrique professionnel : câbles, tableaux, interrupteurs et éclairage.',
+                'image' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800&auto=format&fit=crop',
             ],
             [
-                'name' => 'Maison & Déco',
-                'description' => 'Tout pour votre intérieur.',
-                'image' => 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=800&auto=format&fit=crop',
+                'name' => 'Matériaux de Construction',
+                'description' => 'Gros œuvre et second œuvre : ciment, briques, isolants et structures.',
+                'image' => 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=800&auto=format&fit=crop',
             ],
             [
-                'name' => 'Beauté',
-                'description' => 'Soins et cosmétiques.',
-                'image' => 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=800&auto=format&fit=crop',
+                'name' => 'Outillage',
+                'description' => 'Outils électroportatifs et manuels pour tous vos travaux.',
+                'image' => 'https://images.unsplash.com/photo-1581147036324-c17ac41dfa6c?q=80&w=800&auto=format&fit=crop',
             ],
             [
-                'name' => 'Sport',
-                'description' => 'Équipements et vêtements de sport.',
-                'image' => 'https://images.unsplash.com/photo-1461896704690-464a18dd6d58?q=80&w=800&auto=format&fit=crop',
+                'name' => 'Peinture & Revêtement',
+                'description' => 'Peintures, vernis, carrelages et parquets pour vos finitions.',
+                'image' => 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop',
             ],
         ];
 

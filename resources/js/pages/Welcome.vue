@@ -7,6 +7,7 @@ import CategoriesSection from '@/components/Home/CategoriesSection.vue';
 import HeroSection from '@/components/Home/HeroSection.vue';
 import StatsSection from '@/components/Home/StatsSection.vue';
 import FeaturesSection from '@/components/Home/FeaturesSection.vue';
+import ServicesCTA from '@/components/Home/ServicesCTA.vue';
 import ShopLayout from '@/layouts/ShopLayout.vue';
 
 
@@ -41,6 +42,7 @@ defineProps<{
         />
         
         <TechFocusSection />
+        <ServicesCTA />
         <FeaturesSection />
     </ShopLayout>
 </template>

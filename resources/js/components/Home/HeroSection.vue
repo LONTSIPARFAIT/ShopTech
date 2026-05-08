@@ -7,22 +7,22 @@ import { Sparkles, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-vue-next
 
 const slides = [
     {
-        image: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=1920&q=80',
-        badge: 'Nouvelle Collection',
-        title: 'iPhone 15 Pro Max',
-        description: 'Le plus puissant iPhone jamais créé.'
+        image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80',
+        badge: 'Gros Œuvre',
+        title: 'Matériaux de Construction',
+        description: 'Ciment, briques et structures de qualité pour des chantiers solides.'
     },
     {
-        image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=1920&q=80',
-        badge: 'Performance Extrême',
-        title: 'MacBook Pro M3',
-        description: "La puissance d'une station de travail."
+        image: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=1920&q=80',
+        badge: 'Installation Sanitaire',
+        title: 'Expertise en Plomberie',
+        description: 'Tout pour vos réseaux d\'eau : tubes, raccords et robinetterie pro.'
     },
     {
-        image: 'https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=1920&q=80',
-        badge: 'Black Friday',
-        title: "Jusqu'à -40%",
-        description: 'Profitez des meilleures offres.'
+        image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1920&q=80',
+        badge: 'Énergie & Sécurité',
+        title: 'Matériel Électrique',
+        description: 'Câblage, tableaux et appareillage pour des installations aux normes.'
     }
 ];
 

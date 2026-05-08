@@ -14,27 +14,27 @@
 </template>
 
 <script setup lang="ts">
+import { Wrench, Zap, Hammer } from 'lucide-vue-next';
 import TechCard from '@/components/Home/TechCard.vue';
-import { Smartphone, Cpu, Headphones } from 'lucide-vue-next';
 
 const techItems = [
     {
-        icon: Smartphone,
+        icon: Wrench,
         iconColor: 'blue',
-        title: 'Smartphones',
-        description: 'Dernières sorties des gammes iPhone, Samsung et Google Pixel.'
+        title: 'Plomberie',
+        description: 'Solutions d\'adduction d\'eau et d\'évacuation durables et fiables.'
     },
     {
-        icon: Cpu,
-        iconColor: 'purple',
-        title: 'Informatique',
-        description: 'Stations de travail surpuissantes et laptops ultra-portables.'
+        icon: Zap,
+        iconColor: 'amber',
+        title: 'Électricité',
+        description: 'Matériel haute performance pour des installations électriques sûres.'
     },
     {
-        icon: Headphones,
-        iconColor: 'emerald',
-        title: 'Accessoires',
-        description: 'Audio haute fidélité et périphériques gaming de précision.'
+        icon: Hammer,
+        iconColor: 'red',
+        title: 'Outillage',
+        description: 'Outils robustes pour professionnels exigeants et bricoleurs passionnés.'
     }
 ];
 </script>

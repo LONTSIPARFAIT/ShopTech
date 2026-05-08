@@ -13,67 +13,60 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $electronics = Category::where('slug', 'electronique')->first();
-        $mode = Category::where('slug', 'mode')->first();
+        $plomberie = Category::where('slug', 'plomberie')->first();
+        $electricite = Category::where('slug', 'electricite')->first();
+        $outillage = Category::where('slug', 'outillage')->first();
+        $materiaux = Category::where('slug', 'materiaux-de-construction')->first();
 
-        // Product 1: Smartphone
+        // Product 1: Mitigeur Cuisine
         $p1 = Product::create([
-            'category_id' => $electronics->id,
-            'name' => 'iPhone 15 Pro',
-            'slug' => 'iphone-15-pro',
-            'description' => 'Le dernier iPhone avec puce A17 Pro et système de caméra avancé.',
-            'base_price' => 750000,
-            'original_price' => 850000,
+            'category_id' => $plomberie->id,
+            'name' => 'Mitigeur Cuisine Flexible',
+            'slug' => 'mitigeur-cuisine-flexible',
+            'description' => 'Mitigeur moderne avec douchette extractible et finition chrome haute qualité.',
+            'base_price' => 45000,
+            'original_price' => 55000,
             'is_active' => true,
         ]);
 
-        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=800', 'is_featured' => true]);
-        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=800', 'is_featured' => false]);
-        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1695048132803-0c4656910629?q=80&w=800', 'is_featured' => false]);
+        ProductImage::create(['product_id' => $p1->id, 'path' => 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800', 'is_featured' => true]);
+        Variant::create(['product_id' => $p1->id, 'name' => 'Finition', 'value' => 'Chrome', 'color_code' => '#C0C0C0', 'price_override' => 0, 'stock' => 25]);
+        Variant::create(['product_id' => $p1->id, 'name' => 'Finition', 'value' => 'Noir Mat', 'color_code' => '#000000', 'price_override' => 5000, 'stock' => 15]);
 
-        Variant::create(['product_id' => $p1->id, 'name' => 'Couleur', 'value' => 'Titane Naturel', 'color_code' => '#BEB7A4', 'price_override' => 0, 'stock' => 50]);
-        Variant::create(['product_id' => $p1->id, 'name' => 'Couleur', 'value' => 'Titane Bleu', 'color_code' => '#272D39', 'price_override' => 0, 'stock' => 30]);
-        Variant::create(['product_id' => $p1->id, 'name' => 'Stockage', 'value' => '256GB', 'price_override' => 50000, 'stock' => 15]);
-
-        // Product 2: Headphones
+        // Product 2: Tableau Électrique
         $p2 = Product::create([
-            'category_id' => $electronics->id,
-            'name' => 'Sony WH-1000XM5',
-            'slug' => 'sony-wh-1000xm5',
-            'description' => 'Casque à réduction de bruit sans fil de pointe.',
-            'base_price' => 225000,
-            'original_price' => 250000,
+            'category_id' => $electricite->id,
+            'name' => 'Tableau Électrique Pré-équipé',
+            'slug' => 'tableau-electrique-pre-equipe',
+            'description' => 'Tableau 2 rangées, 26 modules, équipé de disjoncteurs et interrupteurs différentiels.',
+            'base_price' => 85000,
+            'original_price' => 95000,
             'is_active' => true,
         ]);
 
-        ProductImage::create(['product_id' => $p2->id, 'path' => 'https://images.unsplash.com/photo-1675102008933-7221665a5885?q=80&w=800', 'is_featured' => true]);
-        ProductImage::create(['product_id' => $p2->id, 'path' => 'https://images.unsplash.com/photo-1675102010188-46797a780136?q=80&w=800', 'is_featured' => false]);
+        ProductImage::create(['product_id' => $p2->id, 'path' => 'https://images.unsplash.com/photo-1621905252507-b354bcadc964?q=80&w=800', 'is_featured' => true]);
+        Variant::create(['product_id' => $p2->id, 'name' => 'Taille', 'value' => '2 Rangées', 'price_override' => 0, 'stock' => 10]);
+        Variant::create(['product_id' => $p2->id, 'name' => 'Taille', 'value' => '3 Rangées', 'price_override' => 25000, 'stock' => 5]);
 
-        Variant::create(['product_id' => $p2->id, 'name' => 'Couleur', 'value' => 'Noir', 'color_code' => '#000000', 'price_override' => 0, 'stock' => 100]);
-        Variant::create(['product_id' => $p2->id, 'name' => 'Couleur', 'value' => 'Argent', 'color_code' => '#C0C0C0', 'price_override' => 5000, 'stock' => 45]);
-
-        // Product 3: T-Shirt
+        // Product 3: Perceuse à percussion
         $p3 = Product::create([
-            'category_id' => $mode->id,
-            'name' => 'T-Shirt Coton Bio',
-            'slug' => 't-shirt-coton-bio',
-            'description' => 'T-shirt confortable en coton 100% biologique.',
-            'base_price' => 15000,
+            'category_id' => $outillage->id,
+            'name' => 'Perceuse à Percussion 18V',
+            'slug' => 'perceuse-percussion-18v',
+            'description' => 'Perceuse sans fil puissante avec 2 batteries Lithium-ion et coffret de transport.',
+            'base_price' => 120000,
             'is_active' => true,
         ]);
 
-        ProductImage::create(['product_id' => $p3->id, 'path' => 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800', 'is_featured' => true]);
-
-        Variant::create(['product_id' => $p3->id, 'name' => 'Taille', 'value' => 'M', 'price_override' => 0, 'stock' => 150]);
-        Variant::create(['product_id' => $p3->id, 'name' => 'Taille', 'value' => 'L', 'price_override' => 0, 'stock' => 80]);
-        Variant::create(['product_id' => $p3->id, 'name' => 'Couleur', 'value' => 'Blanc', 'color_code' => '#FFFFFF', 'price_override' => 0, 'stock' => 200]);
+        ProductImage::create(['product_id' => $p3->id, 'path' => 'https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=800', 'is_featured' => true]);
+        Variant::create(['product_id' => $p3->id, 'name' => 'Pack', 'value' => 'Standard (2 batteries)', 'price_override' => 0, 'stock' => 30]);
 
         // Add more products
         $products = [
-            ['name' => 'MacBook Air M2', 'price' => 850000, 'cat' => $electronics, 'img' => 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=800'],
-            ['name' => 'Veste en Jean', 'price' => 45000, 'cat' => $mode, 'img' => 'https://images.unsplash.com/photo-1576871337622-98d48d1cf027?q=80&w=800'],
-            ['name' => 'Montre Connectée', 'price' => 150000, 'cat' => $electronics, 'img' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800'],
-            ['name' => 'Sneakers White', 'price' => 65000, 'cat' => $mode, 'img' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800'],
+            ['name' => 'Sac de Ciment 50kg', 'price' => 5500, 'cat' => $materiaux, 'img' => 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800'],
+            ['name' => 'Lot de 10 Interrupteurs', 'price' => 12000, 'cat' => $electricite, 'img' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800'],
+            ['name' => 'Projecteur LED 50W', 'price' => 18500, 'cat' => $electricite, 'img' => 'https://images.unsplash.com/photo-1550985616-10810253b84d?q=80&w=800'],
+            ['name' => 'Jeu de 12 Tournevis', 'price' => 15000, 'cat' => $outillage, 'img' => 'https://images.unsplash.com/photo-1586864387917-f579ae9248de?q=80&w=800'],
         ];
 
         foreach ($products as $p) {
@@ -81,12 +74,12 @@ class ProductSeeder extends Seeder
                 'category_id' => $p['cat']->id,
                 'name' => $p['name'],
                 'slug' => Str::slug($p['name']),
-                'description' => 'Description détaillée pour '.$p['name'],
+                'description' => 'Produit de qualité professionnelle pour vos chantiers : '.$p['name'],
                 'base_price' => $p['price'],
                 'is_active' => true,
             ]);
             ProductImage::create(['product_id' => $product->id, 'path' => $p['img'], 'is_featured' => true]);
-            Variant::create(['product_id' => $product->id, 'name' => 'Standard', 'value' => 'Unique', 'price_override' => 0, 'stock' => rand(10, 100)]);
+            Variant::create(['product_id' => $product->id, 'name' => 'Standard', 'value' => 'Unique', 'price_override' => 0, 'stock' => rand(50, 500)]);
         }
     }
 }

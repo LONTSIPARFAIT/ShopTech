@@ -4,9 +4,10 @@ import { computed, ref, onMounted, onUnmounted } from 'vue';
 import products from '@/routes/products';
 import { home, login, register, dashboard, services, about, contact } from '@/routes';
 import { useAppearance } from '@/composables/useAppearance';
-import { Sun, Moon, ShoppingBag, Menu, X, User } from 'lucide-vue-next';
+import { Sun, Moon, ShoppingBag, Menu, X, User, Search } from 'lucide-vue-next';
 import CartModal from './CartModal.vue';
 import { DialogTrigger } from '@/components/ui/dialog';
+import { router } from '@inertiajs/vue3';
 
 const page = usePage();
 const auth = computed(() => page.props.auth);
@@ -14,7 +15,26 @@ const cartCount = computed(() => (page.props as any).cartCount || 0);
 const isScrolled = ref(false);
 const isMobileOpen = ref(false);
 
-const { appearance, updateAppearance } = useAppearance();
+const isSearchOpen = ref(false);
+const searchQuery = ref('');
+
+const toggleSearch = () => {
+    isSearchOpen.value = !isSearchOpen.value;
+    if (isSearchOpen.value) {
+        setTimeout(() => {
+            document.getElementById('header-search-input')?.focus();
+        }, 100);
+    }
+};
+
+const handleSearch = () => {
+    if (searchQuery.value.trim()) {
+        router.get(products.index().url, { search: searchQuery.value });
+        isSearchOpen.value = false;
+        searchQuery.value = '';
+    }
+};
+
 const toggleTheme = () => {
     updateAppearance(appearance.value === 'dark' ? 'light' : 'dark');
 };
@@ -49,6 +69,31 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 
             <!-- Actions -->
             <div class="shop-header-actions">
+                <!-- Search Bar -->
+                <div class="relative flex items-center">
+                    <div 
+                        class="flex items-center bg-secondary/50 rounded-full transition-all duration-300 overflow-hidden"
+                        :class="isSearchOpen ? 'w-48 md:w-64 px-3 py-1.5 opacity-100 border border-primary/20' : 'w-0 opacity-0'"
+                    >
+                        <input 
+                            id="header-search-input"
+                            v-model="searchQuery"
+                            type="text" 
+                            placeholder="Rechercher..." 
+                            class="bg-transparent border-none focus:ring-0 text-xs w-full p-0"
+                            @keyup.enter="handleSearch"
+                        />
+                    </div>
+                    <button 
+                        @click="toggleSearch" 
+                        class="shop-icon-btn transition-colors"
+                        :class="isSearchOpen ? 'text-primary' : ''"
+                    >
+                        <X v-if="isSearchOpen" class="w-4 h-4" />
+                        <Search v-else class="w-4 h-4" />
+                    </button>
+                </div>
+
                 <button @click="toggleTheme" class="shop-icon-btn">
                     <Sun v-if="appearance === 'dark'" class="w-4 h-4 text-amber-400" />
                     <Moon v-else class="w-4 h-4" />
