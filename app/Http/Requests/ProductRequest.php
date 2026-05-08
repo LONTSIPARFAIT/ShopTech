@@ -37,7 +37,8 @@ class ProductRequest extends FormRequest
             'featured_image' => 'nullable|image|max:5120',
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => 'image|max:5120',
-            'remove_image_ids' => 'nullable|string',
+            'remove_image_ids' => 'nullable|array',
+            'remove_image_ids.*' => 'integer',
         ];
     }
 }

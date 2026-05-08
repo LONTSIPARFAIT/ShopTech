@@ -12,6 +12,18 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $appends = ['url'];
+
+    protected function url(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn (mixed $value, array $attributes) => 
+                isset($attributes['image']) 
+                    ? (str_starts_with($attributes['image'], 'http') ? $attributes['image'] : asset('storage/' . $attributes['image']))
+                    : null,
+        );
+    }
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

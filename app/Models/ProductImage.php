@@ -27,7 +27,7 @@ class ProductImage extends Model
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => 
-                str_starts_with($attributes['path'], 'http') ? $attributes['path'] : Storage::url($attributes['path']),
+                str_starts_with($attributes['path'], 'http') ? $attributes['path'] : asset('storage/' . $attributes['path']),
         );
     }
 

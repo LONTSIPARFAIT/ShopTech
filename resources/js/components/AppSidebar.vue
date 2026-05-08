@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard as clientDashboard } from '@/routes';
 import { dashboard as adminDashboard } from '@/routes/admin';
+import { index as adminCategories } from '@/routes/admin/categories';
 import { index as adminProducts } from '@/routes/admin/products';
 import { index as adminOrders } from '@/routes/admin/orders';
 import { index as adminUsers } from '@/routes/admin/users';
@@ -41,6 +42,11 @@ const mainNavItems = computed((): NavItem[] => {
                 title: 'Produits',
                 href: adminProducts().url,
                 icon: ShoppingBag,
+            },
+            {
+                title: 'Catégories',
+                href: adminCategories().url,
+                icon: Layers,
             },
             {
                 title: 'Commandes',
@@ -73,14 +79,6 @@ const mainNavItems = computed((): NavItem[] => {
         },
     ];
 });
-
-// const footerNavItems: NavItem[] = [
-//     {
-//         title: 'Paramètres',
-//         href: profileEdit().url,
-//         icon: Settings,
-//     },
-// ];
 </script>
 
 <template>
@@ -102,7 +100,6 @@ const mainNavItems = computed((): NavItem[] => {
         </SidebarContent>
 
         <SidebarFooter>
-            <!-- <NavFooter :items="footerNavItems" /> -->
             <NavUser />
         </SidebarFooter>
     </Sidebar>

@@ -59,11 +59,29 @@ class ProductController extends Controller
         DB::transaction(function () use ($request, $product) {
             $product->update($request->validated());
 
-            $product->variants()->delete();
-            $validatedVariants = $request->validated()['variants'] ?? [];
-            foreach ($validatedVariants as $variantData) {
-                $product->variants()->create($variantData);
+            // Robust variants update: only delete variants that don't have orders
+            $newVariantData = $request->validated()['variants'] ?? [];
+            $existingVariantIds = $product->variants->pluck('id')->toArray();
+            
+            // For simplicity, we'll keep the existing delete-recreate logic 
+            // but wrapped in a try-catch or better: update existing ones.
+            // Actually, let's just update based on name/value match or recreate if impossible.
+            // But the current code is: $product->variants()->delete();
+            // Let's replace it with a safer sync:
+            $keptIds = [];
+            foreach ($newVariantData as $vData) {
+                $variant = $product->variants()->updateOrCreate(
+                    ['name' => $vData['name'], 'value' => $vData['value']],
+                    $vData
+                );
+                $keptIds[] = $variant->id;
             }
+            
+            // Delete variants that were NOT in the new data AND have no orders
+            $product->variants()
+                ->whereNotIn('id', $keptIds)
+                ->whereDoesntHave('orderItems')
+                ->delete();
 
             $this->handleImages($request, $product);
         });
@@ -111,7 +129,11 @@ class ProductController extends Controller
 
         // Remove images by ID if requested
         if ($request->filled('remove_image_ids')) {
-            $ids = array_filter(explode(',', $request->input('remove_image_ids')));
+            $ids = $request->input('remove_image_ids');
+            if (is_string($ids)) {
+                $ids = array_filter(explode(',', $ids));
+            }
+            
             $toRemove = $product->images()->whereIn('id', $ids)->get();
             foreach ($toRemove as $img) {
                 Storage::disk('public')->delete($img->path);

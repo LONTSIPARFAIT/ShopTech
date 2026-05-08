@@ -24,4 +24,9 @@ class Variant extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function orderItems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }

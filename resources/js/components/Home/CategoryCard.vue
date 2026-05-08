@@ -7,7 +7,9 @@ defineProps<{
         id: number;
         name: string;
         slug: string;
+        description: string | null;
         image?: string;
+        url?: string;
         products_count: number;
     };
 }>();
@@ -16,12 +18,18 @@ defineProps<{
 <template>
     <Link :href="products.index({ category: category.slug }).url" class="category-card">
         <div class="category-card-image">
-            <img v-if="category.image" :src="category.image" :alt="category.name" />
+            <img v-if="category.url || category.image" :src="category.url || category.image" :alt="category.name" />
             <div v-else class="category-card-placeholder"></div>
             <div class="category-card-overlay"></div>
         </div>
         <div class="category-card-content">
             <h4 class="category-card-title">{{ category.name }}</h4>
+            
+            <!-- Description ajoutée -->
+            <p v-if="category.description" class="text-xs text-white/70 line-clamp-2 mb-3 leading-relaxed">
+                {{ category.description }}
+            </p>
+
             <div class="flex items-center gap-3">
                 <span class="category-card-badge">{{ category.products_count }} Articles</span>
                 <div class="category-card-arrow">
