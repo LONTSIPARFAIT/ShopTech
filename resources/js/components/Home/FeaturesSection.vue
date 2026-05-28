@@ -1,23 +1,31 @@
 <template>
-    <section class="py-16">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <section class="py-16 bg-card">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Petit en-tête optionnel -->
+            <div class="text-center mb-10">
+                <span class="text-xs font-semibold uppercase tracking-wider text-orange-500">Nos services</span>
+                <h2 class="text-xl md:text-2xl font-bold text-foreground mt-1">
+                    Pourquoi <span class="text-orange-500">nous choisir ?</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <FeatureCard
                     :icon="Truck"
                     title="Livraison Partout"
-                    description="Peu importe où vous vous trouvez au Cameroun, nous vous livrons vos produits préférés en un temps record avec un suivi en temps réel."
+                    description="Livraison rapide sur tout le Cameroun avec suivi en temps réel."
                     variant="primary"
                 />
                 <FeatureCard
                     :icon="ShieldCheck"
                     title="Garantie Officielle"
-                    description="Tous nos produits bénéficient d'une garantie constructeur officielle pour votre tranquillité d'esprit."
+                    description="Garantie constructeur sur tous nos produits pour votre tranquillité."
                     variant="light"
                 />
                 <FeatureCard
                     :icon="Zap"
                     title="SAV Expert"
-                    description="Une équipe de techniciens à votre écoute pour toute assistance technique ou question sur vos produits."
+                    description="Assistance technique réactive par des professionnels qualifiés."
                     variant="dark"
                 />
             </div>
