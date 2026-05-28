@@ -1,10 +1,10 @@
 <template>
-    <SectionWrapper 
-        title="Par Catégories" 
-        badge="Collections" 
+    <SectionWrapper
+        title="Par Catégories"
+        badge="Collections"
         :subtitle="subtitle"
         :badge-icon="Layers"
-        bg-class="bg-white dark:bg-slate-950"
+        bg-class="bg-card border-t border-border"
     >
         <HorizontalSlider :items="categories" card-width="280px" show-progress>
             <template #default="{ item }">

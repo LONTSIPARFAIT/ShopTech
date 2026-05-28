@@ -17,6 +17,8 @@ const isMobileOpen = ref(false);
 
 const isSearchOpen = ref(false);
 const searchQuery = ref('');
+// Bien récupérer les valeurs du composable
+const { appearance, updateAppearance } = useAppearance();
 
 const toggleSearch = () => {
     isSearchOpen.value = !isSearchOpen.value;
@@ -71,21 +73,21 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
             <div class="shop-header-actions">
                 <!-- Search Bar -->
                 <div class="relative flex items-center">
-                    <div 
+                    <div
                         class="flex items-center bg-secondary/50 rounded-full transition-all duration-300 overflow-hidden"
                         :class="isSearchOpen ? 'w-48 md:w-64 px-3 py-1.5 opacity-100 border border-primary/20' : 'w-0 opacity-0'"
                     >
-                        <input 
+                        <input
                             id="header-search-input"
                             v-model="searchQuery"
-                            type="text" 
-                            placeholder="Rechercher..." 
+                            type="text"
+                            placeholder="Rechercher..."
                             class="bg-transparent border-none focus:ring-0 text-xs w-full p-0"
                             @keyup.enter="handleSearch"
                         />
                     </div>
-                    <button 
-                        @click="toggleSearch" 
+                    <button
+                        @click="toggleSearch"
                         class="shop-icon-btn transition-colors"
                         :class="isSearchOpen ? 'text-primary' : ''"
                     >
@@ -119,8 +121,8 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
                             <span class="text-[9px] text-muted-foreground font-black ">Dashboard</span>
                         </div>
                         <div class="w-10 h-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary/50 transition-all">
-                            <img 
-                                :src="auth.user.avatar_url" 
+                            <img
+                                :src="auth.user.avatar_url"
                                 :alt="auth.user.name"
                                 class="w-full h-full object-cover rounded-full"
                             />
@@ -165,7 +167,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
                 <Link :href="contact()" class="shop-mobile-link" @click="isMobileOpen = false">
                     <span>Contact</span>
                 </Link>
-                
+
                 <div class="shop-mobile-auth">
                     <div v-if="auth.user">
                         <Link :href="dashboard().url" class="flex items-center gap-3 p-3 bg-secondary rounded-xl" @click="isMobileOpen = false">

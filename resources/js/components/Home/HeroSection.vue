@@ -1,27 +1,27 @@
 <template>
     <section class="relative w-full h-[calc(100vh-5rem)] lg:h-[calc(100vh-6rem)] mt-20 lg:mt-24 overflow-hidden bg-black">
         <!-- Canvas pour effets visuels -->
-        <canvas ref="canvasRef" class="absolute top-0 left-0 w-full h-full pointer-events-none z-5"></canvas>
-        
+        <canvas ref="canvasRef" class="absolute top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
         <!-- Slides Container -->
         <div class="relative w-full h-full overflow-hidden">
-            <div 
+            <div
                 class="flex w-full h-full will-change-transform"
                 :style="trackStyle"
                 @touchstart="handleTouchStart"
                 @touchmove="handleTouchMove"
                 @touchend="handleTouchEnd"
             >
-                <div 
-                    v-for="(slide, index) in slidesWithDuplicate" 
+                <div
+                    v-for="(slide, index) in slidesWithDuplicate"
                     :key="slide.id"
                     class="relative flex-none w-full h-full overflow-hidden"
                     :class="{ 'z-10': isActive(index) }"
                 >
                     <!-- Image avec parallax -->
                     <div class="absolute -inset-[10%] w-[120%] h-[120%] overflow-hidden">
-                        <img 
-                            :src="slide.image" 
+                        <img
+                            :src="slide.image"
                             :alt="slide.title"
                             class="w-full h-full object-cover brightness-[0.45] saturate-110 will-change-transform transition-transform duration-[8000ms] ease-out"
                             :class="{ 'scale-110': isActive(index) }"
@@ -30,35 +30,38 @@
                         />
                         <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/30 to-black/70"></div>
                     </div>
-                    
+
                     <!-- Contenu avec transitions Vue -->
                     <Transition name="slide-content" mode="out-in">
-                        <div :key="currentIndex" class="absolute inset-0 flex items-center pt-10 sm:pt-20 z-20">
+                        <div :key="currentIndex" class="absolute inset-0 flex items-center justify-center z-20 pt-20 pb-24 sm:pb-32">
                             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                                 <div class="max-w-3xl">
+                                    <!-- Badge avec orange -->
                                     <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-4">
-                                        <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+                                        <span class="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse"></span>
                                         {{ slide.badge }}
                                     </div>
-                                    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] text-white mb-3 uppercase tracking-tighter drop-shadow-lg">
+                                    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white mb-3 drop-shadow-lg">
                                         {{ slide.title }}
                                     </h1>
                                     <p class="text-sm sm:text-base md:text-lg text-white/80 max-w-lg mb-6 leading-relaxed">
                                         {{ slide.description }}
                                     </p>
                                     <div class="flex flex-col sm:flex-row gap-3">
-                                        <Link 
-                                            :href="productsIndex.url()" 
-                                            class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_30px_-10px_rgba(37,99,235,0.4)] relative overflow-hidden"
+                                        <!-- Bouton principal - Orange -->
+                                        <Link
+                                            :href="productsIndex.url()"
+                                            class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_30px_-10px_rgba(249,115,22,0.4)] relative overflow-hidden"
                                         >
                                             <span class="relative z-10">Acheter maintenant</span>
                                             <ArrowRight class="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
                                             <div class="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                                         </Link>
+                                        <!-- Bouton secondaire - Blanc/Orange -->
                                         <Link
                                             v-if="!$page.props.auth.user"
                                             :href="register().url"
-                                            class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-xl font-semibold text-white text-sm border border-white/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20"
+                                            class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-xl font-semibold text-white text-sm border border-white/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 hover:border-orange-400/50"
                                         >
                                             <span>Créer un compte</span>
                                             <Sparkles class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -72,72 +75,75 @@
             </div>
         </div>
 
-        <!-- Navigation Flottante -->
-        <div class="absolute bottom-2 sm:bottom-4 right-4 sm:right-8 z-30 flex items-center gap-2 sm:gap-3 bg-black/40 backdrop-blur-sm px-2 py-2 rounded-full border border-white/10">
-            <button 
-                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/10 rounded-full text-white transition-all duration-300 hover:bg-blue-600 hover:scale-105"
+        <!-- Navigation Flottante - ORANGE -->
+        <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-[100] flex items-center gap-2 sm:gap-3 bg-black/60 backdrop-blur-md px-2 py-2 rounded-full border border-white/20 shadow-lg">
+            <button
+                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-orange-500 hover:scale-110 cursor-pointer"
                 @click="prevSlide"
                 aria-label="Slide précédent"
             >
                 <ChevronLeft class="w-4 h-4 sm:w-5 sm:h-5" />
-                <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/80 rounded text-[10px] text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 rounded-md text-[10px] text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none text-nowrap">
                     Précédent
                 </span>
             </button>
-            
+
             <div class="min-w-[80px] sm:min-w-[100px] flex items-center gap-2 sm:gap-3">
-                <div class="flex-1 h-0.5 bg-white/20 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300" :style="{ width: `${progressPercent}%` }"></div>
+                <!-- Barre de progression ORANGE -->
+                <div class="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-300" :style="{ width: `${progressPercent}%` }"></div>
                 </div>
                 <div class="text-xs sm:text-sm font-semibold text-white tabular-nums">
-                    <span class="text-blue-400">{{ currentIndex + 1 }}</span>
+                    <span class="text-orange-400">{{ currentIndex + 1 }}</span>
                     <span class="text-white/50 mx-0.5">/</span>
                     <span>{{ slides.length }}</span>
                 </div>
             </div>
-            
-            <button 
-                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/10 rounded-full text-white transition-all duration-300 hover:bg-blue-600 hover:scale-105"
+
+            <button
+                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-orange-500 hover:scale-110 cursor-pointer"
                 @click="nextSlide"
                 aria-label="Slide suivant"
             >
                 <ChevronRight class="w-4 h-4 sm:w-5 sm:h-5" />
-                <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/80 rounded text-[10px] text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 rounded-md text-[10px] text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none text-nowrap">
                     Suivant
                 </span>
             </button>
         </div>
 
-        <!-- Thumbnails -->
-        <div class="absolute bottom-2 sm:bottom-4 left-4 sm:left-8 z-30 max-w-[280px] sm:max-w-[400px] overflow-x-auto scrollbar-hide">
+        <!-- Thumbnails - ORANGE -->
+        <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 z-[100] max-w-[280px] sm:max-w-[400px] overflow-x-auto scrollbar-hide">
             <div ref="thumbnailsTrackRef" class="flex gap-2 sm:gap-3 p-1">
                 <button
                     v-for="(slide, index) in slides"
                     :key="index"
-                    class="group relative flex-none w-14 h-14 sm:w-[70px] sm:h-[70px] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 opacity-50 hover:opacity-75"
-                    :class="{ 'ring-2 ring-blue-500 opacity-100 scale-105': currentIndex === index }"
+                    class="group relative flex-none w-12 h-12 sm:w-[60px] sm:h-[60px] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 opacity-50 hover:opacity-80"
+                    :class="{ 'ring-2 ring-orange-500 opacity-100 scale-105': currentIndex === index }"
                     @click="goToSlide(index)"
                 >
                     <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover" />
-                    <span class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white text-[10px] font-semibold py-1 text-center uppercase">{{ slide.badge.split(' ')[0] }}</span>
+                    <span class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white text-[9px] sm:text-[10px] font-semibold py-0.5 sm:py-1 text-center uppercase">{{ slide.badge.split(' ')[0] }}</span>
                 </button>
             </div>
         </div>
 
         <!-- Scroll Indicator -->
-        <div class="absolute left-4 sm:left-8 bottom-2 sm:bottom-4 z-30 flex flex-col items-center gap-2">
+        <div class="absolute left-4 sm:left-6 bottom-4 sm:bottom-6 z-[100] flex flex-col items-center gap-2">
             <span class="text-[10px] font-semibold tracking-[0.2em] text-white/60 [writing-mode:vertical-rl] rotate-180">SCROLL</span>
-            <div class="w-px h-10 bg-gradient-to-b from-white/60 to-transparent animate-[scrollLine_2s_ease-in-out_infinite]"></div>
+            <div class="w-px h-8 sm:h-10 bg-gradient-to-b from-orange-400 to-transparent animate-[scrollLine_2s_ease-in-out_infinite]"></div>
         </div>
     </section>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { index as productsIndex } from '@/actions/App/Http/Controllers/ProductController';
 import { register } from '@/routes';
 import { Sparkles, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+
+const page = usePage();
 
 // Types
 interface Slide {
@@ -148,7 +154,7 @@ interface Slide {
     description: string;
 }
 
-// Slides data
+// Slides data avec thèmes Orange
 const slides: Slide[] = [
     {
         id: 1,
@@ -213,9 +219,9 @@ const updateProgress = () => {
 // Navigation
 const nextSlide = async () => {
     if (isAnimating.value) return;
-    
+
     isAnimating.value = true;
-    
+
     const nextIndex = currentIndex.value + 1;
     if (nextIndex >= slides.length) {
         currentIndex.value = 0;
@@ -229,16 +235,16 @@ const nextSlide = async () => {
             isAnimating.value = false;
         }, 600);
     }
-    
+
     updateProgress();
     resetAutoplay();
 };
 
 const prevSlide = async () => {
     if (isAnimating.value) return;
-    
+
     isAnimating.value = true;
-    
+
     const prevIndex = currentIndex.value - 1;
     if (prevIndex < 0) {
         currentIndex.value = slides.length - 1;
@@ -252,19 +258,19 @@ const prevSlide = async () => {
             isAnimating.value = false;
         }, 600);
     }
-    
+
     updateProgress();
     resetAutoplay();
 };
 
 const goToSlide = async (index: number) => {
     if (isAnimating.value || index === currentIndex.value) return;
-    
+
     isAnimating.value = true;
     currentIndex.value = index;
     updateProgress();
     resetAutoplay();
-    
+
     setTimeout(() => {
         isAnimating.value = false;
     }, 600);
@@ -312,11 +318,11 @@ const handleTouchEnd = () => {
 // Effet canvas (particules)
 const initCanvas = () => {
     if (!canvasRef.value) return;
-    
+
     const canvas = canvasRef.value;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
+
     let particles: Array<{
         x: number;
         y: number;
@@ -325,13 +331,13 @@ const initCanvas = () => {
         speedX: number;
         speedY: number;
     }> = [];
-    
+
     const resizeCanvas = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         initParticles();
     };
-    
+
     const initParticles = () => {
         particles = [];
         const particleCount = Math.min(Math.floor(window.innerWidth / 30), 40);
@@ -346,29 +352,29 @@ const initCanvas = () => {
             });
         }
     };
-    
+
     const animateParticles = () => {
         if (!ctx || !canvas) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+
         particles.forEach(p => {
             p.x += p.speedX;
             p.y += p.speedY;
-            
+
             if (p.x < 0) p.x = canvas.width;
             if (p.x > canvas.width) p.x = 0;
             if (p.y < 0) p.y = canvas.height;
             if (p.y > canvas.height) p.y = 0;
-            
+
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
             ctx.fill();
         });
-        
+
         animationFrame = requestAnimationFrame(animateParticles);
     };
-    
+
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
     animateParticles();
@@ -390,7 +396,7 @@ const updateThumbnailsScroll = () => {
 // Cycle de vie
 onMounted(async () => {
     await nextTick();
-    
+
     // Préchargement des images
     const imagePromises = slides.map(slide => {
         return new Promise((resolve) => {
@@ -401,12 +407,12 @@ onMounted(async () => {
         });
     });
     await Promise.all(imagePromises);
-    
+
     // Initialisation
     startAutoplay();
     initCanvas();
     updateProgress();
-    
+
     // Observer pour les thumbnails
     watch(currentIndex, () => {
         updateThumbnailsScroll();
