@@ -1,9 +1,12 @@
 <template>
     <section class="py-16 md:py-20 lg:py-24 relative overflow-hidden bg-gradient-to-b from-secondary/50 to-secondary">
+        <!-- Canvas pour animations -->
+        <canvas ref="canvasRef" class="absolute top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
         <!-- Effets de fond décoratifs -->
-        <div class="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl -ml-48 -mb-48"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-500/5 rounded-full blur-3xl"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl -mr-48 -mt-48 z-0"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl -ml-48 -mb-48 z-0"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-500/5 rounded-full blur-3xl z-0"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -87,6 +90,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { contact } from '@/routes';
 import { Wrench, Zap, ArrowRight, ShieldCheck, Clock, Award } from 'lucide-vue-next';
@@ -109,4 +113,136 @@ const benefits = [
     { title: 'Qualité Garantie', icon: ShieldCheck },
     { title: 'Experts Certifiés', icon: Award },
 ];
+
+const canvasRef = ref<HTMLCanvasElement | null>(null);
+let animationFrame: number | null = null;
+
+// Petites formes multiples
+let particles: Array<{
+    x: number;
+    y: number;
+    radius: number;
+    speedX: number;
+    speedY: number;
+    opacity: number;
+}> = [];
+
+let circles: Array<{
+    x: number;
+    y: number;
+    radius: number;
+    speedX: number;
+    speedY: number;
+    opacity: number;
+}> = [];
+
+const initCanvas = () => {
+    if (!canvasRef.value) return;
+
+    const canvas = canvasRef.value;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initParticles();
+        initCircles();
+    };
+
+    // Petites particules (type étoiles)
+    const initParticles = () => {
+        particles = [];
+        const particleCount = Math.min(Math.floor(window.innerWidth / 30), 80);
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                speedX: (Math.random() - 0.5) * 0.4,
+                speedY: (Math.random() - 0.5) * 0.3,
+                opacity: Math.random() * 0.3 + 0.1
+            });
+        }
+    };
+
+    // Petits cercles (type bulles)
+    const initCircles = () => {
+        circles = [];
+        const circleCount = 12;
+
+        for (let i = 0; i < circleCount; i++) {
+            circles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 40 + 15,
+                speedX: (Math.random() - 0.5) * 0.2,
+                speedY: (Math.random() - 0.5) * 0.15,
+                opacity: Math.random() * 0.1 + 0.05
+            });
+        }
+    };
+
+    const animate = () => {
+        if (!ctx || !canvas) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Dessiner les petits cercles
+        circles.forEach(circle => {
+            circle.x += circle.speedX;
+            circle.y += circle.speedY;
+
+            if (circle.x + circle.radius < 0) circle.x = canvas.width + circle.radius;
+            if (circle.x - circle.radius > canvas.width) circle.x = -circle.radius;
+            if (circle.y + circle.radius < 0) circle.y = canvas.height + circle.radius;
+            if (circle.y - circle.radius > canvas.height) circle.y = -circle.radius;
+
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(249, 115, 22, ${circle.opacity})`;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(249, 115, 22, ${circle.opacity + 0.05})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        });
+
+        // Dessiner les particules
+        particles.forEach(particle => {
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+
+            if (particle.x < 0) particle.x = canvas.width;
+            if (particle.x > canvas.width) particle.x = 0;
+            if (particle.y < 0) particle.y = canvas.height;
+            if (particle.y > canvas.height) particle.y = 0;
+
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(249, 115, 22, ${particle.opacity})`;
+            ctx.fill();
+        });
+
+        animationFrame = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animate();
+};
+
+onMounted(() => {
+    initCanvas();
+});
+
+onUnmounted(() => {
+    if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+    }
+});
 </script>
