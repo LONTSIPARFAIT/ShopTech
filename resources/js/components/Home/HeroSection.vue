@@ -36,18 +36,17 @@
                         <div :key="currentIndex" class="absolute inset-0 flex items-center justify-center z-20 pt-20 pb-24 sm:pb-32">
                             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                                 <div class="max-w-3xl">
-                                    <!-- Badge -->
-                                    <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-4 animate-fade-in-up">
+                                    <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-4">
                                         <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
                                         {{ slide.badge }}
                                     </div>
-                                    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white mb-3 drop-shadow-lg animate-fade-in-up animation-delay-200">
+                                    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white mb-3 drop-shadow-lg">
                                         {{ slide.title }}
                                     </h1>
-                                    <p class="text-sm sm:text-base md:text-lg text-white/80 max-w-lg mb-6 leading-relaxed animate-fade-in-up animation-delay-400">
+                                    <p class="text-sm sm:text-base md:text-lg text-white/80 max-w-lg mb-6 leading-relaxed">
                                         {{ slide.description }}
                                     </p>
-                                    <div class="flex flex-col sm:flex-row gap-3 animate-fade-in-up animation-delay-600">
+                                    <div class="flex flex-col sm:flex-row gap-3">
                                         <Link
                                             :href="productsIndex.url()"
                                             class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primary-dark rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_30px_-10px_rgba(249,115,22,0.4)] relative overflow-hidden"
@@ -73,48 +72,33 @@
             </div>
         </div>
 
-        <!-- Navigation Flottante -->
-        <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-[100] flex items-center gap-2 sm:gap-3 bg-black/60 backdrop-blur-md px-2 py-2 rounded-full border border-white/20 shadow-lg">
+        <!-- Navigation - Flèches (contenues dans la section) -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
             <button
-                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-primary hover:scale-110 cursor-pointer"
                 @click="prevSlide"
+                class="w-9 h-9 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-primary hover:scale-110"
             >
-                <ChevronLeft class="w-4 h-4 sm:w-5 sm:h-5" />
+                <ChevronLeft class="w-4 h-4" />
             </button>
-
-            <div class="min-w-[80px] sm:min-w-[100px] flex items-center gap-2 sm:gap-3">
-                <div class="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-primary to-primary-dark rounded-full transition-all duration-300" :style="{ width: `${progressPercent}%` }"></div>
-                </div>
-                <div class="text-xs sm:text-sm font-semibold text-white tabular-nums">
-                    <span class="text-primary">{{ currentIndex + 1 }}</span>
-                    <span class="text-white/50 mx-0.5">/</span>
-                    <span>{{ slides.length }}</span>
-                </div>
-            </div>
-
-            <button
-                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-primary hover:scale-110 cursor-pointer"
-                @click="nextSlide"
-            >
-                <ChevronRight class="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-        </div>
-
-        <!-- Thumbnails -->
-        <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 z-[100] max-w-[280px] sm:max-w-[400px] overflow-x-auto scrollbar-hide">
-            <div ref="thumbnailsTrackRef" class="flex gap-2 sm:gap-3 p-1">
+            <div class="flex gap-1">
                 <button
-                    v-for="(slide, index) in slides"
-                    :key="index"
-                    class="group relative flex-none w-12 h-12 sm:w-[60px] sm:h-[60px] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 opacity-50 hover:opacity-80"
-                    :class="{ 'ring-2 ring-primary opacity-100 scale-105': currentIndex === index }"
-                    @click="goToSlide(index)"
-                >
-                    <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover" />
-                    <span class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white text-[9px] sm:text-[10px] font-semibold py-0.5 sm:py-1 text-center uppercase">{{ slide.badge.split(' ')[0] }}</span>
-                </button>
+                    v-for="(slide, idx) in slides"
+                    :key="idx"
+                    @click="goToSlide(idx)"
+                    class="transition-all duration-300 rounded-full"
+                    :class="[
+                        currentIndex === idx
+                            ? 'w-6 h-1.5 bg-primary'
+                            : 'w-1.5 h-1.5 bg-white/50 hover:bg-white/80'
+                    ]"
+                ></button>
             </div>
+            <button
+                @click="nextSlide"
+                class="w-9 h-9 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-primary hover:scale-110"
+            >
+                <ChevronRight class="w-4 h-4" />
+            </button>
         </div>
     </section>
 </template>
@@ -164,9 +148,7 @@ const currentIndex = ref(0);
 const isAnimating = ref(false);
 const touchStartX = ref(0);
 const touchEndX = ref(0);
-const progressPercent = ref(0);
 const canvasRef = ref<HTMLCanvasElement | null>(null);
-const thumbnailsTrackRef = ref<HTMLElement | null>(null);
 let autoplayInterval: ReturnType<typeof setInterval> | null = null;
 let animationFrame: number | null = null;
 
@@ -188,10 +170,6 @@ const trackStyle = computed(() => {
     };
 });
 
-const updateProgress = () => {
-    progressPercent.value = ((currentIndex.value + 1) / slides.length) * 100;
-};
-
 const nextSlide = async () => {
     if (isAnimating.value) return;
     isAnimating.value = true;
@@ -200,16 +178,11 @@ const nextSlide = async () => {
     if (nextIndex >= slides.length) {
         currentIndex.value = 0;
         await nextTick();
-        setTimeout(() => {
-            isAnimating.value = false;
-        }, 600);
+        setTimeout(() => { isAnimating.value = false; }, 600);
     } else {
         currentIndex.value = nextIndex;
-        setTimeout(() => {
-            isAnimating.value = false;
-        }, 600);
+        setTimeout(() => { isAnimating.value = false; }, 600);
     }
-    updateProgress();
     resetAutoplay();
 };
 
@@ -221,16 +194,11 @@ const prevSlide = async () => {
     if (prevIndex < 0) {
         currentIndex.value = slides.length - 1;
         await nextTick();
-        setTimeout(() => {
-            isAnimating.value = false;
-        }, 600);
+        setTimeout(() => { isAnimating.value = false; }, 600);
     } else {
         currentIndex.value = prevIndex;
-        setTimeout(() => {
-            isAnimating.value = false;
-        }, 600);
+        setTimeout(() => { isAnimating.value = false; }, 600);
     }
-    updateProgress();
     resetAutoplay();
 };
 
@@ -238,11 +206,8 @@ const goToSlide = async (index: number) => {
     if (isAnimating.value || index === currentIndex.value) return;
     isAnimating.value = true;
     currentIndex.value = index;
-    updateProgress();
     resetAutoplay();
-    setTimeout(() => {
-        isAnimating.value = false;
-    }, 600);
+    setTimeout(() => { isAnimating.value = false; }, 600);
 };
 
 const startAutoplay = () => {
@@ -320,13 +285,6 @@ onMounted(async () => {
     await nextTick();
     startAutoplay();
     initCanvas();
-    updateProgress();
-    watch(currentIndex, () => {
-        if (thumbnailsTrackRef.value) {
-            const active = thumbnailsTrackRef.value.querySelector('.ring-2') as HTMLElement;
-            active?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-    });
 });
 
 onUnmounted(() => {
@@ -347,22 +305,4 @@ onUnmounted(() => {
     opacity: 0;
     transform: translateY(-20px);
 }
-
-@keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in-up {
-    animation: fade-in-up 0.5s ease-out forwards;
-    opacity: 0;
-}
-.animation-delay-200 { animation-delay: 0.2s; }
-.animation-delay-400 { animation-delay: 0.4s; }
-.animation-delay-600 { animation-delay: 0.6s; }
-
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar { display: none; }
 </style>
