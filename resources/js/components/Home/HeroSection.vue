@@ -31,37 +31,35 @@
                         <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/30 to-black/70"></div>
                     </div>
 
-                    <!-- Contenu avec transitions Vue -->
+                    <!-- Contenu -->
                     <Transition name="slide-content" mode="out-in">
                         <div :key="currentIndex" class="absolute inset-0 flex items-center justify-center z-20 pt-20 pb-24 sm:pb-32">
                             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                                 <div class="max-w-3xl">
-                                    <!-- Badge avec orange -->
-                                    <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-4">
-                                        <span class="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse"></span>
+                                    <!-- Badge -->
+                                    <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-4 animate-fade-in-up">
+                                        <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
                                         {{ slide.badge }}
                                     </div>
-                                    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white mb-3 drop-shadow-lg">
+                                    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white mb-3 drop-shadow-lg animate-fade-in-up animation-delay-200">
                                         {{ slide.title }}
                                     </h1>
-                                    <p class="text-sm sm:text-base md:text-lg text-white/80 max-w-lg mb-6 leading-relaxed">
+                                    <p class="text-sm sm:text-base md:text-lg text-white/80 max-w-lg mb-6 leading-relaxed animate-fade-in-up animation-delay-400">
                                         {{ slide.description }}
                                     </p>
-                                    <div class="flex flex-col sm:flex-row gap-3">
-                                        <!-- Bouton principal - Orange -->
+                                    <div class="flex flex-col sm:flex-row gap-3 animate-fade-in-up animation-delay-600">
                                         <Link
                                             :href="productsIndex.url()"
-                                            class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_30px_-10px_rgba(249,115,22,0.4)] relative overflow-hidden"
+                                            class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primary-dark rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_30px_-10px_rgba(249,115,22,0.4)] relative overflow-hidden"
                                         >
                                             <span class="relative z-10">Acheter maintenant</span>
                                             <ArrowRight class="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
                                             <div class="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                                         </Link>
-                                        <!-- Bouton secondaire - Blanc/Orange -->
                                         <Link
                                             v-if="!$page.props.auth.user"
                                             :href="register().url"
-                                            class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-xl font-semibold text-white text-sm border border-white/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 hover:border-orange-400/50"
+                                            class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-xl font-semibold text-white text-sm border border-white/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 hover:border-primary/50"
                                         >
                                             <span>Créer un compte</span>
                                             <Sparkles class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -75,63 +73,48 @@
             </div>
         </div>
 
-        <!-- Navigation Flottante - ORANGE -->
+        <!-- Navigation Flottante -->
         <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-[100] flex items-center gap-2 sm:gap-3 bg-black/60 backdrop-blur-md px-2 py-2 rounded-full border border-white/20 shadow-lg">
             <button
-                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-orange-500 hover:scale-110 cursor-pointer"
+                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-primary hover:scale-110 cursor-pointer"
                 @click="prevSlide"
-                aria-label="Slide précédent"
             >
                 <ChevronLeft class="w-4 h-4 sm:w-5 sm:h-5" />
-                <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 rounded-md text-[10px] text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none text-nowrap">
-                    Précédent
-                </span>
             </button>
 
             <div class="min-w-[80px] sm:min-w-[100px] flex items-center gap-2 sm:gap-3">
-                <!-- Barre de progression ORANGE -->
                 <div class="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-300" :style="{ width: `${progressPercent}%` }"></div>
+                    <div class="h-full bg-gradient-to-r from-primary to-primary-dark rounded-full transition-all duration-300" :style="{ width: `${progressPercent}%` }"></div>
                 </div>
                 <div class="text-xs sm:text-sm font-semibold text-white tabular-nums">
-                    <span class="text-orange-400">{{ currentIndex + 1 }}</span>
+                    <span class="text-primary">{{ currentIndex + 1 }}</span>
                     <span class="text-white/50 mx-0.5">/</span>
                     <span>{{ slides.length }}</span>
                 </div>
             </div>
 
             <button
-                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-orange-500 hover:scale-110 cursor-pointer"
+                class="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/20 rounded-full text-white transition-all duration-300 hover:bg-primary hover:scale-110 cursor-pointer"
                 @click="nextSlide"
-                aria-label="Slide suivant"
             >
                 <ChevronRight class="w-4 h-4 sm:w-5 sm:h-5" />
-                <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 rounded-md text-[10px] text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none text-nowrap">
-                    Suivant
-                </span>
             </button>
         </div>
 
-        <!-- Thumbnails - ORANGE -->
+        <!-- Thumbnails -->
         <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 z-[100] max-w-[280px] sm:max-w-[400px] overflow-x-auto scrollbar-hide">
             <div ref="thumbnailsTrackRef" class="flex gap-2 sm:gap-3 p-1">
                 <button
                     v-for="(slide, index) in slides"
                     :key="index"
                     class="group relative flex-none w-12 h-12 sm:w-[60px] sm:h-[60px] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 opacity-50 hover:opacity-80"
-                    :class="{ 'ring-2 ring-orange-500 opacity-100 scale-105': currentIndex === index }"
+                    :class="{ 'ring-2 ring-primary opacity-100 scale-105': currentIndex === index }"
                     @click="goToSlide(index)"
                 >
                     <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover" />
                     <span class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white text-[9px] sm:text-[10px] font-semibold py-0.5 sm:py-1 text-center uppercase">{{ slide.badge.split(' ')[0] }}</span>
                 </button>
             </div>
-        </div>
-
-        <!-- Scroll Indicator -->
-        <div class="absolute left-4 sm:left-6 bottom-4 sm:bottom-6 z-[100] flex flex-col items-center gap-2">
-            <span class="text-[10px] font-semibold tracking-[0.2em] text-white/60 [writing-mode:vertical-rl] rotate-180">SCROLL</span>
-            <div class="w-px h-8 sm:h-10 bg-gradient-to-b from-orange-400 to-transparent animate-[scrollLine_2s_ease-in-out_infinite]"></div>
         </div>
     </section>
 </template>
@@ -145,7 +128,6 @@ import { Sparkles, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-vue-next
 
 const page = usePage();
 
-// Types
 interface Slide {
     id: number;
     image: string;
@@ -154,32 +136,30 @@ interface Slide {
     description: string;
 }
 
-// Slides data avec thèmes Orange
 const slides: Slide[] = [
     {
         id: 1,
-        image: '/images/hero/construction.jpg',
-        badge: 'Gros Œuvre',
-        title: 'Matériaux de Construction',
-        description: 'Ciment, briques et structures de qualité pour des chantiers solides.'
+        image: '/images/hero/plomberie.jpg',
+        badge: 'Plomberie',
+        title: 'Installation Sanitaire',
+        description: 'Tuyauterie, robinetterie, chauffe-eau. Installation et réparation par des plombiers certifiés.'
     },
     {
         id: 2,
-        image: '/images/hero/plomberie.jpg',
-        badge: 'Installation Sanitaire',
-        title: 'Expertise en Plomberie',
-        description: 'Tout pour vos réseaux d\'eau : tubes, raccords et robinetterie pro.'
+        image: '/images/hero/electricite.jpg',
+        badge: 'Électricité',
+        title: 'Installation Électrique',
+        description: 'Câblage, tableaux, éclairage. Mise aux normes et dépannage par des électriciens professionnels.'
     },
     {
         id: 3,
-        image: '/images/hero/electricite.jpg',
-        badge: 'Énergie & Sécurité',
-        title: 'Matériel Électrique',
-        description: 'Câblage, tableaux et appareillage pour des installations aux normes.'
+        image: '/images/hero/outillage.jpg',
+        badge: 'Outillage',
+        title: 'Matériel Professionnel',
+        description: 'Outillage électroportatif, perceuses, visseuses. Vente de matériel de qualité.'
     }
 ];
 
-// État
 const currentIndex = ref(0);
 const isAnimating = ref(false);
 const touchStartX = ref(0);
@@ -190,18 +170,15 @@ const thumbnailsTrackRef = ref<HTMLElement | null>(null);
 let autoplayInterval: ReturnType<typeof setInterval> | null = null;
 let animationFrame: number | null = null;
 
-// Création d'un tableau avec duplication pour effet infini
 const slidesWithDuplicate = computed(() => {
     return [slides[slides.length - 1], ...slides, slides[0]];
 });
 
-// Vérifier si un slide est actif
 const isActive = (index: number): boolean => {
     const virtualCurrentIndex = currentIndex.value + 1;
     return index === virtualCurrentIndex;
 };
 
-// Style du track pour le défilement horizontal
 const trackStyle = computed(() => {
     const virtualIndex = currentIndex.value + 1;
     const translateX = -(virtualIndex * 100);
@@ -211,15 +188,12 @@ const trackStyle = computed(() => {
     };
 });
 
-// Mise à jour de la progression
 const updateProgress = () => {
     progressPercent.value = ((currentIndex.value + 1) / slides.length) * 100;
 };
 
-// Navigation
 const nextSlide = async () => {
     if (isAnimating.value) return;
-
     isAnimating.value = true;
 
     const nextIndex = currentIndex.value + 1;
@@ -235,14 +209,12 @@ const nextSlide = async () => {
             isAnimating.value = false;
         }, 600);
     }
-
     updateProgress();
     resetAutoplay();
 };
 
 const prevSlide = async () => {
     if (isAnimating.value) return;
-
     isAnimating.value = true;
 
     const prevIndex = currentIndex.value - 1;
@@ -258,31 +230,25 @@ const prevSlide = async () => {
             isAnimating.value = false;
         }, 600);
     }
-
     updateProgress();
     resetAutoplay();
 };
 
 const goToSlide = async (index: number) => {
     if (isAnimating.value || index === currentIndex.value) return;
-
     isAnimating.value = true;
     currentIndex.value = index;
     updateProgress();
     resetAutoplay();
-
     setTimeout(() => {
         isAnimating.value = false;
     }, 600);
 };
 
-// Autoplay
 const startAutoplay = () => {
     if (autoplayInterval) clearInterval(autoplayInterval);
     autoplayInterval = setInterval(() => {
-        if (!isAnimating.value) {
-            nextSlide();
-        }
+        if (!isAnimating.value) nextSlide();
     }, 6000);
 };
 
@@ -293,55 +259,29 @@ const resetAutoplay = () => {
     }
 };
 
-// Touch events pour mobile
-const handleTouchStart = (e: TouchEvent) => {
-    touchStartX.value = e.touches[0].clientX;
-};
-
-const handleTouchMove = (e: TouchEvent) => {
-    touchEndX.value = e.touches[0].clientX;
-};
-
+const handleTouchStart = (e: TouchEvent) => { touchStartX.value = e.touches[0].clientX; };
+const handleTouchMove = (e: TouchEvent) => { touchEndX.value = e.touches[0].clientX; };
 const handleTouchEnd = () => {
     const deltaX = touchEndX.value - touchStartX.value;
     if (Math.abs(deltaX) > 50) {
-        if (deltaX > 0) {
-            prevSlide();
-        } else {
-            nextSlide();
-        }
+        deltaX > 0 ? prevSlide() : nextSlide();
     }
-    touchStartX.value = 0;
-    touchEndX.value = 0;
 };
 
-// Effet canvas (particules)
 const initCanvas = () => {
     if (!canvasRef.value) return;
-
     const canvas = canvasRef.value;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let particles: Array<{
-        x: number;
-        y: number;
-        radius: number;
-        alpha: number;
-        speedX: number;
-        speedY: number;
-    }> = [];
+    let particles: any[] = [];
 
     const resizeCanvas = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        initParticles();
-    };
-
-    const initParticles = () => {
         particles = [];
-        const particleCount = Math.min(Math.floor(window.innerWidth / 30), 40);
-        for (let i = 0; i < particleCount; i++) {
+        const count = Math.min(Math.floor(window.innerWidth / 40), 50);
+        for (let i = 0; i < count; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
@@ -353,69 +293,39 @@ const initCanvas = () => {
         }
     };
 
-    const animateParticles = () => {
+    const animate = () => {
         if (!ctx || !canvas) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         particles.forEach(p => {
             p.x += p.speedX;
             p.y += p.speedY;
-
             if (p.x < 0) p.x = canvas.width;
             if (p.x > canvas.width) p.x = 0;
             if (p.y < 0) p.y = canvas.height;
             if (p.y > canvas.height) p.y = 0;
-
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+            ctx.fillStyle = `rgba(249, 115, 22, ${p.alpha})`;
             ctx.fill();
         });
-
-        animationFrame = requestAnimationFrame(animateParticles);
+        animationFrame = requestAnimationFrame(animate);
     };
 
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
-    animateParticles();
+    animate();
 };
 
-// Scroll des thumbnails
-const updateThumbnailsScroll = () => {
-    if (!thumbnailsTrackRef.value) return;
-    const activeThumb = thumbnailsTrackRef.value.querySelector('.ring-2') as HTMLElement;
-    if (activeThumb) {
-        const containerRect = thumbnailsTrackRef.value.parentElement?.getBoundingClientRect();
-        const thumbRect = activeThumb.getBoundingClientRect();
-        if (containerRect && (thumbRect.right > containerRect.right || thumbRect.left < containerRect.left)) {
-            activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-    }
-};
-
-// Cycle de vie
 onMounted(async () => {
     await nextTick();
-
-    // Préchargement des images
-    const imagePromises = slides.map(slide => {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.src = slide.image;
-            img.onload = resolve;
-            img.onerror = resolve;
-        });
-    });
-    await Promise.all(imagePromises);
-
-    // Initialisation
     startAutoplay();
     initCanvas();
     updateProgress();
-
-    // Observer pour les thumbnails
     watch(currentIndex, () => {
-        updateThumbnailsScroll();
+        if (thumbnailsTrackRef.value) {
+            const active = thumbnailsTrackRef.value.querySelector('.ring-2') as HTMLElement;
+            active?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
     });
 });
 
@@ -426,12 +336,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Animation pour le contenu des slides */
-.slide-content-enter-active {
+.slide-content-enter-active, .slide-content-leave-active {
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.slide-content-leave-active {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .slide-content-enter-from {
     opacity: 0;
@@ -442,35 +348,21 @@ onUnmounted(() => {
     transform: translateY(-20px);
 }
 
-/* Animation pour scrollLine */
-@keyframes scrollLine {
-    0% {
-        transform: scaleY(0.3);
-        opacity: 0;
-        transform-origin: top;
-    }
-    50% {
-        transform: scaleY(1);
-        opacity: 1;
-        transform-origin: top;
-    }
-    100% {
-        transform: scaleY(0.3);
-        opacity: 0;
-        transform-origin: top;
-    }
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
-.animate-\[scrollLine_2s_ease-in-out_infinite\] {
-    animation: scrollLine 2s ease-in-out infinite;
+.animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out forwards;
+    opacity: 0;
 }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-600 { animation-delay: 0.6s; }
 
-/* Cacher la scrollbar pour les thumbnails */
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
 </style>
