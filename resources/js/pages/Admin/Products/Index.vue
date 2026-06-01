@@ -1,102 +1,200 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { create as admin_products_create, edit as admin_products_edit, destroy as admin_products_destroy } from '@/routes/admin/products';
+import { Plus, Package, Search, Edit, Trash2, AlertCircle, CheckCircle, XCircle, Layers } from 'lucide-vue-next';
+import { ref, computed } from 'vue';
 
 const props = defineProps<{
     products: any[];
 }>();
+
+const search = ref('');
+
+const filteredProducts = computed(() => {
+    if (!search.value) return props.products;
+    const q = search.value.toLowerCase();
+    return props.products.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
+        p.category?.name.toLowerCase().includes(q)
+    );
+});
 
 const deleteProduct = (id: number) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
         router.delete(admin_products_destroy(id).url);
     }
 };
+
+const getTotalStock = (product: any) => {
+    return product.variants?.reduce((acc: number, v: any) => acc + (v.stock || 0), 0) || 0;
+};
 </script>
 
 <template>
     <Head title="Gestion des Produits - Admin" />
 
-    <div class="admin-container">
-        <!-- Header responsive -->
-        <div class="admin-header">
-            <div class="admin-header-content">
-                <h1 class="admin-title">Produits</h1>
-                <p class="admin-subtitle">Gérez le catalogue de votre boutique.</p>
+    <div class="py-6 md:py-8 px-4 max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2.5 bg-primary/10 text-primary rounded-xl">
+                        <Package class="w-6 h-6" />
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-black tracking-tight text-foreground">Produits</h1>
+                        <p class="text-sm text-muted-foreground mt-1">
+                            Gérez le catalogue de votre boutique
+                        </p>
+                    </div>
+                </div>
             </div>
-            <Link 
+            <Link
                 :href="admin_products_create().url"
-                class="btn-primary"
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-dark text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Ajouter un Produit
+                <Plus class="w-5 h-5" />
+                <span>Ajouter un produit</span>
             </Link>
         </div>
 
-        <!-- Table responsive avec scroll horizontal sur mobile -->
-        <div class="admin-table-container">
+        <!-- Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div class="bg-card border border-border rounded-xl p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="p-2 bg-primary/10 rounded-lg">
+                        <Package class="w-4 h-4 text-primary" />
+                    </div>
+                    <span class="text-2xl font-black text-primary">{{ products.length }}</span>
+                </div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total produits</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="p-2 bg-green-100 dark:bg-green-950/30 rounded-lg">
+                        <CheckCircle class="w-4 h-4 text-green-600 dark:text-green-400" />
+                    </div>
+                    <span class="text-2xl font-black text-green-600 dark:text-green-400">
+                        {{ products.filter(p => p.is_active).length }}
+                    </span>
+                </div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Produits actifs</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="p-2 bg-red-100 dark:bg-red-950/30 rounded-lg">
+                        <XCircle class="w-4 h-4 text-red-600 dark:text-red-400" />
+                    </div>
+                    <span class="text-2xl font-black text-red-600 dark:text-red-400">
+                        {{ products.filter(p => !p.is_active).length }}
+                    </span>
+                </div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Produits inactifs</div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="mb-6">
+            <div class="relative">
+                <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input
+                    v-model="search"
+                    type="text"
+                    placeholder="Rechercher un produit..."
+                    class="w-full pl-11 pr-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground placeholder:text-muted-foreground/50"
+                />
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-card border border-border rounded-2xl overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="admin-table">
+                <table class="w-full">
                     <thead>
-                        <tr class="admin-table-header">
-                            <th class="admin-table-cell">Produit</th>
-                            <th class="admin-table-cell">Catégorie</th>
-                            <th class="admin-table-cell">Prix</th>
-                            <th class="admin-table-cell">Stock</th>
-                            <th class="admin-table-cell">Statut</th>
-                            <th class="admin-table-cell">Actions</th>
+                        <tr class="border-b border-border bg-secondary/30">
+                            <th class="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Produit</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Catégorie</th>
+                            <th class="px-6 py-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Prix</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Stock</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Statut</th>
+                            <th class="px-6 py-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr v-for="product in products" :key="product.id" class="admin-table-row">
-                            <td class="admin-table-cell">
-                                <div class="admin-product-info">
-                                    <div class="admin-product-image">
-                                        <img v-if="product.featured_image" :src="product.featured_image.url" />
+                    <tbody class="divide-y divide-border">
+                        <tr v-for="product in filteredProducts" :key="product.id" class="group hover:bg-secondary/30 transition-colors duration-200">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-xl overflow-hidden bg-secondary border border-border shrink-0">
+                                        <img 
+                                            v-if="product.featured_image?.url" 
+                                            :src="product.featured_image.url" 
+                                            class="w-full h-full object-cover"
+                                            :alt="product.name"
+                                        />
+                                        <div v-else class="w-full h-full flex items-center justify-center text-muted-foreground">
+                                            <Package class="w-5 h-5" />
+                                        </div>
                                     </div>
                                     <div>
-                                        <div class="admin-product-name">{{ product.name }}</div>
-                                        <div class="admin-product-slug">{{ product.slug }}</div>
+                                        <div class="text-sm font-bold text-foreground">{{ product.name }}</div>
+                                        <div class="text-xs text-muted-foreground">{{ product.slug }}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="admin-table-cell">
-                                <span class="admin-badge">
-                                    {{ product.category.name }}
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                                    <Layers class="w-3 h-3" />
+                                    {{ product.category?.name || 'Non catégorisé' }}
                                 </span>
                             </td>
-                            <td class="admin-table-cell admin-price">
-                                {{ Number(product.base_price).toLocaleString() }} XAF
+                            <td class="px-6 py-4 text-right">
+                                <div class="text-sm font-bold text-foreground">
+                                    {{ Number(product.base_price).toLocaleString() }} XAF
+                                </div>
+                                <div v-if="product.original_price" class="text-xs text-muted-foreground line-through">
+                                    {{ Number(product.original_price).toLocaleString() }} XAF
+                                </div>
                             </td>
-                            <td class="admin-table-cell">
-                                <span class="admin-stock" :class="{ 'admin-stock-low': product.variants.reduce((acc, v) => acc + v.stock, 0) < 10 }">
-                                    {{ product.variants.reduce((acc, v) => acc + v.stock, 0) }} unités
+                            <td class="px-6 py-4 text-center">
+                                <span 
+                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                                    :class="getTotalStock(product) > 10 
+                                        ? 'bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400' 
+                                        : getTotalStock(product) > 0 
+                                        ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-400'
+                                        : 'bg-red-100 text-red-700 dark:bg-red-950/30 dark:text-red-400'"
+                                >
+                                    <AlertCircle class="w-3 h-3" />
+                                    {{ getTotalStock(product) }} unités
                                 </span>
                             </td>
-                            <td class="admin-table-cell">
-                                <span class="admin-status" :class="product.is_active ? 'admin-status-active' : 'admin-status-inactive'">
-                                    <span class="admin-status-dot" :class="product.is_active ? 'admin-status-dot-active' : 'admin-status-dot-inactive'"></span>
+                            <td class="px-6 py-4 text-center">
+                                <span 
+                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                                    :class="product.is_active 
+                                        ? 'bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400' 
+                                        : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'"
+                                >
+                                    <span class="w-1.5 h-1.5 rounded-full" :class="product.is_active ? 'bg-green-500' : 'bg-gray-400'"></span>
                                     {{ product.is_active ? 'Actif' : 'Inactif' }}
                                 </span>
                             </td>
-                            <td class="admin-table-cell">
-                                <div class="admin-actions">
-                                    <Link 
+                            <td class="px-6 py-4">
+                                <div class="flex items-center justify-end gap-2">
+                                    <Link
                                         :href="admin_products_edit(product.id).url"
-                                        class="admin-action-btn admin-action-edit"
+                                        class="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-200"
+                                        title="Modifier"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                        </svg>
+                                        <Edit class="w-4 h-4" />
                                     </Link>
-                                    <button 
+                                    <button
                                         @click="deleteProduct(product.id)"
-                                        class="admin-action-btn admin-action-delete"
+                                        class="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all duration-200"
+                                        title="Supprimer"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
+                                        <Trash2 class="w-4 h-4" />
                                     </button>
                                 </div>
                             </td>
@@ -104,16 +202,24 @@ const deleteProduct = (id: number) => {
                     </tbody>
                 </table>
             </div>
-            
-            <!-- Empty State responsive -->
-            <div v-if="products.length === 0" class="admin-empty-state">
-                <div class="admin-empty-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                    </svg>
+
+            <!-- Empty State -->
+            <div v-if="filteredProducts.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    <Package class="w-10 h-10 text-primary" />
                 </div>
-                <h3 class="admin-empty-title">Aucun produit</h3>
-                <p class="admin-empty-text">Commencez par ajouter votre premier produit au catalogue.</p>
+                <h3 class="text-lg font-bold text-foreground mb-2">Aucun produit trouvé</h3>
+                <p class="text-sm text-muted-foreground max-w-sm mb-6">
+                    {{ search ? 'Aucun produit ne correspond à votre recherche.' : 'Commencez par ajouter votre premier produit au catalogue.' }}
+                </p>
+                <Link
+                    v-if="!search"
+                    :href="admin_products_create().url"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-dark text-white font-bold rounded-xl transition-all hover:-translate-y-0.5"
+                >
+                    <Plus class="w-5 h-5" />
+                    Ajouter un produit
+                </Link>
             </div>
         </div>
     </div>
