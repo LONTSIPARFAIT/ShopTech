@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import { Plus, Pencil, Trash2, FolderSearch, Layers, Search, ChevronDown } from 'lucide-vue-next';
+import { Plus, Pencil, Trash2, FolderSearch, Layers, Search, ChevronDown, Package, Calendar, ChevronRight } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 import { create as admin_categories_create, edit as admin_categories_edit, destroy as admin_categories_destroy } from '@/routes/admin/categories';
 import type { Category } from '@/types';
@@ -10,30 +10,23 @@ const props = defineProps<{
 }>();
 
 const search = ref('');
-
 const expandedCategoryIds = ref<number[]>([]);
 
 const toggleCategory = (id: number) => {
     if (expandedCategoryIds.value.includes(id)) {
         expandedCategoryIds.value = expandedCategoryIds.value.filter(item => item !== id);
-
-        return;
+    } else {
+        expandedCategoryIds.value.push(id);
     }
-
-    expandedCategoryIds.value.push(id);
 };
 
 const filteredCategories = computed(() => {
-    if (!search.value) {
-        return props.categories;
-    }
-
+    if (!search.value) return props.categories;
     const q = search.value.toLowerCase();
-
     return props.categories.filter((c) =>
-        c.name.toLowerCase().includes(q)
-        || (c.description?.toLowerCase().includes(q) ?? false)
-        || (c.children ?? []).some((child) => child.name.toLowerCase().includes(q) || (child.description?.toLowerCase().includes(q) ?? false))
+        c.name.toLowerCase().includes(q) ||
+        (c.description?.toLowerCase().includes(q) ?? false) ||
+        (c.children ?? []).some((child) => child.name.toLowerCase().includes(q) || (child.description?.toLowerCase().includes(q) ?? false))
     );
 });
 
@@ -49,7 +42,6 @@ const productCount = computed(() => {
         const childrenProducts = (category.children ?? []).reduce((childCount, child) => {
             return childCount + (child.products_count ?? 0);
         }, 0);
-
         return count + parentProducts + childrenProducts;
     }, 0);
 });
@@ -64,123 +56,139 @@ const deleteCategory = (id: number) => {
 <template>
     <Head title="Gestion des Catégories - Admin" />
 
-    <div class="admin-container">
+    <div class="py-6 md:py-8 px-4 max-w-7xl mx-auto">
         <!-- Header -->
-        <div class="admin-header flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-            <div class="admin-header-content">
-                <div class="flex items-center gap-2 mb-1">
-                    <div class="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-lg">
-                        <Layers class="w-5 h-5" />
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2.5 bg-primary/10 text-primary rounded-xl">
+                        <Layers class="w-6 h-6" />
                     </div>
-                    <h1 class="admin-title text-3xl font-extrabold tracking-tight">Catégories</h1>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-black tracking-tight text-foreground">Catégories</h1>
+                        <p class="text-sm text-muted-foreground mt-1">
+                            Organisez vos produits par secteurs d'activité (Électricité, Plomberie, etc.)
+                        </p>
+                    </div>
                 </div>
-                <p class="admin-subtitle text-gray-500">Organisez vos produits par secteurs d'activité (Électricité, Plomberie, etc.)</p>
             </div>
             <Link
                 :href="admin_categories_create().url"
-                class="btn-primary shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all"
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-dark text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30"
             >
                 <Plus class="w-5 h-5" />
-                <span>Ajouter une Catégorie</span>
+                <span>Ajouter une catégorie</span>
             </Link>
         </div>
 
-        <!-- Stats Quick Look -->
+        <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm">
-                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Catégories</div>
-                <div class="text-2xl font-black text-gray-900 dark:text-white">{{ categoryCount }}</div>
-            </div>
-            <div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm">
-                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Produits</div>
-                <div class="text-2xl font-black text-blue-600">{{ productCount }}</div>
-            </div>
-            <div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm">
-                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Dernière mise à jour</div>
-                <div class="text-lg font-bold text-gray-700 dark:text-gray-300">
-                    {{ categories.length > 0 ? new Date(categories[0].created_at).toLocaleDateString('fr-FR') : '-' }}
+            <div class="bg-card border border-border rounded-xl p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="p-2 bg-primary/10 rounded-lg">
+                        <Layers class="w-4 h-4 text-primary" />
+                    </div>
+                    <span class="text-2xl font-black text-primary">{{ categoryCount }}</span>
                 </div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total catégories</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="p-2 bg-primary/10 rounded-lg">
+                        <Package class="w-4 h-4 text-primary" />
+                    </div>
+                    <span class="text-2xl font-black text-primary">{{ productCount }}</span>
+                </div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total produits</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="p-2 bg-primary/10 rounded-lg">
+                        <Calendar class="w-4 h-4 text-primary" />
+                    </div>
+                    <span class="text-lg font-bold text-foreground">
+                        {{ categories.length > 0 ? new Date(categories[0].created_at).toLocaleDateString('fr-FR') : '-' }}
+                    </span>
+                </div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Dernière mise à jour</div>
             </div>
         </div>
 
-        <!-- Search and Filter -->
-        <div class="mb-6 relative">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-                v-model="search"
-                type="text"
-                placeholder="Rechercher une catégorie..."
-                class="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
-            />
+        <!-- Search -->
+        <div class="mb-6">
+            <div class="relative">
+                <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input
+                    v-model="search"
+                    type="text"
+                    placeholder="Rechercher une catégorie..."
+                    class="w-full pl-11 pr-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground placeholder:text-muted-foreground/50"
+                />
+            </div>
         </div>
 
-        <!-- Table container -->
-        <div class="admin-table-container shadow-xl shadow-gray-200/50 dark:shadow-none overflow-hidden rounded-2xl border-none">
+        <!-- Table -->
+        <div class="bg-card border border-border rounded-2xl overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="admin-table border-collapse">
+                <table class="w-full">
                     <thead>
-                        <tr class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">Catégorie</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-widest">Description</th>
-                            <th class="px-6 py-4 text-center text-xs font-bold text-gray-400 uppercase tracking-widest">Produits</th>
-                            <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-widest">Actions</th>
+                        <tr class="border-b border-border bg-secondary/30">
+                            <th class="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Catégorie</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Description</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Produits</th>
+                            <th class="px-6 py-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                    <tbody class="divide-y divide-border">
                         <template v-for="category in filteredCategories" :key="category.id">
-                            <tr class="admin-table-row group transition-all hover:bg-blue-50/30 dark:hover:bg-blue-900/10">
+                            <!-- Catégorie parente -->
+                            <tr class="group hover:bg-secondary/30 transition-colors duration-200">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-between gap-4">
                                         <div class="flex items-center gap-4">
-                                            <div class="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shrink-0 relative group-hover:scale-105 transition-transform duration-300">
+                                            <div class="w-12 h-12 rounded-xl overflow-hidden bg-secondary border border-border shrink-0">
                                                 <img v-if="category.url" :src="category.url" class="w-full h-full object-cover" />
-                                                <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                                                    <FolderSearch class="w-6 h-6" />
+                                                <div v-else class="w-full h-full flex items-center justify-center text-muted-foreground">
+                                                    <FolderSearch class="w-5 h-5" />
                                                 </div>
-                                                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-bold text-gray-900 dark:text-white">{{ category.name }}</div>
-                                                <div class="text-xs font-medium text-blue-600 dark:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    {{ category.slug }}
-                                                </div>
+                                                <div class="text-sm font-bold text-foreground">{{ category.name }}</div>
+                                                <div class="text-xs text-muted-foreground">{{ category.slug }}</div>
                                             </div>
                                         </div>
 
                                         <button
                                             v-if="category.children?.length"
-                                            type="button"
                                             @click.stop="toggleCategory(category.id)"
-                                            class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition"
-                                            :aria-expanded="expandedCategoryIds.includes(category.id)"
-                                            :aria-label="expandedCategoryIds.includes(category.id) ? 'Replier les sous-catégories' : 'Déplier les sous-catégories'"
+                                            class="flex items-center justify-center w-8 h-8 rounded-full border border-border text-muted-foreground hover:text-primary hover:bg-primary/10 transition"
                                         >
-                                            <ChevronDown :class="['w-4 h-4 transition-transform', expandedCategoryIds.includes(category.id) ? 'rotate-180' : 'rotate-0']" />
+                                            <ChevronRight :class="['w-4 h-4 transition-transform duration-200', expandedCategoryIds.includes(category.id) ? 'rotate-90' : '']" />
                                         </button>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 max-w-xs">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
-                                        {{ category.description || 'Aucune description disponible pour cette catégorie.' }}
+                                <td class="px-6 py-4">
+                                    <p class="text-sm text-muted-foreground line-clamp-2 max-w-xs">
+                                        {{ category.description || 'Aucune description.' }}
                                     </p>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                                        {{ (category.products_count ?? 0) + ((category.children ?? []).reduce((sum, child) => sum + (child.products_count ?? 0), 0)) }} items
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary">
+                                        {{ (category.products_count ?? 0) + ((category.children ?? []).reduce((sum, child) => sum + (child.products_count ?? 0), 0)) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-end gap-2">
                                         <Link
                                             :href="admin_categories_edit(category.id).url"
-                                            class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-lg transition-all"
+                                            class="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
                                             title="Modifier"
                                         >
                                             <Pencil class="w-4 h-4" />
                                         </Link>
                                         <button
                                             @click="deleteCategory(category.id)"
-                                            class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-lg transition-all"
+                                            class="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                                             title="Supprimer"
                                         >
                                             <Trash2 class="w-4 h-4" />
@@ -189,39 +197,35 @@ const deleteCategory = (id: number) => {
                                 </td>
                             </tr>
 
-                            <tr v-if="category.children?.length && expandedCategoryIds.includes(category.id)" class="bg-gray-50/70 dark:bg-gray-900/70">
-                                <td colspan="4" class="px-6 py-4">
-                                    <div class="space-y-3">
-                                        <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Sous-catégories</div>
-                                        <div class="grid gap-3">
-                                            <div v-for="child in category.children" :key="child.id" class="p-4 bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                            <!-- Sous-catégories -->
+                            <tr v-if="category.children?.length && expandedCategoryIds.includes(category.id)">
+                                <td colspan="4" class="px-6 py-4 bg-secondary/20">
+                                    <div class="ml-8 space-y-2">
+                                        <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Sous-catégories</div>
+                                        <div class="space-y-2">
+                                            <div v-for="child in category.children" :key="child.id" class="p-4 bg-card border border-border rounded-xl">
                                                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                                     <div>
-                                                        <div class="text-sm font-bold text-gray-900 dark:text-white">{{ child.name }}</div>
-                                                        <div class="text-xs text-gray-500 dark:text-gray-400">{{ child.description || 'Aucune description.' }}</div>
+                                                        <div class="text-sm font-bold text-foreground">{{ child.name }}</div>
+                                                        <div class="text-xs text-muted-foreground">{{ child.description || 'Aucune description.' }}</div>
                                                     </div>
-                                                    <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                                                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
+                                                    <div class="flex flex-wrap items-center gap-2">
+                                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary">
                                                             {{ child.products_count ?? 0 }} produits
                                                         </span>
-                                                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-900/40 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-800">
-                                                            {{ child.slug }}
-                                                        </span>
+                                                        <Link
+                                                            :href="admin_categories_edit(child.id).url"
+                                                            class="px-3 py-1.5 text-xs font-semibold text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition"
+                                                        >
+                                                            Modifier
+                                                        </Link>
+                                                        <button
+                                                            @click="deleteCategory(child.id)"
+                                                            class="px-3 py-1.5 text-xs font-semibold text-red-500 bg-red-500/10 rounded-lg hover:bg-red-500/20 transition"
+                                                        >
+                                                            Supprimer
+                                                        </button>
                                                     </div>
-                                                </div>
-                                                <div class="flex justify-end gap-2 mt-3">
-                                                    <Link
-                                                        :href="admin_categories_edit(child.id).url"
-                                                        class="px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-50 rounded-2xl hover:bg-blue-100 transition"
-                                                    >
-                                                        Modifier
-                                                    </Link>
-                                                    <button
-                                                        @click="deleteCategory(child.id)"
-                                                        class="px-3 py-2 text-xs font-semibold text-red-600 bg-red-50 rounded-2xl hover:bg-red-100 transition"
-                                                    >
-                                                        Supprimer
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -234,33 +238,22 @@ const deleteCategory = (id: number) => {
             </div>
 
             <!-- Empty State -->
-            <div v-if="filteredCategories.length === 0" class="flex flex-col items-center justify-center py-20 text-center bg-white dark:bg-gray-900">
-                <div class="relative mb-6">
-                    <div class="absolute -inset-4 bg-blue-100 dark:bg-blue-900/20 rounded-full animate-pulse"></div>
-                    <FolderSearch class="relative w-16 h-16 text-blue-500" />
+            <div v-if="filteredCategories.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    <FolderSearch class="w-10 h-10 text-primary" />
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Aucune catégorie trouvée</h3>
-                <p class="text-gray-500 dark:text-gray-400 max-w-sm mb-8">
-                    Nous n'avons trouvé aucune catégorie correspondant à votre recherche. Essayez d'autres mots-clés ou créez-en une nouvelle.
+                <h3 class="text-lg font-bold text-foreground mb-2">Aucune catégorie trouvée</h3>
+                <p class="text-sm text-muted-foreground max-w-sm mb-6">
+                    Aucune catégorie ne correspond à votre recherche. Essayez d'autres mots-clés ou créez-en une nouvelle.
                 </p>
                 <Link
                     :href="admin_categories_create().url"
-                    class="btn-primary"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-dark text-white font-bold rounded-xl transition-all hover:-translate-y-0.5"
                 >
-                    <Plus class="w-5 h-5 mr-2" />
-                    Créer ma première catégorie
+                    <Plus class="w-5 h-5" />
+                    Créer une catégorie
                 </Link>
             </div>
         </div>
     </div>
 </template>
-
-<style scoped>
-.admin-table-row {
-    transition: all 0.2s ease;
-}
-.admin-table-row:hover {
-    transform: scale(1.002);
-    z-index: 10;
-}
-</style>

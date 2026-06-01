@@ -2,13 +2,15 @@
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import { store as admin_products_store, update as admin_products_update } from '@/routes/admin/products';
 import { computed, ref } from 'vue';
-import { ArrowLeft, Camera, Trash2, Plus, Minus } from 'lucide-vue-next';
+import { ArrowLeft, Camera, Trash2, Plus, Minus, UploadCloud, Image, Package, Tag, Truck, Percent, CheckCircle } from 'lucide-vue-next';
 import type { Category } from '@/types';
 
 const props = defineProps<{
     categories: Category[];
     product: any;
 }>();
+
+const isEditing = !!props.product;
 
 const form = useForm({
     category_id: props.product?.category_id ?? '',
@@ -28,8 +30,8 @@ const form = useForm({
         price_override: v.price_override,
         stock: v.stock
     })) ?? [
-            { name: 'Standard', value: 'Unique', color_code: '', price_override: 0, stock: 0 }
-        ],
+        { name: 'Standard', value: 'Unique', color_code: '', price_override: 0, stock: 0 }
+    ],
     featured_image: null as File | null,
     gallery_images: [] as File[],
     remove_image_ids: [] as number[],
@@ -50,7 +52,6 @@ const onFeaturedChange = (e: any) => {
 const onGalleryChange = (e: any) => {
     const files = Array.from(e.target.files) as File[];
     form.gallery_images = [...form.gallery_images, ...files];
-
     const newPreviews = files.map(file => ({ id: null, path: URL.createObjectURL(file) }));
     galleryPreviews.value = [...galleryPreviews.value, ...newPreviews];
 };
@@ -98,290 +99,384 @@ const discountPercent = computed(() => {
 const generateSlug = () => {
     form.slug = form.name
         .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .replace(/ /g, '-')
         .replace(/[^\w-]+/g, '');
 };
 </script>
 
 <template>
+    <Head :title="isEditing ? 'Modifier le Produit' : 'Ajouter un Produit'" />
 
-    <Head :title="product ? 'Modifier le Produit' : 'Ajouter un Produit'" />
-
-    <div class="max-w-5xl mx-auto p-4 md:p-6">
+    <div class="py-6 md:py-8 px-4 max-w-6xl mx-auto">
         <!-- Header -->
         <div class="flex items-center gap-4 mb-8">
-            <Link href="/admin/products"
-                class="w-10 h-10 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
+            <Link
+                href="/admin/products"
+                class="w-10 h-10 rounded-xl border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-all duration-300"
+            >
                 <ArrowLeft class="w-5 h-5" />
             </Link>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white md:text-3xl">
-                {{ product ? 'Modifier' : 'Ajouter' }} un Produit
-            </h1>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black tracking-tight text-foreground">
+                    {{ isEditing ? 'Modifier' : 'Ajouter' }} un produit
+                </h1>
+                <p class="text-sm text-muted-foreground mt-1">
+                    {{ isEditing ? 'Modifiez les informations du produit' : 'Créez un nouveau produit pour votre catalogue' }}
+                </p>
+            </div>
         </div>
 
         <form @submit.prevent="submit" class="space-y-6">
-            <!-- Two column grid -->
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <!-- Left Column: Main Information -->
-                <div
-                    class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm dark:bg-gray-900/50 dark:border-gray-800">
-                    <h2
-                        class="text-lg font-semibold text-gray-900 pb-4 border-b border-gray-200 mb-6 dark:text-white dark:border-gray-800">
-                        Informations Générales</h2>
-
-                    <!-- Name -->
-                    <div class="mb-5">
-                        <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Nom du
-                            produit</label>
-                        <input v-model="form.name" @input="generateSlug" type="text"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                            placeholder="ex: iPhone 15 Pro" />
-                        <p v-if="form.errors.name" class="text-sm text-red-500 mt-1">{{ form.errors.name }}</p>
-                    </div>
-
-                    <!-- Slug - Version avec saisie bloquée -->
-                    <div class="mb-5">
-                        <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Slug</label>
-                        <input v-model="form.slug" type="text" readonly
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-100 cursor-not-allowed text-gray-500 focus:border-gray-300 focus:ring-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
-                            placeholder="iphone-15-pro" />
-                        <p class="text-xs text-gray-400 mt-1">Le slug est généré automatiquement à partir du nom</p>
-                        <p v-if="form.errors.slug" class="text-sm text-red-500 mt-1">{{ form.errors.slug }}</p>
-                    </div>
-
-                    <!-- Category -->
-                    <div class="mb-5">
-                        <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Catégorie</label>
-                        <select v-model="form.category_id"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            <option value="">Sélectionner une sous-catégorie</option>
-                            <template v-for="parent in categories" :key="parent.id">
-                                <optgroup :label="parent.name">
-                                    <option v-for="child in parent.children ?? []" :key="child.id" :value="child.id">
-                                        {{ child.name }}
-                                    </option>
-                                </optgroup>
-                            </template>
-                        </select>
-                        <p v-if="form.errors.category_id" class="text-sm text-red-500 mt-1">{{ form.errors.category_id
-                            }}</p>
-                    </div>
-
-                    <!-- Prices -->
-                    <div class="grid grid-cols-2 gap-4 mb-5">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Prix actuel
-                                (XAF)</label>
-                            <input v-model="form.base_price" type="number" step="1"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                                placeholder="150000" />
-                            <p v-if="form.errors.base_price" class="text-sm text-red-500 mt-1">{{ form.errors.base_price
-                                }}</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left Column -->
+                <div class="space-y-6">
+                    <!-- Informations Générales -->
+                    <div class="bg-card border border-border rounded-2xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-border bg-secondary/30">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 bg-primary/10 rounded-lg">
+                                    <Package class="w-4 h-4 text-primary" />
+                                </div>
+                                <h2 class="text-lg font-bold text-foreground">Informations générales</h2>
+                            </div>
                         </div>
+                        <div class="p-6 space-y-5">
+                            <!-- Nom -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                                    Nom du produit <span class="text-primary">*</span>
+                                </label>
+                                <input
+                                    v-model="form.name"
+                                    @input="generateSlug"
+                                    type="text"
+                                    class="w-full px-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground placeholder:text-muted-foreground/50"
+                                    placeholder="ex: Câble électrique 2.5mm²"
+                                />
+                                <p v-if="form.errors.name" class="mt-2 text-xs font-medium text-red-500">{{ form.errors.name }}</p>
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Ancien prix
-                                (XAF)</label>
-                            <input v-model="form.original_price" type="number" step="1"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                                placeholder="Optionnel" />
-                            <p v-if="form.errors.original_price" class="text-sm text-red-500 mt-1">{{
-                                form.errors.original_price }}</p>
+                            <!-- Slug -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                                    Slug
+                                </label>
+                                <input
+                                    v-model="form.slug"
+                                    type="text"
+                                    readonly
+                                    class="w-full px-4 py-3 bg-secondary/50 border border-border rounded-xl cursor-not-allowed text-muted-foreground"
+                                />
+                                <p class="text-xs text-muted-foreground mt-1">Généré automatiquement à partir du nom</p>
+                            </div>
+
+                            <!-- Catégorie -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                                    Catégorie <span class="text-primary">*</span>
+                                </label>
+                                <select
+                                    v-model="form.category_id"
+                                    class="w-full px-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-foreground"
+                                >
+                                    <option value="">Sélectionner une catégorie</option>
+                                    <template v-for="parent in categories" :key="parent.id">
+                                        <optgroup :label="parent.name">
+                                            <option v-for="child in parent.children ?? []" :key="child.id" :value="child.id">
+                                                └ {{ child.name }}
+                                            </option>
+                                        </optgroup>
+                                    </template>
+                                </select>
+                                <p v-if="form.errors.category_id" class="mt-2 text-xs font-medium text-red-500">{{ form.errors.category_id }}</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Shipping -->
-                    <div class="mb-5">
-                        <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Frais de livraison (XAF)</label>
-                        <input v-model="form.shipping_cost" type="number" step="1"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                            placeholder="ex: 1500 (Laisser vide ou 0 pour gratuit)" />
-                        <p v-if="form.errors.shipping_cost" class="text-sm text-red-500 mt-1">{{ form.errors.shipping_cost }}</p>
-                    </div>
-
-                    <!-- Wholesale Promotion -->
-                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 border-t pt-4 dark:text-gray-400">Promotion en Gros</h3>
-                    <div class="grid grid-cols-2 gap-4 mb-5">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Quantité minimum</label>
-                            <input v-model="form.promo_min_quantity" type="number" step="1" min="1"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                                placeholder="ex: 5" />
-                            <p v-if="form.errors.promo_min_quantity" class="text-sm text-red-500 mt-1">{{ form.errors.promo_min_quantity }}</p>
+                    <!-- Prix -->
+                    <div class="bg-card border border-border rounded-2xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-border bg-secondary/30">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 bg-primary/10 rounded-lg">
+                                    <Tag class="w-4 h-4 text-primary" />
+                                </div>
+                                <h2 class="text-lg font-bold text-foreground">Tarification</h2>
+                            </div>
                         </div>
+                        <div class="p-6 space-y-5">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                                        Prix actuel (XAF)
+                                    </label>
+                                    <input
+                                        v-model="form.base_price"
+                                        type="number"
+                                        step="1"
+                                        class="w-full px-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-foreground"
+                                        placeholder="150000"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                                        Ancien prix (XAF)
+                                    </label>
+                                    <input
+                                        v-model="form.original_price"
+                                        type="number"
+                                        step="1"
+                                        class="w-full px-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-foreground"
+                                        placeholder="Optionnel"
+                                    />
+                                </div>
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Réduction (%)</label>
-                            <input v-model="form.promo_discount_percent" type="number" step="1" min="1" max="25"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                                placeholder="Max 25%" />
-                            <p v-if="form.errors.promo_discount_percent" class="text-sm text-red-500 mt-1">{{ form.errors.promo_discount_percent }}</p>
-                        </div>
-                    </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                                    Frais de livraison (XAF)
+                                </label>
+                                <div class="relative">
+                                    <Truck class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                    <input
+                                        v-model="form.shipping_cost"
+                                        type="number"
+                                        step="1"
+                                        class="w-full pl-11 pr-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-foreground"
+                                        placeholder="0 = livraison gratuite"
+                                    />
+                                </div>
+                            </div>
 
-                    <!-- Discount preview -->
-                    <div v-if="discountPercent"
-                        class="flex items-center gap-3 p-3 mb-5 rounded-lg bg-red-50 border border-red-200 dark:bg-red-950/20 dark:border-red-800/30">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-red-500 text-white flex items-center justify-center font-bold text-sm">
-                            -{{ discountPercent }}%
-                        </div>
-                        <div>
-                            <p class="font-semibold text-sm text-red-700 dark:text-red-400">Réduction automatique</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-400">
-                                {{ Number(form.original_price).toLocaleString() }} XAF → {{
-                                    Number(form.base_price).toLocaleString() }} XAF
-                            </p>
-                        </div>
-                    </div>
+                            <!-- Remise -->
+                            <div class="pt-2">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <Percent class="w-4 h-4 text-primary" />
+                                    <span class="text-sm font-semibold text-foreground">Promotion en gros</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                                            Quantité minimum
+                                        </label>
+                                        <input
+                                            v-model="form.promo_min_quantity"
+                                            type="number"
+                                            step="1"
+                                            min="1"
+                                            class="w-full px-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-foreground"
+                                            placeholder="ex: 5"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                                            Réduction (%)
+                                        </label>
+                                        <input
+                                            v-model="form.promo_discount_percent"
+                                            type="number"
+                                            step="1"
+                                            min="1"
+                                            max="25"
+                                            class="w-full px-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-foreground"
+                                            placeholder="Max 25%"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
 
-                    <!-- Active -->
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" v-model="form.is_active" id="is_active"
-                            class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                        <label for="is_active" class="text-sm font-medium text-gray-700 dark:text-gray-300">Produit
-                            actif</label>
+                            <!-- Badge réduction -->
+                            <div v-if="discountPercent" class="flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20">
+                                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+                                    <Percent class="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-sm text-primary">-{{ discountPercent }}% de réduction</p>
+                                    <p class="text-xs text-muted-foreground">
+                                        {{ Number(form.original_price).toLocaleString() }} XAF → {{ Number(form.base_price).toLocaleString() }} XAF
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Actif -->
+                            <div class="flex items-center gap-3 pt-2">
+                                <input
+                                    type="checkbox"
+                                    v-model="form.is_active"
+                                    id="is_active"
+                                    class="w-4 h-4 rounded border-border text-primary focus:ring-primary focus:ring-offset-0"
+                                />
+                                <label for="is_active" class="text-sm font-medium text-foreground">Produit actif</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right Column: Images & Description -->
+                <!-- Right Column -->
                 <div class="space-y-6">
-                    <!-- Featured Image -->
-                    <div
-                        class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm dark:bg-gray-900/50 dark:border-gray-800">
-                        <h2
-                            class="text-lg font-semibold text-gray-900 pb-4 border-b border-gray-200 mb-6 dark:text-white dark:border-gray-800">
-                            Image principale</h2>
-
-                        <div class="relative cursor-pointer group">
-                            <div
-                                class="aspect-video bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 transition-colors group-hover:border-blue-500 dark:bg-gray-800 dark:border-gray-700">
-                                <img v-if="featuredPreview" :src="featuredPreview" class="w-full h-full object-cover" />
-                                <div v-else
-                                    class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                                    <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="2" />
-                                        <circle cx="8.5" cy="8.5" r="1.5" stroke-width="2" />
-                                        <polyline points="21 15 16 10 5 21" stroke-width="2" />
-                                    </svg>
-                                    <span class="text-sm font-medium">Choisir une image</span>
+                    <!-- Image principale -->
+                    <div class="bg-card border border-border rounded-2xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-border bg-secondary/30">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 bg-primary/10 rounded-lg">
+                                    <Camera class="w-4 h-4 text-primary" />
                                 </div>
+                                <h2 class="text-lg font-bold text-foreground">Image principale</h2>
                             </div>
-                            <input type="file" @change="onFeaturedChange"
-                                class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
                         </div>
-                        <p v-if="form.errors.featured_image" class="text-sm text-red-500 mt-2">{{
-                            form.errors.featured_image }}</p>
+                        <div class="p-6">
+                            <div class="relative cursor-pointer group">
+                                <div class="aspect-video bg-secondary rounded-xl overflow-hidden border-2 border-dashed border-border transition-all group-hover:border-primary">
+                                    <img v-if="featuredPreview" :src="featuredPreview" class="w-full h-full object-cover" />
+                                    <div v-else class="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground">
+                                        <UploadCloud class="w-12 h-12 mb-2" />
+                                        <span class="text-sm font-medium">Choisir une image</span>
+                                    </div>
+                                </div>
+                                <input type="file" @change="onFeaturedChange" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                            </div>
+                            <p v-if="form.errors.featured_image" class="mt-2 text-xs font-medium text-red-500">{{ form.errors.featured_image }}</p>
+                        </div>
                     </div>
 
-                    <!-- Gallery -->
-                    <div
-                        class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm dark:bg-gray-900/50 dark:border-gray-800">
-                        <h2
-                            class="text-lg font-semibold text-gray-900 pb-4 border-b border-gray-200 mb-6 dark:text-white dark:border-gray-800">
-                            Galerie photos</h2>
-
-                        <div class="grid grid-cols-4 gap-3">
-                            <div v-for="(img, idx) in galleryPreviews" :key="idx"
-                                class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200 group dark:bg-gray-800 dark:border-gray-700">
-                                <img :src="img.path" class="w-full h-full object-cover" />
-                                <button @click.prevent="removeImage(idx, img.id)"
-                                    class="absolute top-1 right-1 p-1.5 bg-red-500 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <Trash2 class="w-3 h-3" />
-                                </button>
-                            </div>
-
-                            <div
-                                class="relative aspect-square bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 cursor-pointer transition-colors hover:border-blue-500 hover:text-blue-500 dark:bg-gray-800 dark:border-gray-700">
-                                <Plus class="w-6 h-6 mb-1" />
-                                <span class="text-xs font-medium">Ajouter</span>
-                                <input type="file" multiple @change="onGalleryChange"
-                                    class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                    <!-- Galerie -->
+                    <div class="bg-card border border-border rounded-2xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-border bg-secondary/30">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 bg-primary/10 rounded-lg">
+                                    <Image class="w-4 h-4 text-primary" />
+                                </div>
+                                <h2 class="text-lg font-bold text-foreground">Galerie photos</h2>
                             </div>
                         </div>
-                        <p v-if="form.errors.gallery_images" class="text-sm text-red-500 mt-3">{{
-                            form.errors.gallery_images }}</p>
+                        <div class="p-6">
+                            <div class="grid grid-cols-4 gap-3">
+                                <div v-for="(img, idx) in galleryPreviews" :key="idx" class="relative aspect-square bg-secondary rounded-xl overflow-hidden border border-border group">
+                                    <img :src="img.path" class="w-full h-full object-cover" />
+                                    <button
+                                        @click.prevent="removeImage(idx, img.id)"
+                                        class="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <Trash2 class="w-3 h-3" />
+                                    </button>
+                                </div>
+                                <div class="relative aspect-square bg-secondary rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center text-muted-foreground cursor-pointer transition-all hover:border-primary hover:text-primary">
+                                    <Plus class="w-6 h-6 mb-1" />
+                                    <span class="text-xs font-medium">Ajouter</span>
+                                    <input type="file" multiple @change="onGalleryChange" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+                                </div>
+                            </div>
+                            <p v-if="form.errors.gallery_images" class="mt-3 text-xs font-medium text-red-500">{{ form.errors.gallery_images }}</p>
+                        </div>
                     </div>
 
                     <!-- Description -->
-                    <div
-                        class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm dark:bg-gray-900/50 dark:border-gray-800">
-                        <h2
-                            class="text-lg font-semibold text-gray-900 pb-4 border-b border-gray-200 mb-6 dark:text-white dark:border-gray-800">
-                            Description</h2>
-                        <textarea v-model="form.description" rows="6"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-y dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                            placeholder="Détails du produit..."></textarea>
-                        <p v-if="form.errors.description" class="text-sm text-red-500 mt-2">{{ form.errors.description
-                            }}</p>
+                    <div class="bg-card border border-border rounded-2xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-border bg-secondary/30">
+                            <h2 class="text-lg font-bold text-foreground">Description</h2>
+                        </div>
+                        <div class="p-6">
+                            <textarea
+                                v-model="form.description"
+                                rows="6"
+                                class="w-full px-4 py-3 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground placeholder:text-muted-foreground/50 resize-none"
+                                placeholder="Décrivez votre produit en détail..."
+                            ></textarea>
+                            <p v-if="form.errors.description" class="mt-2 text-xs font-medium text-red-500">{{ form.errors.description }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Variants -->
-            <div
-                class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm dark:bg-gray-900/50 dark:border-gray-800">
-                <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-800">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Variantes & Stock</h2>
-                    <button @click.prevent="addVariant"
-                        class="px-4 py-2 rounded-lg bg-blue-50 text-blue-600 font-medium text-sm hover:bg-blue-600 hover:text-white transition-all dark:bg-blue-950/30 dark:text-blue-400">
-                        + Ajouter une variante
+            <div class="bg-card border border-border rounded-2xl overflow-hidden">
+                <div class="px-6 py-4 border-b border-border bg-secondary/30 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-foreground">Variantes & Stock</h2>
+                    <button
+                        @click.prevent="addVariant"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-xl text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-300"
+                    >
+                        <Plus class="w-4 h-4" />
+                        Ajouter une variante
                     </button>
                 </div>
-
-                <div class="space-y-3">
-                    <div v-for="(variant, index) in form.variants" :key="index"
-                        class="grid grid-cols-1 gap-3 p-4 bg-gray-50 rounded-lg dark:bg-gray-800/50 md:grid-cols-5">
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-bold uppercase text-gray-500">Type</label>
-                            <input v-model="variant.name" type="text" placeholder="Couleur, Taille..."
-                                class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm dark:bg-gray-900 dark:border-gray-700" />
-                        </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-bold uppercase text-gray-500">Valeur</label>
-                            <input v-model="variant.value" type="text" placeholder="Rouge, XL..."
-                                class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm dark:bg-gray-900 dark:border-gray-700" />
-                        </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-bold uppercase text-gray-500">Couleur (Hex)</label>
-                            <div class="flex gap-2">
-                                <input v-model="variant.color_code" type="color"
-                                    class="w-10 h-10 rounded-lg border border-gray-200 cursor-pointer" />
-                                <input v-model="variant.color_code" type="text" placeholder="#FFFFFF"
-                                    class="flex-1 px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-mono uppercase dark:bg-gray-900 dark:border-gray-700" />
+                <div class="p-6">
+                    <div class="space-y-3">
+                        <div v-for="(variant, index) in form.variants" :key="index" class="grid grid-cols-1 md:grid-cols-5 gap-3 p-4 bg-secondary rounded-xl">
+                            <div>
+                                <label class="text-xs font-bold uppercase text-muted-foreground">Type</label>
+                                <input
+                                    v-model="variant.name"
+                                    type="text"
+                                    placeholder="Couleur, Taille..."
+                                    class="w-full mt-1 px-3 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold uppercase text-muted-foreground">Valeur</label>
+                                <input
+                                    v-model="variant.value"
+                                    type="text"
+                                    placeholder="Rouge, XL..."
+                                    class="w-full mt-1 px-3 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold uppercase text-muted-foreground">Couleur (Hex)</label>
+                                <div class="flex gap-2 mt-1">
+                                    <input v-model="variant.color_code" type="color" class="w-10 h-10 rounded-lg border border-border cursor-pointer" />
+                                    <input
+                                        v-model="variant.color_code"
+                                        type="text"
+                                        placeholder="#FFFFFF"
+                                        class="flex-1 px-3 py-2 bg-card border border-border rounded-lg text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-primary"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold uppercase text-muted-foreground">Supplément</label>
+                                <input
+                                    v-model="variant.price_override"
+                                    type="number"
+                                    step="0.01"
+                                    placeholder="0"
+                                    class="w-full mt-1 px-3 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold uppercase text-muted-foreground">Stock</label>
+                                <input
+                                    v-model="variant.stock"
+                                    type="number"
+                                    placeholder="0"
+                                    class="w-full mt-1 px-3 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                            </div>
+                            <div class="flex items-end">
+                                <button
+                                    v-if="form.variants.length > 1"
+                                    @click.prevent="removeVariant(index)"
+                                    class="w-full py-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
+                                >
+                                    <Trash2 class="w-4 h-4 mx-auto" />
+                                </button>
                             </div>
                         </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-bold uppercase text-gray-500">Supplément</label>
-                            <input v-model="variant.price_override" type="number" step="0.01"
-                                class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm dark:bg-gray-900 dark:border-gray-700" />
-                        </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-bold uppercase text-gray-500">Stock</label>
-                            <input v-model="variant.stock" type="number"
-                                class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm dark:bg-gray-900 dark:border-gray-700" />
-                        </div>
-
-                        <div class="flex items-end">
-                            <button @click.prevent="removeVariant(index)" v-if="form.variants.length > 1"
-                                class="w-full py-2 rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all dark:bg-red-950/30">
-                                <Trash2 class="w-4 h-4 mx-auto" />
-                            </button>
-                        </div>
                     </div>
+                    <p v-if="form.errors.variants" class="mt-3 text-xs font-medium text-red-500">{{ form.errors.variants }}</p>
                 </div>
-                <p v-if="form.errors.variants" class="text-sm text-red-500 mt-3">{{ form.errors.variants }}</p>
             </div>
 
-            <!-- Form Actions -->
-            <div class="flex justify-end">
-                <button type="submit" :disabled="form.processing"
-                    class="px-8 py-3 rounded-lg bg-linear-to-r from-blue-600 to-blue-500 text-white font-semibold shadow-lg shadow-blue-500/20 transition-all hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
-                    {{ form.processing ? 'Chargement...' : (product ? 'Mettre à jour' : 'Enregistrer le produit') }}
+            <!-- Submit -->
+            <div class="flex justify-end pt-4">
+                <button
+                    type="submit"
+                    :disabled="form.processing"
+                    class="inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-primary to-primary-dark text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                >
+                    <CheckCircle v-if="!form.processing" class="w-5 h-5" />
+                    <span v-else class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    {{ form.processing ? 'Enregistrement...' : (isEditing ? 'Mettre à jour' : 'Créer le produit') }}
                 </button>
             </div>
         </form>
