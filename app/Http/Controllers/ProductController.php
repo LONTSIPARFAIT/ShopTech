@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -15,6 +16,9 @@ class ProductController extends Controller
         $query = Product::with(['category', 'featuredImage', 'variants'])
             ->where('is_active', true);
 
+        $selectedCategory = null;
+        $subcategories = [];
+
         // Search
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
@@ -23,11 +27,24 @@ class ProductController extends Controller
             });
         }
 
-        // Category
+        // Category filtering with support for parent categories and subcategories
         if ($request->filled('category')) {
-            $query->whereHas('category', function ($q) use ($request) {
-                $q->where('slug', $request->category);
-            });
+            $selectedCategory = Category::with('children')
+                ->where('slug', $request->category)
+                ->first();
+
+            if ($selectedCategory) {
+                if (is_null($selectedCategory->parent_id)) {
+                    $query->whereHas('category', function ($q) use ($selectedCategory) {
+                        $q->where('parent_id', $selectedCategory->id)
+                          ->orWhere('id', $selectedCategory->id);
+                    });
+
+                    $subcategories = $selectedCategory->children;
+                } else {
+                    $query->where('category_id', $selectedCategory->id);
+                }
+            }
         }
 
         // Sorting
@@ -40,8 +57,9 @@ class ProductController extends Controller
 
         return Inertia::render('Products/Index', [
             'products' => $query->paginate(12)->withQueryString(),
-            'categories' => Category::all(),
-            'filters' => $request->only(['search', 'category', 'sort'])
+            'categories' => Category::with('children')->whereNull('parent_id')->get(),
+            'subcategories' => $subcategories,
+            'filters' => $request->only(['search', 'category', 'sort']),
         ]);
     }
 

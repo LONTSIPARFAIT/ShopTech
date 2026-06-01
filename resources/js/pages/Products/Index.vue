@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
+import { Search, ChevronDown, FilterX } from 'lucide-vue-next';
 import { ref } from 'vue';
 import ProductCard from '@/components/Shop/ProductCard.vue';
-import ShopLayout from '@/Layouts/ShopLayout.vue';
-import { Search, ChevronDown, FilterX } from 'lucide-vue-next';
-import { debounce } from 'lodash';
+import ShopLayout from '@/layouts/ShopLayout.vue';
 
 const props = defineProps<{
     products: {
@@ -12,11 +11,26 @@ const props = defineProps<{
         links: any[];
     };
     categories: any[];
+    subcategories: any[];
     filters: any;
 }>();
 
 const search = ref(props.filters.search || '');
 const sort = ref(props.filters.sort || 'latest');
+
+function debounce<T extends (...args: any[]) => void>(fn: T, delay = 500) {
+    let timeout: ReturnType<typeof setTimeout> | null = null;
+
+    return (...args: Parameters<T>) => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(() => {
+            fn(...args);
+        }, delay);
+    };
+}
 
 const updateFilters = debounce(() => {
     router.get('/products', {
@@ -28,7 +42,7 @@ const updateFilters = debounce(() => {
         preserveScroll: true,
         replace: true
     });
-}, 500);
+});
 
 const clearFilters = () => {
     search.value = '';
@@ -56,9 +70,10 @@ const clearFilters = () => {
                 <!-- Search -->
                 <div class="shop-search">
                     <Search class="shop-search-icon" />
-                    <input 
+                    <input
                         v-model="search"
-                        type="text" 
+                        @input="updateFilters"
+                        type="text"
                         placeholder="Rechercher un produit..."
                         class="shop-search-input"
                     />
@@ -66,15 +81,15 @@ const clearFilters = () => {
 
                 <!-- Categories -->
                 <div class="shop-categories">
-                    <Link 
+                    <Link
                         href="/products"
                         class="shop-category-btn"
                         :class="!filters.category && 'shop-category-btn-active'"
                     >
                         Tous
                     </Link>
-                    <Link 
-                        v-for="category in categories" 
+                    <Link
+                        v-for="category in categories"
                         :key="category.id"
                         :href="`/products?category=${category.slug}`"
                         class="shop-category-btn"
@@ -86,7 +101,7 @@ const clearFilters = () => {
 
                 <!-- Sort & Clear -->
                 <div class="shop-sort">
-                    <select 
+                    <select
                         v-model="sort"
                         class="shop-sort-select"
                     >
@@ -109,10 +124,25 @@ const clearFilters = () => {
                 <span class="shop-results-line"></span>
             </div>
 
+            <div v-if="subcategories.length > 0" class="shop-subcategories">
+                <h2 class="shop-subcategories-title">Sous-catégories</h2>
+                <div class="shop-subcategories-grid">
+                    <Link
+                        v-for="subcategory in subcategories"
+                        :key="subcategory.id"
+                        :href="`/products?category=${subcategory.slug}`"
+                        class="shop-subcategory-card"
+                    >
+                        <div class="shop-subcategory-card-title">{{ subcategory.name }}</div>
+                        <p class="shop-subcategory-card-description">{{ subcategory.description }}</p>
+                    </Link>
+                </div>
+            </div>
+
             <!-- Product Grid -->
             <div v-if="products.data.length > 0" class="shop-product-grid">
-                <ProductCard 
-                    v-for="product in products.data" 
+                <ProductCard
+                    v-for="product in products.data"
                     :key="product.id"
                     :product="product"
                 />
@@ -130,8 +160,8 @@ const clearFilters = () => {
 
             <!-- Pagination -->
             <div v-if="products.links.length > 3" class="shop-pagination">
-                <Link 
-                    v-for="(link, index) in products.links" 
+                <Link
+                    v-for="(link, index) in products.links"
                     :key="index"
                     v-html="link.label"
                     :href="link.url || '#'"

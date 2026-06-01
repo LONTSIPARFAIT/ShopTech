@@ -16,7 +16,9 @@ class CategoryController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Categories/Index', [
-            'categories' => Category::withCount('products')->latest()->get(),
+            'categories' => Category::with(['children' => function ($query) {
+                $query->withCount('products')->latest();
+            }])->withCount('products')->whereNull('parent_id')->latest()->get(),
         ]);
     }
 
@@ -24,6 +26,7 @@ class CategoryController extends Controller
     {
         return Inertia::render('Admin/Categories/Form', [
             'category' => null,
+            'parents' => Category::whereNull('parent_id')->get(),
         ]);
     }
 
@@ -45,6 +48,7 @@ class CategoryController extends Controller
     {
         return Inertia::render('Admin/Categories/Form', [
             'category' => $category,
+            'parents' => Category::where('id', '!=', $category->id)->whereNull('parent_id')->get(),
         ]);
     }
 

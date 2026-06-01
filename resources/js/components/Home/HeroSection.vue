@@ -134,13 +134,6 @@ const slides: Slide[] = [
         badge: 'Électricité',
         title: 'Installation Électrique',
         description: 'Câblage, tableaux, éclairage. Mise aux normes et dépannage par des électriciens professionnels.'
-    },
-    {
-        id: 3,
-        image: '/images/hero/outillage.jpg',
-        badge: 'Outillage',
-        title: 'Matériel Professionnel',
-        description: 'Outillage électroportatif, perceuses, visseuses. Vente de matériel de qualité.'
     }
 ];
 

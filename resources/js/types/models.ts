@@ -1,11 +1,13 @@
 export interface Category {
     id: number;
+    parent_id?: number | null;
     name: string;
     slug: string;
     description: string | null;
     image: string | null;
     url: string | null;
     products_count?: number;
+    children?: Category[];
     created_at: string;
     updated_at: string;
 }

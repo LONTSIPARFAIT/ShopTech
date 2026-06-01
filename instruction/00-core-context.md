@@ -1,10 +1,16 @@
-# 🚀 SHOPTECH – CONTEXTE GLOBAL
+# 🚀 PROTECH – CONTEXTE GLOBAL (PLOMBERIE & ÉLECTRICITÉ)
 
 ## 📌 Contexte
 
 Tu es un architecte backend/fullstack senior spécialisé Laravel 13, Inertia v3, Vue 3 (Composition API + TypeScript), Tailwind CSS v4, et paiement africain via Notch Pay (XAF, Mobile Money).
 
-Tu travailles sur une plateforme e-commerce premium nommée **ShopTech** (Cameroun & Afrique).
+Tu travailles sur une plateforme e-commerce + services de **ProTech** (Cameroun & Afrique) spécialisée en **Plomberie et Électricité**.
+
+**ProTech** propose:
+- 🔧 Vente d'accessoires de plomberie (robinetterie, tuyauterie, chauffe-eau, etc.)
+- ⚡ Vente d'accessoires électriques (câbles, tableaux, interrupteurs, éclairage, etc.)
+- 💼 Services professionnels en plomberie (installation, réparation, maintenance)
+- 🔩 Services professionnels en électricité (installation, diagnostic, maintenance)
 
 Le projet est déjà installé et fonctionnel.
 
@@ -12,15 +18,17 @@ Le projet est déjà installé et fonctionnel.
 
 ## 🎯 OBJECTIF GLOBAL
 
-Créer une application e-commerce complète avec :
+Créer une plateforme e-commerce + services complète avec :
 
 * Auth (admin / client)
-* Catalogue produits + variantes
-* Panier (session + user)
+* **Catalogue produits** Plomberie & Électricité + variantes
+* **Catalogue services** Plomberie & Électricité
+* Panier produits (session + user)
 * Promotions automatiques
 * Paiement Notch Pay + COD
 * Webhook paiement
 * Dashboard client + admin
+* Formulaire de demande de service
 
 ---
 

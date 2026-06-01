@@ -25,7 +25,7 @@ class ProductController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Products/Form', [
-            'categories' => Category::all(),
+            'categories' => Category::with('children')->whereNull('parent_id')->get(),
             'product' => null,
         ]);
     }
@@ -49,7 +49,7 @@ class ProductController extends Controller
     public function edit(Product $product): Response
     {
         return Inertia::render('Admin/Products/Form', [
-            'categories' => Category::all(),
+            'categories' => Category::with('children')->whereNull('parent_id')->get(),
             'product' => $product->load(['variants', 'images']),
         ]);
     }
@@ -62,8 +62,8 @@ class ProductController extends Controller
             // Robust variants update: only delete variants that don't have orders
             $newVariantData = $request->validated()['variants'] ?? [];
             $existingVariantIds = $product->variants->pluck('id')->toArray();
-            
-            // For simplicity, we'll keep the existing delete-recreate logic 
+
+            // For simplicity, we'll keep the existing delete-recreate logic
             // but wrapped in a try-catch or better: update existing ones.
             // Actually, let's just update based on name/value match or recreate if impossible.
             // But the current code is: $product->variants()->delete();
@@ -76,7 +76,7 @@ class ProductController extends Controller
                 );
                 $keptIds[] = $variant->id;
             }
-            
+
             // Delete variants that were NOT in the new data AND have no orders
             $product->variants()
                 ->whereNotIn('id', $keptIds)
@@ -133,7 +133,7 @@ class ProductController extends Controller
             if (is_string($ids)) {
                 $ids = array_filter(explode(',', $ids));
             }
-            
+
             $toRemove = $product->images()->whereIn('id', $ids)->get();
             foreach ($toRemove as $img) {
                 Storage::disk('public')->delete($img->path);

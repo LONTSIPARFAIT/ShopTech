@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import { Wrench, Zap, Hammer } from 'lucide-vue-next';
+import { Wrench, Zap } from 'lucide-vue-next';
 import TechCard from '@/components/Home/TechCard.vue';
 
 const techItems = [
@@ -53,11 +53,6 @@ const techItems = [
         icon: Zap,
         title: 'Électricité',
         description: 'Matériel haute performance pour des installations électriques sûres.'
-    },
-    {
-        icon: Hammer,
-        title: 'Outillage',
-        description: 'Outils robustes pour professionnels exigeants.'
     }
 ];
 

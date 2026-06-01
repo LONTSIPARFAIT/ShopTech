@@ -11,15 +11,19 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\Payment\NotchPayController;
 use App\Http\Controllers\Payment\WebhookController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Static Pages
 Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::get('/services', [PageController::class, 'services'])->name('services');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::post('/contact/send', [PageController::class, 'sendContact'])->name('contact.send');
+
+// Services (Plomberie & Électricité)
+Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/services/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');

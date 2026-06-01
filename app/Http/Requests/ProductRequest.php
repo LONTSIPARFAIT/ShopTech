@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -18,7 +19,7 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => ['required', Rule::exists('categories', 'id')->whereNotNull('parent_id')],
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products,slug,' . ($this->product?->id ?? ''),
             'description' => 'nullable|string',

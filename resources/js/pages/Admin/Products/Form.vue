@@ -3,9 +3,10 @@ import { Head, useForm, Link } from '@inertiajs/vue3';
 import { store as admin_products_store, update as admin_products_update } from '@/routes/admin/products';
 import { computed, ref } from 'vue';
 import { ArrowLeft, Camera, Trash2, Plus, Minus } from 'lucide-vue-next';
+import type { Category } from '@/types';
 
 const props = defineProps<{
-    categories: any[];
+    categories: Category[];
     product: any;
 }>();
 
@@ -153,8 +154,14 @@ const generateSlug = () => {
                         <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Catégorie</label>
                         <select v-model="form.category_id"
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                            <option value="">Sélectionner une catégorie</option>
-                            <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+                            <option value="">Sélectionner une sous-catégorie</option>
+                            <template v-for="parent in categories" :key="parent.id">
+                                <optgroup :label="parent.name">
+                                    <option v-for="child in parent.children ?? []" :key="child.id" :value="child.id">
+                                        {{ child.name }}
+                                    </option>
+                                </optgroup>
+                            </template>
                         </select>
                         <p v-if="form.errors.category_id" class="text-sm text-red-500 mt-1">{{ form.errors.category_id
                             }}</p>
@@ -373,7 +380,7 @@ const generateSlug = () => {
             <!-- Form Actions -->
             <div class="flex justify-end">
                 <button type="submit" :disabled="form.processing"
-                    class="px-8 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold shadow-lg shadow-blue-500/20 transition-all hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
+                    class="px-8 py-3 rounded-lg bg-linear-to-r from-blue-600 to-blue-500 text-white font-semibold shadow-lg shadow-blue-500/20 transition-all hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
                     {{ form.processing ? 'Chargement...' : (product ? 'Mettre à jour' : 'Enregistrer le produit') }}
                 </button>
             </div>

@@ -17,6 +17,7 @@ class CategoryRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'image_file' => ['nullable', 'image', 'max:2048'],
+            'parent_id' => ['nullable', 'exists:categories,id'],
         ];
     }
 }
