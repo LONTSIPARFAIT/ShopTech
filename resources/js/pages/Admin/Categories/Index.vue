@@ -56,7 +56,7 @@ const deleteCategory = (id: number) => {
 <template>
     <Head title="Gestion des Catégories - Admin" />
 
-    <div class="py-6 md:py-8 px-4 max-w-7xl mx-auto">
+    <div class="py-6 md:py-8 px-4 max-w-7xl ">
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>

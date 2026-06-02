@@ -2,7 +2,8 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import products from '@/routes/products';
-import { home, login, register, dashboard, services, about, contact } from '@/routes';
+import services from '@/routes/services';
+import { home, login, register, dashboard, about, contact } from '@/routes';
 import { useAppearance } from '@/composables/useAppearance';
 import { Sun, Moon, ShoppingBag, Menu, X, User, Search } from 'lucide-vue-next';
 import CartModal from './CartModal.vue';
@@ -64,7 +65,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
             <div class="shop-nav-desktop">
                 <Link :href="home()" class="shop-nav-link" :class="$page.url === '/' && 'shop-nav-link-active'">Accueil</Link>
                 <Link :href="products.index().url" class="shop-nav-link" :class="$page.url.startsWith('/products') && 'shop-nav-link-active'">Boutique</Link>
-                <Link :href="services()" class="shop-nav-link" :class="$page.url === '/services' && 'shop-nav-link-active'">Services</Link>
+                <Link :href="services.index().url" class="shop-nav-link" :class="$page.url === '/services' && 'shop-nav-link-active'">Services</Link>
                 <Link :href="about()" class="shop-nav-link" :class="$page.url === '/about' && 'shop-nav-link-active'">À propos</Link>
                 <Link :href="contact()" class="shop-nav-link" :class="$page.url === '/contact' && 'shop-nav-link-active'">Contact</Link>
             </div>
@@ -158,7 +159,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
                     <span>Boutique</span>
                     <ShoppingBag class="w-3.5 h-3.5 opacity-30" />
                 </Link>
-                <Link :href="services()" class="shop-mobile-link" @click="isMobileOpen = false">
+                <Link :href="services.index().url" class="shop-mobile-link" @click="isMobileOpen = false">
                     <span>Services</span>
                 </Link>
                 <Link :href="about()" class="shop-mobile-link" @click="isMobileOpen = false">

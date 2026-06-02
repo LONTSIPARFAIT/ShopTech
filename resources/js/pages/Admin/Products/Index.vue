@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { create as admin_products_create, edit as admin_products_edit, destroy as admin_products_destroy } from '@/routes/admin/products';
-import { Plus, Package, Search, Edit, Trash2, AlertCircle, CheckCircle, XCircle, Layers } from 'lucide-vue-next';
+import { Plus, Package, Search, Edit, Trash2, AlertCircle, CheckCircle, XCircle, Layers, Eye, TrendingUp } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 
 const props = defineProps<{
@@ -34,7 +34,7 @@ const getTotalStock = (product: any) => {
 <template>
     <Head title="Gestion des Produits - Admin" />
 
-    <div class="py-6 md:py-8 px-4 max-w-7xl mx-auto">
+    <div class="py-6 md:py-8 px-4 max-w-7xl ">
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
@@ -60,18 +60,18 @@ const getTotalStock = (product: any) => {
         </div>
 
         <!-- Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div class="bg-card border border-border rounded-xl p-5">
-                <div class="flex items-center justify-between mb-2">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
+            <div class="bg-card border border-border rounded-xl p-4">
+                <div class="flex items-center justify-between">
                     <div class="p-2 bg-primary/10 rounded-lg">
                         <Package class="w-4 h-4 text-primary" />
                     </div>
                     <span class="text-2xl font-black text-primary">{{ products.length }}</span>
                 </div>
-                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total produits</div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-2">Total produits</div>
             </div>
-            <div class="bg-card border border-border rounded-xl p-5">
-                <div class="flex items-center justify-between mb-2">
+            <div class="bg-card border border-border rounded-xl p-4">
+                <div class="flex items-center justify-between">
                     <div class="p-2 bg-green-100 dark:bg-green-950/30 rounded-lg">
                         <CheckCircle class="w-4 h-4 text-green-600 dark:text-green-400" />
                     </div>
@@ -79,10 +79,10 @@ const getTotalStock = (product: any) => {
                         {{ products.filter(p => p.is_active).length }}
                     </span>
                 </div>
-                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Produits actifs</div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-2">Actifs</div>
             </div>
-            <div class="bg-card border border-border rounded-xl p-5">
-                <div class="flex items-center justify-between mb-2">
+            <div class="bg-card border border-border rounded-xl p-4">
+                <div class="flex items-center justify-between">
                     <div class="p-2 bg-red-100 dark:bg-red-950/30 rounded-lg">
                         <XCircle class="w-4 h-4 text-red-600 dark:text-red-400" />
                     </div>
@@ -90,7 +90,18 @@ const getTotalStock = (product: any) => {
                         {{ products.filter(p => !p.is_active).length }}
                     </span>
                 </div>
-                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Produits inactifs</div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-2">Inactifs</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div class="p-2 bg-primary/10 rounded-lg">
+                        <TrendingUp class="w-4 h-4 text-primary" />
+                    </div>
+                    <span class="text-2xl font-black text-primary">
+                        {{ products.reduce((sum, p) => sum + getTotalStock(p), 0) }}
+                    </span>
+                </div>
+                <div class="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-2">Stock total</div>
             </div>
         </div>
 
@@ -107,9 +118,10 @@ const getTotalStock = (product: any) => {
             </div>
         </div>
 
-        <!-- Table -->
+        <!-- Table responsive -->
         <div class="bg-card border border-border rounded-2xl overflow-hidden">
-            <div class="overflow-x-auto">
+            <!-- Version desktop -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full">
                     <thead>
                         <tr class="border-b border-border bg-secondary/30">
@@ -118,14 +130,14 @@ const getTotalStock = (product: any) => {
                             <th class="px-6 py-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Prix</th>
                             <th class="px-6 py-4 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Stock</th>
                             <th class="px-6 py-4 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Statut</th>
-                            <th class="px-6 py-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
-                        </tr>
+                            <th class="px-6 py-4 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
+                        </tr> 
                     </thead>
                     <tbody class="divide-y divide-border">
-                        <tr v-for="product in filteredProducts" :key="product.id" class="group hover:bg-secondary/30 transition-colors duration-200">
+                        <tr v-for="product in filteredProducts" :key="product.id" class="hover:bg-secondary/30 transition-colors">
                             <td class="px-6 py-4">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-xl overflow-hidden bg-secondary border border-border shrink-0">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg overflow-hidden bg-secondary border border-border shrink-0">
                                         <img 
                                             v-if="product.featured_image?.url" 
                                             :src="product.featured_image.url" 
@@ -133,32 +145,29 @@ const getTotalStock = (product: any) => {
                                             :alt="product.name"
                                         />
                                         <div v-else class="w-full h-full flex items-center justify-center text-muted-foreground">
-                                            <Package class="w-5 h-5" />
+                                            <Package class="w-4 h-4" />
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="text-sm font-bold text-foreground">{{ product.name }}</div>
+                                        <div class="text-sm font-semibold text-foreground line-clamp-1">{{ product.name }}</div>
                                         <div class="text-xs text-muted-foreground">{{ product.slug }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium bg-primary/10 text-primary">
                                     <Layers class="w-3 h-3" />
-                                    {{ product.category?.name || 'Non catégorisé' }}
+                                    {{ product.category?.name || '-' }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <div class="text-sm font-bold text-foreground">
-                                    {{ Number(product.base_price).toLocaleString() }} XAF
-                                </div>
-                                <div v-if="product.original_price" class="text-xs text-muted-foreground line-through">
-                                    {{ Number(product.original_price).toLocaleString() }} XAF
-                                </div>
+                                <span class="text-sm font-bold text-foreground">
+                                    {{ Number(product.base_price).toLocaleString() }} FCFA
+                                </span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span 
-                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                                    class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium"
                                     :class="getTotalStock(product) > 10 
                                         ? 'bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400' 
                                         : getTotalStock(product) > 0 
@@ -166,12 +175,12 @@ const getTotalStock = (product: any) => {
                                         : 'bg-red-100 text-red-700 dark:bg-red-950/30 dark:text-red-400'"
                                 >
                                     <AlertCircle class="w-3 h-3" />
-                                    {{ getTotalStock(product) }} unités
+                                    {{ getTotalStock(product) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span 
-                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                                    class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium"
                                     :class="product.is_active 
                                         ? 'bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400' 
                                         : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'"
@@ -180,18 +189,18 @@ const getTotalStock = (product: any) => {
                                     {{ product.is_active ? 'Actif' : 'Inactif' }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center justify-end gap-2">
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex items-center justify-center gap-2">
                                     <Link
                                         :href="admin_products_edit(product.id).url"
-                                        class="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-200"
+                                        class="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
                                         title="Modifier"
                                     >
                                         <Edit class="w-4 h-4" />
                                     </Link>
                                     <button
                                         @click="deleteProduct(product.id)"
-                                        class="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all duration-200"
+                                        class="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                                         title="Supprimer"
                                     >
                                         <Trash2 class="w-4 h-4" />
@@ -201,6 +210,73 @@ const getTotalStock = (product: any) => {
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Version mobile (cartes) -->
+            <div class="md:hidden divide-y divide-border">
+                <div v-for="product in filteredProducts" :key="product.id" class="p-4 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl overflow-hidden bg-secondary border border-border shrink-0">
+                            <img 
+                                v-if="product.featured_image?.url" 
+                                :src="product.featured_image.url" 
+                                class="w-full h-full object-cover"
+                                :alt="product.name"
+                            />
+                            <div v-else class="w-full h-full flex items-center justify-center text-muted-foreground">
+                                <Package class="w-5 h-5" />
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-bold text-foreground">{{ product.name }}</div>
+                            <div class="text-xs text-muted-foreground">{{ product.slug }}</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <Link
+                                :href="admin_products_edit(product.id).url"
+                                class="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
+                            >
+                                <Edit class="w-4 h-4" />
+                            </Link>
+                            <button
+                                @click="deleteProduct(product.id)"
+                                class="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                            >
+                                <Trash2 class="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <div class="text-xs text-muted-foreground">Catégorie</div>
+                            <div class="text-sm font-medium">
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs bg-primary/10 text-primary">
+                                    {{ product.category?.name || '-' }}
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground">Prix</div>
+                            <div class="text-sm font-bold text-foreground">{{ Number(product.base_price).toLocaleString() }} FCFA</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground">Stock</div>
+                            <div class="text-sm font-medium">{{ getTotalStock(product) }} unités</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground">Statut</div>
+                            <span 
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-medium"
+                                :class="product.is_active 
+                                    ? 'bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400' 
+                                    : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'"
+                            >
+                                <span class="w-1.5 h-1.5 rounded-full" :class="product.is_active ? 'bg-green-500' : 'bg-gray-400'"></span>
+                                {{ product.is_active ? 'Actif' : 'Inactif' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Empty State -->

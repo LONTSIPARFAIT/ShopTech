@@ -108,7 +108,7 @@ const generateSlug = () => {
 <template>
     <Head :title="isEditing ? 'Modifier le Produit' : 'Ajouter un Produit'" />
 
-    <div class="py-6 md:py-8 px-4 max-w-6xl mx-auto">
+    <div class="py-6 md:py-8 px-4 max-w-6xl ">
         <!-- Header -->
         <div class="flex items-center gap-4 mb-8">
             <Link

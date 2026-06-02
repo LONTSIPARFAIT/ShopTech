@@ -55,7 +55,7 @@ const submit = () => {
 <template>
     <Head :title="`${isEditing ? 'Modifier' : 'Ajouter'} une Catégorie - Admin`" />
 
-    <div class="py-6 md:py-8 px-4 max-w-6xl mx-auto">
+    <div class="py-6 md:py-8 px-4 max-w-6xl">
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>

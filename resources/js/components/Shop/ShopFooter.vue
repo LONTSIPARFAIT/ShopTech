@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import products from '@/routes/products';
-import { home, contact, about, services } from '@/routes';
+import services from '@/routes/services';
+import { home, contact, about } from '@/routes';
 import { MapPin, Phone, Mail, Instagram, Facebook, Twitter, Clock, ArrowUp } from 'lucide-vue-next';
 import { ref, onMounted, onUnmounted } from 'vue';
 
@@ -95,7 +96,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
                     <h4 class="text-sm font-bold uppercase tracking-wider text-foreground mb-5">Support</h4>
                     <ul class="space-y-3">
                         <li><Link :href="contact()" class="text-sm text-muted-foreground hover:text-primary transition-colors duration-300">Nous contacter</Link></li>
-                        <li><Link :href="services()" class="text-sm text-muted-foreground hover:text-primary transition-colors duration-300">Nos services</Link></li>
+                        <li><Link :href="services.index().url" class="text-sm text-muted-foreground hover:text-primary transition-colors duration-300">Nos services</Link></li>
                         <li><Link :href="about()" class="text-sm text-muted-foreground hover:text-primary transition-colors duration-300">À propos</Link></li>
                         <li><a href="#" class="text-sm text-muted-foreground hover:text-primary transition-colors duration-300">Livraison & Retours</a></li>
                         <li><a href="#" class="text-sm text-muted-foreground hover:text-primary transition-colors duration-300">FAQ</a></li>
