@@ -5,8 +5,7 @@ import type { BreadcrumbItem } from '@/types';
 import { usePage, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useAppearance } from '@/composables/useAppearance';
-import { Sun, Moon } from 'lucide-vue-next';
-
+import { Sun, Moon, User, Shield } from 'lucide-vue-next';
 import { edit as profileEdit } from '@/routes/profile';
 
 withDefaults(
@@ -29,37 +28,48 @@ const toggleTheme = () => {
 
 <template>
     <header
-        class="flex h-16 shrink-0 items-center justify-between border-b border-sidebar-border/70 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4 fixed top-0 right-0 left-0 lg:left-[var(--sidebar-width)] bg-background/80 backdrop-blur-md z-30"
+        class="fixed top-0 right-0 left-0 z-30 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/80 px-4 backdrop-blur-md transition-[width,height] ease-linear md:px-6 lg:left-[var(--sidebar-width)]"
     >
         <div class="flex items-center gap-2">
-            <SidebarTrigger class="-ml-1" />
+            <SidebarTrigger class="-ml-1 text-muted-foreground hover:text-primary transition-colors" />
             <template v-if="breadcrumbs && breadcrumbs.length > 0">
                 <Breadcrumbs :breadcrumbs="breadcrumbs" />
             </template>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
             <!-- Theme Toggle -->
-            <button 
-                @click="toggleTheme" 
-                class="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
+            <button
+                @click="toggleTheme"
+                class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary"
                 aria-label="Toggle theme"
             >
-                <Sun v-if="appearance === 'dark'" class="w-5 h-5 text-amber-400" />
-                <Moon v-else class="w-5 h-5" />
+                <Sun v-if="appearance === 'dark'" class="h-5 w-5 text-amber-400" />
+                <Moon v-else class="h-5 w-5" />
             </button>
 
             <!-- User Profile -->
-            <Link v-if="auth.user" :href="profileEdit().url" class="flex items-center gap-3 pl-2 border-l border-border hover:opacity-80 transition-opacity">
-                <div class="flex flex-col items-end hidden sm:flex">
-                    <span class="text-sm font-semibold truncate max-w-[150px]">{{ auth.user.name }}</span>
-                    <span class="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">{{ auth.user.role }}</span>
+            <Link
+                v-if="auth.user"
+                :href="profileEdit().url"
+                class="group flex items-center gap-3 rounded-lg pl-3 transition-all duration-200 hover:bg-primary/5"
+            >
+                <div class="flex flex-col items-end">
+                    <span class="max-w-[150px] truncate text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                        {{ auth.user.name }}
+                    </span>
+                    <div class="flex items-center gap-1">
+                        <Shield v-if="auth.user.role === 'admin'" class="h-3 w-3 text-primary" />
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                            {{ auth.user.role === 'admin' ? 'Administrateur' : 'Client' }}
+                        </span>
+                    </div>
                 </div>
-                <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-primary/20 bg-secondary flex-shrink-0">
-                    <img 
-                        :src="auth.user.avatar_url" 
+                <div class="h-9 w-9 flex-shrink-0 overflow-hidden rounded-lg border-2 border-primary/20 bg-secondary transition-all duration-200 group-hover:border-primary">
+                    <img
+                        :src="auth.user.avatar_url"
                         :alt="auth.user.name"
-                        class="w-full h-full object-cover"
+                        class="h-full w-full object-cover"
                     />
                 </div>
             </Link>
