@@ -559,7 +559,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-CbJhZfwU.css",
+    "file": "assets/app-BGb-7HsZ.css",
     "name": "app",
     "names": [
       "app.css"
@@ -568,7 +568,7 @@
     "isEntry": true
   },
   "resources/js/app.ts": {
-    "file": "assets/app-DCMupokv.js",
+    "file": "assets/app-CVjuzYQE.js",
     "name": "app",
     "src": "resources/js/app.ts",
     "isEntry": true,
@@ -924,7 +924,7 @@
     ]
   },
   "resources/js/pages/Welcome.vue": {
-    "file": "assets/Welcome-DFzkzaM2.js",
+    "file": "assets/Welcome-DtGMXZDw.js",
     "name": "Welcome",
     "src": "resources/js/pages/Welcome.vue",
     "isDynamicEntry": true,
@@ -937,9 +937,12 @@
       "_chevron-left-Bq6idrej.js",
       "_chevron-right-ZcpRx97v.js",
       "_clock-Ytgq763f.js",
+      "_eye-DfRS9F8e.js",
       "_layers-Cl3Ipmxp.js",
+      "_package-C1xyJIEF.js",
       "_shield-check-PwV8Zfk3.js",
       "_sparkles-VlwVXC1r.js",
+      "_trending-up-BbtSr8Zc.js",
       "_truck-DHsRWduu.js",
       "_sonner-BV7WD_2b.js",
       "_ProductCard-BhHoOhqo.js",
@@ -947,7 +950,7 @@
       "_wayfinder-C9ILyiR7.js"
     ],
     "css": [
-      "assets/Welcome-C9FHLgHM.css"
+      "assets/Welcome-lQgHaX8y.css"
     ]
   },
   "resources/js/pages/auth/ConfirmPassword.vue": {
@@ -1050,7 +1053,7 @@
     ]
   },
   "resources/js/pages/auth/TestRole.vue": {
-    "file": "assets/TestRole-l6gi-S0r.js",
+    "file": "assets/TestRole-w5_O3MAF.js",
     "name": "TestRole",
     "src": "resources/js/pages/auth/TestRole.vue",
     "isDynamicEntry": true,
@@ -1091,7 +1094,7 @@
     ]
   },
   "resources/js/pages/settings/Appearance.vue": {
-    "file": "assets/Appearance--wbyvtpu.js",
+    "file": "assets/Appearance-8CAvvmyD.js",
     "name": "Appearance",
     "src": "resources/js/pages/settings/Appearance.vue",
     "isDynamicEntry": true,
