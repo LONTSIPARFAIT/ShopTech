@@ -3,14 +3,17 @@ import AppLogoIcon from '@/components/AppLogoIcon.vue';
 </script>
 
 <template>
-    <div
-        class="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground"
-    >
-        <AppLogoIcon class="size-5 fill-current text-white dark:text-black" />
-    </div>
-    <div class="ml-2 grid flex-1 text-left text-sm">
-        <span class="truncate leading-tight font-black uppercase tracking-tighter"
-            >Shop<span class="text-blue-600">Tech</span></span
-        >
+    <div class="flex items-center gap-2">
+        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary-dark shadow-md shadow-primary/20">
+            <AppLogoIcon class="h-5 w-5 text-white" />
+        </div>
+        <div class="flex flex-col">
+            <span class="text-sm font-black uppercase tracking-tight text-foreground">
+                Shop<span class="text-primary">Tech</span>
+            </span>
+            <span class="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {{ $page.props.auth.user?.role === 'admin' ? 'Administration' : 'Espace client' }}
+            </span>
+        </div>
     </div>
 </template>

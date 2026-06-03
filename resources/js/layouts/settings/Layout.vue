@@ -31,18 +31,12 @@ const sidebarNavItems: NavItem[] = [
 const { isCurrentOrParentUrl } = useCurrentUrl();
 </script>
 
-<style>
-.marge {
-    margin: 0 0 auto;
-}
-</style>
-
 <template>
-    <div class="marge max-w-6xl p-4 md:p-6">
+    <div class="max-w-6xl px-4 py-1 md:px-6 md:py-8">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white md:text-3xl">Paramètres</h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <h1 class="text-2xl font-bold text-foreground md:text-3xl">Paramètres</h1>
+            <p class="mt-1 text-sm text-muted-foreground">
                 Gérez votre profil, la sécurité et l'apparence de votre compte
             </p>
         </div>
@@ -56,10 +50,10 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
                         :key="toUrl(item.href)"
                         variant="ghost"
                         :class="[
-                            'justify-start gap-2',
-                            isCurrentOrParentUrl(item.href) 
-                                ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white' 
-                                : 'text-gray-600 dark:text-gray-400'
+                            'justify-start gap-2 w-full transition-all duration-200',
+                            isCurrentOrParentUrl(item.href)
+                                ? 'bg-primary/10 text-primary hover:bg-primary/15'
+                                : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                         ]"
                         as-child
                     >
@@ -71,7 +65,7 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
                 </nav>
             </aside>
 
-            <Separator class="lg:hidden" />
+            <Separator class="lg:hidden bg-border" />
 
             <!-- Content -->
             <div class="flex-1">

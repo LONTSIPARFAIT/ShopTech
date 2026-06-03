@@ -6,19 +6,18 @@ import { ArrowLeft, Palette } from 'lucide-vue-next';
 </script>
 
 <template>
-
     <Head title="Apparence" />
-    <div class="space-y-6 max-w-2xl ">
+
+    <div class="space-y-6 max-w-2xl">
         <!-- Appearance Card -->
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900/50">
-            <div class="mb-6 flex items-center gap-3 border-b border-gray-100 pb-4 dark:border-gray-800">
-                <div
-                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-50 to-indigo-50 text-purple-600 dark:from-purple-950/50 dark:to-indigo-950/50 dark:text-purple-400">
+        <div class="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div class="mb-6 flex items-center gap-3 border-b border-border pb-4">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Palette class="h-5 w-5" />
                 </div>
                 <div>
-                    <h2 class="font-semibold text-gray-900 dark:text-white">Thème</h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                    <h2 class="font-semibold text-foreground">Thème</h2>
+                    <p class="text-xs text-muted-foreground">
                         Choisissez entre le mode clair, sombre ou automatique
                     </p>
                 </div>
