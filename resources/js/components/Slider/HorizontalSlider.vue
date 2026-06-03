@@ -1,20 +1,20 @@
 <template>
-    <div class="relative group">
+    <div class="relative">
         <!-- Navigation Buttons -->
         <button
             @click="scrollLeft"
-            class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed"
+            class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-300 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed"
             :disabled="scrollPosition <= 0"
         >
-            <ChevronLeft class="w-5 h-5" />
+            <ChevronLeft class="w-5 h-5 text-foreground" />
         </button>
 
         <button
             @click="scrollRight"
-            class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed"
+            class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-300 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed"
             :disabled="scrollPosition >= maxScroll"
         >
-            <ChevronRight class="w-5 h-5" />
+            <ChevronRight class="w-5 h-5 text-foreground" />
         </button>
 
         <!-- Slider Track -->
@@ -34,9 +34,9 @@
         </div>
 
         <!-- Scroll Progress Indicator -->
-        <div v-if="showProgress" class="mt-4 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div v-if="showProgress" class="mt-4 h-1 bg-secondary rounded-full overflow-hidden">
             <div
-                class="h-full bg-blue-600 rounded-full transition-all duration-300"
+                class="h-full bg-primary rounded-full transition-all duration-300"
                 :style="{ width: `${scrollProgress}%` }"
             ></div>
         </div>
