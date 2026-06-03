@@ -30,9 +30,9 @@ defineOptions({
     >
         <!-- Name Field -->
         <div class="space-y-2">
-            <Label for="name" class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nom complet</Label>
+            <Label for="name" class="text-sm font-semibold text-foreground">Nom complet</Label>
             <div class="relative">
-                <User class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors peer-focus:text-blue-600 dark:peer-focus:text-blue-400" />
+                <User class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors peer-focus:text-primary" />
                 <Input
                     id="name"
                     type="text"
@@ -42,17 +42,17 @@ defineOptions({
                     autocomplete="name"
                     name="name"
                     placeholder="Jean Dupont"
-                    class="h-11 w-full rounded-xl border-gray-200 bg-white pl-9 transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:focus:border-blue-400"
+                    class="h-11 w-full rounded-xl bg-secondary border-border pl-9 transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
             </div>
-            <InputError :message="errors.name" class="text-sm text-red-500 dark:text-red-400" />
+            <InputError :message="errors.name" />
         </div>
 
         <!-- Email Field -->
         <div class="space-y-2">
-            <Label for="email" class="text-sm font-semibold text-gray-700 dark:text-gray-300">Adresse email</Label>
+            <Label for="email" class="text-sm font-semibold text-foreground">Adresse email</Label>
             <div class="relative">
-                <Mail class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors peer-focus:text-blue-600 dark:peer-focus:text-blue-400" />
+                <Mail class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors peer-focus:text-primary" />
                 <Input
                     id="email"
                     type="email"
@@ -61,17 +61,17 @@ defineOptions({
                     autocomplete="email"
                     name="email"
                     placeholder="exemple@email.com"
-                    class="h-11 w-full rounded-xl border-gray-200 bg-white pl-9 transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:focus:border-blue-400"
+                    class="h-11 w-full rounded-xl bg-secondary border-border pl-9 transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
             </div>
-            <InputError :message="errors.email" class="text-sm text-red-500 dark:text-red-400" />
+            <InputError :message="errors.email" />
         </div>
 
         <!-- Password Field -->
         <div class="space-y-2">
-            <Label for="password" class="text-sm font-semibold text-gray-700 dark:text-gray-300">Mot de passe</Label>
+            <Label for="password" class="text-sm font-semibold text-foreground">Mot de passe</Label>
             <div class="relative">
-                <Lock class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors peer-focus:text-blue-600 dark:peer-focus:text-blue-400" />
+                <Lock class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors peer-focus:text-primary" />
                 <PasswordInput
                     id="password"
                     required
@@ -79,17 +79,17 @@ defineOptions({
                     autocomplete="new-password"
                     name="password"
                     placeholder="Créez un mot de passe sécurisé"
-                    class="h-11 w-full rounded-xl border-gray-200 bg-white pl-9 transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:focus:border-blue-400"
+                    class="h-11 w-full rounded-xl bg-secondary border-border pl-9 transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
             </div>
-            <InputError :message="errors.password" class="text-sm text-red-500 dark:text-red-400" />
+            <InputError :message="errors.password" />
         </div>
 
         <!-- Confirm Password -->
         <div class="space-y-2">
-            <Label for="password_confirmation" class="text-sm font-semibold text-gray-700 dark:text-gray-300">Confirmer le mot de passe</Label>
+            <Label for="password_confirmation" class="text-sm font-semibold text-foreground">Confirmer le mot de passe</Label>
             <div class="relative">
-                <Lock class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors peer-focus:text-blue-600 dark:peer-focus:text-blue-400" />
+                <Lock class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors peer-focus:text-primary" />
                 <PasswordInput
                     id="password_confirmation"
                     required
@@ -97,19 +97,19 @@ defineOptions({
                     autocomplete="new-password"
                     name="password_confirmation"
                     placeholder="Confirmez votre mot de passe"
-                    class="h-11 w-full rounded-xl border-gray-200 bg-white pl-9 transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:focus:border-blue-400"
+                    class="h-11 w-full rounded-xl bg-secondary border-border pl-9 transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
             </div>
-            <InputError :message="errors.password_confirmation" class="text-sm text-red-500 dark:text-red-400" />
+            <InputError :message="errors.password_confirmation" />
         </div>
 
         <!-- Password Hint -->
-        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div class="flex items-center gap-2 text-xs text-muted-foreground">
             <div class="flex gap-1">
-                <span class="h-1.5 w-1.5 rounded-full bg-gray-400 dark:bg-gray-600"></span>
-                <span class="h-1.5 w-1.5 rounded-full bg-gray-400 dark:bg-gray-600"></span>
-                <span class="h-1.5 w-1.5 rounded-full bg-gray-400 dark:bg-gray-600"></span>
-                <span class="h-1.5 w-1.5 rounded-full bg-gray-400 dark:bg-gray-600"></span>
+                <span class="h-1.5 w-1.5 rounded-full bg-muted-foreground"></span>
+                <span class="h-1.5 w-1.5 rounded-full bg-muted-foreground"></span>
+                <span class="h-1.5 w-1.5 rounded-full bg-muted-foreground"></span>
+                <span class="h-1.5 w-1.5 rounded-full bg-muted-foreground"></span>
             </div>
             <p>Minimum 8 caractères avec lettres et chiffres</p>
         </div>
@@ -117,10 +117,9 @@ defineOptions({
         <!-- Submit Button -->
         <Button
             type="submit"
-            class="mt-2 h-11 w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 font-semibold text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed dark:from-blue-500 dark:to-blue-600"
+            class="mt-2 h-11 w-full rounded-xl bg-gradient-to-r from-primary to-primary-dark font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 disabled:opacity-50"
             tabindex="5"
             :disabled="processing"
-            data-test="register-user-button"
         >
             <Spinner v-if="processing" class="mr-2 h-4 w-4 animate-spin" />
             <UserPlus v-else class="mr-2 h-4 w-4" />
@@ -128,9 +127,9 @@ defineOptions({
         </Button>
 
         <!-- Login Link -->
-        <div class="flex items-center justify-center gap-1 pt-2 text-sm text-gray-500 border-t border-gray-100 dark:border-gray-800">
+        <div class="flex items-center justify-center gap-1 pt-2 text-sm text-muted-foreground border-t border-border">
             <span>Déjà un compte ?</span>
-            <TextLink :href="login()" class="inline-flex items-center gap-1 font-semibold text-blue-600 transition-all hover:gap-2 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300" :tabindex="6">
+            <TextLink :href="login()" class="inline-flex items-center gap-1 font-semibold text-primary transition-all hover:gap-2" :tabindex="6">
                 Se connecter
                 <Sparkles class="h-3 w-3" />
             </TextLink>

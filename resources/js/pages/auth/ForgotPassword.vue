@@ -32,9 +32,9 @@ defineProps<{
     <Form v-bind="email.form()" v-slot="{ errors, processing }">
         <div class="space-y-6">
             <div class="space-y-2">
-                <Label for="email" class="text-sm font-semibold text-gray-700 dark:text-gray-300">Adresse email</Label>
+                <Label for="email" class="text-sm font-semibold text-foreground">Adresse email</Label>
                 <div class="relative">
-                    <Mail class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors peer-focus:text-blue-600 dark:peer-focus:text-blue-400" />
+                    <Mail class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors peer-focus:text-primary" />
                     <Input
                         id="email"
                         type="email"
@@ -42,26 +42,25 @@ defineProps<{
                         autocomplete="off"
                         autofocus
                         placeholder="exemple@email.com"
-                        class="h-11 w-full rounded-xl border-gray-200 bg-white pl-9 transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:focus:border-blue-400"
+                        class="h-11 w-full rounded-xl bg-secondary border-border pl-9 transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                 </div>
-                <InputError :message="errors.email" class="text-sm text-red-500 dark:text-red-400" />
+                <InputError :message="errors.email" />
             </div>
 
             <Button
                 type="submit"
-                class="h-11 w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 font-semibold text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 disabled:opacity-50"
+                class="h-11 w-full rounded-xl bg-gradient-to-r from-primary to-primary-dark font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 disabled:opacity-50"
                 :disabled="processing"
-                data-test="email-password-reset-link-button"
             >
                 <Spinner v-if="processing" class="mr-2 h-4 w-4 animate-spin" />
                 <KeyRound v-else class="mr-2 h-4 w-4" />
                 Envoyer le lien de réinitialisation
             </Button>
 
-            <div class="text-center text-sm text-gray-500">
+            <div class="text-center text-sm text-muted-foreground">
                 <span>Retour à </span>
-                <TextLink :href="login()" class="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                <TextLink :href="login()" class="font-medium text-primary hover:text-primary-dark transition-colors">
                     la connexion
                 </TextLink>
             </div>
