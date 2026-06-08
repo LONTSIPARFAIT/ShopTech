@@ -56,7 +56,7 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
                 : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
         ]"
     >
-        <component :is="item.icon" class="h-4 w-4" />
+        <component :is="item.icon" class="h-4 w-4" />p
         {{ item.title }}
     </Link>
 </nav>
