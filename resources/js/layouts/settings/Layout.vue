@@ -44,25 +44,22 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
         <div class="flex flex-col gap-8 lg:flex-row lg:gap-12">
             <!-- Sidebar Navigation -->
             <aside class="w-full lg:w-64">
-                <nav class="flex flex-row gap-1 lg:flex-col lg:space-y-1" aria-label="Paramètres">
-                    <Button
-                        v-for="item in sidebarNavItems"
-                        :key="toUrl(item.href)"
-                        variant="ghost"
-                        :class="[
-                            'justify-start gap-2 w-full transition-all duration-200',
-                            isCurrentOrParentUrl(item.href)
-                                ? 'bg-primary/10 text-primary hover:bg-primary/15'
-                                : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                        ]"
-                        as-child
-                    >
-                        <Link :href="item.href">
-                            <component :is="item.icon" class="h-4 w-4" />
-                            {{ item.title }}
-                        </Link>
-                    </Button>
-                </nav>
+               <nav class="flex flex-row gap-1 lg:flex-col lg:space-y-1" aria-label="Paramètres">
+    <Link
+        v-for="item in sidebarNavItems"
+        :key="toUrl(item.href)"
+        :href="item.href"
+        :class="[
+            'inline-flex items-center justify-start gap-2 w-full h-10 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+            isCurrentOrParentUrl(item.href)
+                ? 'bg-primary/10 text-primary hover:bg-primary/15'
+                : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+        ]"
+    >
+        <component :is="item.icon" class="h-4 w-4" />
+        {{ item.title }}
+    </Link>
+</nav>
             </aside>
 
             <Separator class="lg:hidden bg-border" />
