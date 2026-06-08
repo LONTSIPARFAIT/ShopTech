@@ -64,7 +64,7 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
 
             <Separator class="lg:hidden bg-border" />
 
-            <!-- Content-->
+            <!-- Content -->
             <div class="flex-1">
                 <slot />
             </div>
