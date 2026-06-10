@@ -37,7 +37,7 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
         <div class="mb-8">
             <h1 class="text-2xl font-bold text-foreground md:text-3xl">Paramètres</h1>
             <p class="mt-1 text-sm text-muted-foreground">
-                Gérez votre profil, la sécurité et l'apparence de votre compte
+                Gérez votre profil, la sécurité et l'apparence de votre compt
             </p>
         </div>
 
