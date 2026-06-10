@@ -568,7 +568,7 @@
     "isEntry": true
   },
   "resources/js/app.ts": {
-    "file": "assets/app-CVjuzYQE.js",
+    "file": "assets/app-lGJgFloD.js",
     "name": "app",
     "src": "resources/js/app.ts",
     "isEntry": true,
@@ -576,7 +576,6 @@
       "_dist-CnGKnKAJ.js",
       "_AppSidebarLayout-BcqeQY0s.js",
       "_core-BHnVMzbG.js",
-      "_button-_cQekaa4.js",
       "_Primitive-xj9GagXZ.js",
       "_createLucideIcon-gxZJbQ4w.js",
       "_shield-BHXayNDl.js",
@@ -924,7 +923,7 @@
     ]
   },
   "resources/js/pages/Welcome.vue": {
-    "file": "assets/Welcome-DtGMXZDw.js",
+    "file": "assets/Welcome-BkJfk9BQ.js",
     "name": "Welcome",
     "src": "resources/js/pages/Welcome.vue",
     "isDynamicEntry": true,
@@ -1053,7 +1052,7 @@
     ]
   },
   "resources/js/pages/auth/TestRole.vue": {
-    "file": "assets/TestRole-w5_O3MAF.js",
+    "file": "assets/TestRole-DWgdRHKc.js",
     "name": "TestRole",
     "src": "resources/js/pages/auth/TestRole.vue",
     "isDynamicEntry": true,
@@ -1094,7 +1093,7 @@
     ]
   },
   "resources/js/pages/settings/Appearance.vue": {
-    "file": "assets/Appearance-8CAvvmyD.js",
+    "file": "assets/Appearance-BaNtbZK9.js",
     "name": "Appearance",
     "src": "resources/js/pages/settings/Appearance.vue",
     "isDynamicEntry": true,
