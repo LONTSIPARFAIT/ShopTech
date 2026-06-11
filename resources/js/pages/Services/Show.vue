@@ -71,8 +71,8 @@ const requestQuote = () => {
                 <!-- Gallery -->
                 <div class="space-y-4">
                     <div class="relative aspect-square bg-secondary rounded-2xl overflow-hidden">
-                        <img 
-                            :src="service.image_url" 
+                        <img
+                            :src="service.image_url"
                             :alt="service.name"
                             class="w-full h-full object-cover"
                         />
@@ -112,14 +112,14 @@ const requestQuote = () => {
                     <!-- Actions -->
                     <div class="space-y-4 pt-4">
                         <div class="flex flex-col sm:flex-row gap-3">
-                            <button 
+                            <button
                                 @click="showQuoteForm = true"
                                 class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30"
                             >
                                 Demander un devis gratuit
                             </button>
 
-                            <a 
+                            <a
                                 href="tel:+237XXXXXXXXX"
                                 class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-secondary border border-border rounded-xl font-semibold text-foreground hover:bg-primary hover:text-white hover:border-primary transition-all"
                             >
@@ -169,31 +169,31 @@ const requestQuote = () => {
                         </button>
                     </div>
                     <p class="text-sm text-muted-foreground mb-4">Pour le service : <span class="font-semibold text-primary">{{ service.name }}</span></p>
-                    
+
                     <form @submit.prevent="requestQuote" class="space-y-4">
                         <div>
                             <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1 block">Nom complet</label>
-                            <input 
+                            <input
                                 v-model="form.name"
-                                type="text" 
+                                type="text"
                                 required
                                 class="w-full px-4 py-2.5 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
                             />
                         </div>
                         <div>
                             <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1 block">Email</label>
-                            <input 
+                            <input
                                 v-model="form.email"
-                                type="email" 
+                                type="email"
                                 required
                                 class="w-full px-4 py-2.5 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
                             />
                         </div>
                         <div>
                             <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1 block">Téléphone</label>
-                            <input 
+                            <input
                                 v-model="form.phone"
-                                type="tel" 
+                                type="tel"
                                 required
                                 class="w-full px-4 py-2.5 bg-secondary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
                             />
@@ -216,8 +216,8 @@ const requestQuote = () => {
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div v-for="relService in relatedServices" :key="relService.id" class="group bg-card border border-border rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         <div class="relative aspect-[4/3] overflow-hidden bg-secondary">
-                            <img 
-                                :src="relService.image_url" 
+                            <img
+                                :src="relService.image_url"
                                 :alt="relService.name"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
@@ -231,11 +231,11 @@ const requestQuote = () => {
                                     <span class="text-xl font-black text-primary">{{ formatPrice(relService.base_price) }}</span>
                                     <span class="text-xs text-muted-foreground ml-0.5">FCFA</span>
                                 </div>
-                                <Link 
+                                <Link
                                     :href="'/services/' + relService.slug"
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-dark transition-all hover:-translate-y-0.5"
                                 >
-                                    Détails
+                                    Détail
                                     <ChevronRight class="w-3.5 h-3.5" />
                                 </Link>
                             </div>
