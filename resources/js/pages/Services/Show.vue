@@ -235,7 +235,7 @@ const requestQuote = () => {
                                     :href="'/services/' + relService.slug"
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-dark transition-all hover:-translate-y-0.5"
                                 >
-                                    Détail
+                                    Détai
                                     <ChevronRight class="w-3.5 h-3.5" />
                                 </Link>
                             </div>
