@@ -30,7 +30,7 @@
 :root {
     /* Mode clair - Orange, Blanc, Noir */
     --background: hsl(0 0% 100%);      /* Blanc pur */
-    --foreground: hsl(0 0% 0%);        /* Noir */
+    --foreground: hsl(0, 2%, 8%);        /* Noir */
     --card: hsl(0 0% 100%);            /* Blanc */
     --primary: hsl(24 95% 53%);        /* Orange vif #f97316 */
     --primary-dark: hsl(24 94% 45%);   /* Orange foncé #ea580c */

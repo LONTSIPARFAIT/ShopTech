@@ -120,11 +120,11 @@ const requestQuote = () => {
                             </button>
 
                             <a
-                                href="tel:+237XXXXXXXXX"
+                                href="tel:+23760000000"
                                 class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-secondary border border-border rounded-xl font-semibold text-foreground hover:bg-primary hover:text-white hover:border-primary transition-all"
                             >
                                 <Phone class="w-5 h-5" />
-                                Appeler maintenant
+                                Nous contactez
                             </a>
                         </div>
 

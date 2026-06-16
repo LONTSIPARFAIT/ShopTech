@@ -5,7 +5,7 @@ import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-vue-next
 
 defineOptions({ layout: ShopLayout });
 
-const WHATSAPP_NUMBER = '237600000000';
+const WHATSAPP_NUMBER = '237679324517';
 const WHATSAPP_MSG = encodeURIComponent("Bonjour ShopTech, j'ai une question.");
 
 const form = useForm({

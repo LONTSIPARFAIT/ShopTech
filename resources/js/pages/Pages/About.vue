@@ -43,7 +43,7 @@ const advantages = [
                     Qui sommes-<span class="text-primary">nous ?</span>
                 </h1>
                 <p class="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
-                    ShopTech est né d'une passion pour la technologie et d'une volonté de démocratiser l'accès aux meilleurs produits high-tech au Cameroun.
+                    ShopTech est né d'une passion pour la technologie et d'une volonté de démocratiser l'accès aux meilleurs produits de service de Plomberie et d'Electricité au Cameroun.
                 </p>
             </div>
         </section>
