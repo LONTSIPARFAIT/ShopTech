@@ -14,7 +14,7 @@ class ApplyPromotionAction
         foreach ($cart->items as $item) {
             $product = $item->product;
 
-            // Check if product has a valid wholesale promotion and quantity meets th threshold
+            // Check if product has a valid wholesale promotion and quantity meets the threshold
             if (
                 $product &&
                 $product->promo_min_quantity > 0 &&
