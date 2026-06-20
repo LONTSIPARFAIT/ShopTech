@@ -29,6 +29,6 @@ class ApplyPromotionAction
             }
         }
 
-        return $;
+        return $totalDiscount;
     }
 }
